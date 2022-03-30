@@ -1,24 +1,24 @@
 import React, { useState } from "react";
-import {StyleSheet, View, Text, Pressable } from 'react-native';
+import { StyleSheet, View, Text, Pressable } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Entypo from '@expo/vector-icons/Entypo';
 import { db, ROOT_REF } from '../firebase/Config';
 
 
-export const Components = ({items: {items: title, done}, id}) => {
+export const Components = ({ component: { item: title, done }, id }) => {
     const [doneState, setDone] = useState(done);
 
     const onCheck = () => {
         setDone(!doneState);
         db.ref(ROOT_REF).update({
             [id]: {
-                components: title,
+                item: title,
                 done: !doneState,
             },
         });
     };
 
-    const onRemove= () => {
+    const onRemove = () => {
         db.ref(ROOT_REF + [id]).remove();
     };
 
@@ -28,14 +28,15 @@ export const Components = ({items: {items: title, done}, id}) => {
     return (
         <View style={styles.component}>
             <Pressable onPress={onCheck}>
-                {doneState?<MaterialIcons name={'check-box'} size={32} />
-                : <MaterialIcons name={'check-box-outline-blank'} size= {32} />}
+                {doneState ? <MaterialIcons name={'check-box'} size={32} />
+                    : <MaterialIcons name={'check-box-outline-blank'} size={32} />}
             </Pressable>
             <Text onPress={onCheck}
                 style={
                     [styles.componentText,
-                    {backgroundColor: doneState ? "lightgreen" : "lightblue"}]}>{title}
+                    { backgroundColor: doneState ? "lightgreen" : "lightblue" }]}>{title}
             </Text>
+
             <Pressable>
                 <Entypo name={'trash'} size={32} onPress={onRemove} />
             </Pressable>
@@ -45,6 +46,7 @@ export const Components = ({items: {items: title, done}, id}) => {
 
 const styles = StyleSheet.create({
     component: {
+        width: '300px',
         flexDirection: 'row',
         marginVertical: 10,
         alignItems: 'center',
@@ -58,5 +60,5 @@ const styles = StyleSheet.create({
         marginRight: 10,
         marginLeft: 10,
         minWidth: '60%'
-    }
+    },
 })

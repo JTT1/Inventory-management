@@ -27,7 +27,7 @@ export default function App() {
   useEffect(() => {
     db.ref(ROOT_REF).on('value', querySnapShot => {
       let data = querySnapShot.val() ? querySnapShot.val() : {};
-      let items = {...data};
+      let items = { ...data };
       setItems(items);
     });
   }, []);
@@ -53,20 +53,20 @@ export default function App() {
         {itemKeys.length > 0 ? (
           itemKeys.map(key => (
             <Components
-            key={key}
-            id={key}
-            item={items[key]}
-          />
+              key={key}
+              id={key}
+              component={items[key]}
+            />
           ))
         ) : (
           <Text>Ei ole komponentteja</Text>
         )}
-      <View>
-        <Button
-          title="Poista kaikki"
-          onPress={() => removeItems()}
-        />
-      </View>
+        <View>
+          <Button
+            title="Poista kaikki"
+            onPress={() => removeItems()}
+          />
+        </View>
       </ScrollView>
     </View>
   );
