@@ -1,38 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, ScrollView, View, Button, Alert, TextInput } from 'react-native';
 import { db, ROOT_REF } from '../firebase/Config';
+import AddNewComponent from './AddNewComponent';
 import { Components } from './Items';
 
 export default function Componentlist() {
 
-  const [newItem, setNewItem] = useState('');
-  const [items, setItems] = useState({});
-  const [id, setId] = useState("");
-  const [category, setCategory] = useState("");
-  const [info, setInfo] = useState("");
-  const [amount, setAmount] = useState(0);
-  const [location, setLocation] = useState("");
+    const [items, setItems] = useState({});
+    const [Show, setShow] = useState(false);
 
 
-
-  function addNewItem() {
-    if (newItem.trim() !== "") {
-      db.ref(ROOT_REF).push({
-        ID: id,
-        Kategoria: category,
-        Lisätieto: info,
-        Määrä: amount,
-        Nimike: newItem,
-        Sijainti: location
-      })
-      setNewItem('');
-      setCategory('');
-      setId('');
-      setInfo('');
-      setAmount('');
-      setLocation('');
-    }
-  }
+    
 
   function removeItems() {
     db.ref(ROOT_REF).remove();
@@ -50,46 +28,23 @@ export default function Componentlist() {
 
   return (
     <View style={styles.container}>
-      <Text>Komponentit</Text>
-      <View>
-        <TextInput
-          value={newItem}
-          onChangeText={setNewItem}
-          placeholder="Komponentin nimi"
-        />
-        <TextInput
-          value={id}
-          onChangeText={setId}
-          placeholder="Komponentin ID"
-        />
-        <TextInput
-          value={category}
-          onChangeText={setCategory}
-          placeholder="Komponentin kategoria"
-        />
-        <TextInput
-          value={amount}
-          onChangeText={setAmount}
-          placeholder="Komponenttien määrä"
-        />
-        <TextInput
-          value={location}
-          onChangeText={setLocation}
-          placeholder="Komponentin sijainti"
-        />
-        <TextInput
-          value={info}
-          onChangeText={setInfo}
-          placeholder="Lisätietoa"
-        />
-        
-      </View>
-      <View>
+
+     {/* Komponentin toggle-toiminto */}
+
+      <View style={styles.addComponent}>
+        {/*Here we will return the view when state is true 
+        and will return false if state is false*/}
+        {Show ? (
+          <AddNewComponent/>
+        ) : null}
         <Button
-          title="Lisää komponentti"
-          onPress={() => addNewItem()}
+          title="Hide/Show Component"
+          onPress={() => setShow(!Show)}
         />
       </View>
+
+    {/* Komponentin toggle-toiminto */}
+
       <ScrollView>
         {itemKeys.length > 0 ? (
           itemKeys.map(key => (
@@ -104,6 +59,7 @@ export default function Componentlist() {
         )}
         <View>
           <Button
+            style={styles.button}
             title="Poista kaikki"
             onPress={() => removeItems()}
           />
@@ -120,4 +76,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  addComponent: {
+      marginBottom: 25,
+      marginTop: 25,
+  },
+  button: {
+      marginBottom: 5,
+      marginTop: 5,
+  }
 });
