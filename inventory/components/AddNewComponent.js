@@ -37,7 +37,7 @@ export default function AddNewComponent() {
 
 
   return (
-    <View style={styles.container}>
+    <View style={styles.layer}>
       <Text>Lisää komponentti</Text>
       <View>
           <Text style={styles.text}>
@@ -93,7 +93,7 @@ export default function AddNewComponent() {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  layer: {
     flex: 1,
     backgroundColor: '#393663',
     alignItems: 'center',
@@ -126,6 +126,5 @@ const styles = StyleSheet.create({
   },
   text: {
     fontWeight: 600,
-    
   }
 });

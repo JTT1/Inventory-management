@@ -9,12 +9,22 @@ export default function Componentlist() {
     const [items, setItems] = useState({});
     const [Show, setShow] = useState(false);
 
+    const [addWord, setAddWord] = useState("Lisää");
+    const [status, setStatus] = useState(false);
+
 
     
+    function toggle() {
+        setShow(!Show)
 
-  function removeItems() {
-    db.ref(ROOT_REF).remove();
-  }
+        if (status == false) {
+            setStatus(!status);
+            setAddWord("Pienennä");
+        } else {
+            setStatus(!status);
+            setAddWord("Lisää");
+        }
+    }
 
   useEffect(() => {
     db.ref(ROOT_REF).on('value', querySnapShot => {
@@ -38,8 +48,8 @@ export default function Componentlist() {
           <AddNewComponent/>
         ) : null}
         <Button
-          title="Hide/Show Component"
-          onPress={() => setShow(!Show)}
+          title={addWord}
+          onPress={() => toggle()}
         />
       </View>
 
@@ -57,13 +67,6 @@ export default function Componentlist() {
         ) : (
           <Text>Ei ole komponentteja</Text>
         )}
-        <View>
-          <Button
-            style={styles.button}
-            title="Poista kaikki"
-            onPress={() => removeItems()}
-          />
-        </View>
       </ScrollView>
     </View>
   );

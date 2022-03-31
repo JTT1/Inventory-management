@@ -46,7 +46,7 @@ export const Components = ({ component: { item: title, done }, id }) => {
 
 const styles = StyleSheet.create({
     component: {
-        width: '300px',
+        width: 300,
         flexDirection: 'row',
         marginVertical: 10,
         alignItems: 'center',
