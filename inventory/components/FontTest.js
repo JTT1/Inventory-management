@@ -1,33 +1,16 @@
-import React from 'react'
-import { StyleSheet, View, Text } from 'react-native';
-import { useFonts } from 'expo-font';
+import { View, Text } from 'react-native';
+import React from 'react';
+import { styles } from '../styles/app-root-style.js';
 
-export default function App() {
-    const [loaded] = useFonts({
-        Quicksand: require('./assets/fonts/Quicksand400Regular.ttf'),
-    });
-
-    if (!loaded) {
-        return null;
-    }
-    else {
-        return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={styles.text}>Testing Quicksand</Text>
-            </View>
-        );
-    }
+const FontTest = () => {
+    return (
+        <View>
+            <Text style={styles.headingBold}>Quicksand 700</Text>
+            <Text style={styles.heading}>Quicksand 600</Text>
+            <Text style={styles.bodyTextMedium}>Quicksand 500</Text>
+            <Text style={styles.bodyText}>Quicksand 400</Text>
+        </View>
+    )
 }
-const styles = StyleSheet.create({
-    container: {
-        fontSize: 30,
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    text: {
-        fontFamily: 'Quicksand',
-        fontSize: 30,
-    }
-});
+
+export default FontTest
