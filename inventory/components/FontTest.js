@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native';
 import React from 'react';
-import { styles } from '../styles/app-root-style.js';
+import { styles } from '../styles/AppRootStyle.js';
 
 const FontTest = () => {
     return (
