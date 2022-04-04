@@ -10,7 +10,7 @@ export default function AddNewComponent() {
   const [id, setId] = useState("");
   const [category, setCategory] = useState("");
   const [info, setInfo] = useState("");
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState("");
   const [location, setLocation] = useState("");
 
 
@@ -40,50 +40,50 @@ export default function AddNewComponent() {
     <View style={styles.layer}>
       <Text>Lisää komponentti</Text>
       <View>
-          <Text style={styles.text}>
-              Nimi
-          </Text>
+        <Text style={styles.text}>
+          Nimi
+        </Text>
         <TextInput
-        style={styles.textField}
+          style={styles.textField}
           value={newItem}
           onChangeText={setNewItem}
           placeholder="Komponentin nimi"
         />
         <TextInput
-        style={styles.textField}
+          style={styles.textField}
           value={id}
           onChangeText={setId}
           placeholder="Komponentin ID"
         />
         <TextInput
-        style={styles.textField}
+          style={styles.textField}
           value={category}
           onChangeText={setCategory}
           placeholder="Komponentin kategoria"
         />
         <TextInput
-        style={styles.textField}
+          style={styles.textField}
           value={amount}
           onChangeText={setAmount}
           placeholder="Komponenttien määrä"
         />
         <TextInput
-        style={styles.textField}
+          style={styles.textField}
           value={location}
           onChangeText={setLocation}
           placeholder="Komponentin sijainti"
         />
         <TextInput
-        style={styles.textFieldLarge}
+          style={styles.textFieldLarge}
           value={info}
           onChangeText={setInfo}
           placeholder="Lisätietoa"
         />
-        
+
       </View>
       <View>
         <Button
-        style={styles.button}
+          style={styles.button}
           title="Lisää"
           onPress={() => addNewItem()}
         />
@@ -103,9 +103,9 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   button: {
-      padding: 5,
-      margin: 15,
-  }, 
+    padding: 5,
+    margin: 15,
+  },
   textField: {
     backgroundColor: "#8F8ABF",
     borderRadius: 25,
@@ -125,6 +125,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   text: {
-    fontWeight: 600,
+
   }
 });
