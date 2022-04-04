@@ -3,7 +3,9 @@ import { styles } from './styles/AppRootStyle.js';
 import { View, Text } from 'react-native';
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
-import FontTest from './components/FontTest.js';
+import SearchComponents from './components/search/SearchComponents';
+import { StatusBar } from 'expo-status-bar';
+import TopBar from './components/topbar/TopBar.js';
 // import Componentlist from './components/Componentlist';
 // import { db, ROOT_REF } from './firebase/Config';
 // import { Components } from './components/Items';
@@ -23,7 +25,9 @@ const App = () => {
   } else {
     return (
       <View style={styles.container}>
-        <FontTest />
+        <TopBar />
+        <SearchComponents />
+        <StatusBar style="light" />
       </View>
     );
   }
