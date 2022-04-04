@@ -4,6 +4,7 @@ import { View, Text } from 'react-native';
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import FontTest from './components/FontTest.js';
+import Componentlist from './components/Componentlist.js';
 // import Componentlist from './components/Componentlist';
 // import { db, ROOT_REF } from './firebase/Config';
 // import { Components } from './components/Items';
@@ -25,6 +26,7 @@ const App = () => {
       <View style={styles.container}>
         <FontTest />
       </View>
+      
     );
   }
 }
