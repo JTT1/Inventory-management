@@ -20,17 +20,16 @@ const SearchListItem = ({ item }) => {
             <View style={[styles.flexRow, styles.flexBetween]}>
                 <View style={styles.flexRow}>
                     {
-                        item.Määrä !== 0 ? <MaterialIcons name="check" size={30} color="#13FF80" />
+                        item.Maara !== "" ? <MaterialIcons name="check" size={30} color="#13FF80" />
                             : <MaterialIcons name="do-not-disturb" size={30} color="#F4307C" />
                     }
                     <Text style={styles.bodyTextWhite}>
-                        {item.Määrä}
+                        {item.Maara} kpl varastossa
                     </Text>
                 </View>
                 <View style={[styles.flexRow, styles.location]}>
-                    <Text style={styles.bodyTextWhite}>  Sijainti: </Text>
                     <MaterialIcons name="map" size={30} color="white" />
-                    <Text style={[styles.bodyTextWhite, styles.selfEnd]}>
+                    <Text style={[styles.bodyTextWhite]}>
                         {item.Sijainti}
                     </Text>
                 </View>

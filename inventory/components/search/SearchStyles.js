@@ -34,4 +34,37 @@ export const searchStyles = StyleSheet.create({
     location: {
         marginRight: 30,
     },
+    searchFAB: {
+        alignSelf: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        bottom: 10,
+        backgroundColor: '#96E9CB',
+        width: 70,
+        height: 70,
+        borderRadius: 35,
+        borderWidth: 2,
+        borderColor: '#fff',
+        shadowColor: '#000000',
+        elevation: 10,
+        shadowOffset: {
+            height: 10,
+            width: 10
+        },
+    },
+    searchField: {
+        position: 'absolute',
+        alignSelf: 'center',
+        width: 312,
+        height: 56,
+        bottom: 10,
+        backgroundColor: '#5E5A86',
+        borderWidth: 2,
+        borderRadius: 30,
+        borderColor: '#96E9CB',
+        justifyContent: 'center',
+        paddingHorizontal: 15,
+    },
 });

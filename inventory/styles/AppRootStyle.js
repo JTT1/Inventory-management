@@ -6,6 +6,7 @@ export const styles = StyleSheet.create({
         paddingTop: Constants.statusBarHeight,
         flex: 1,
         backgroundColor: '#2C2A4C',
+        color: 'white',
     },
     h1: {
         fontFamily: 'Quicksand700',
