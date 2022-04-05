@@ -14,6 +14,7 @@ const SearchComponents = () => {
     const [filteredItems, setFilteredItems] = useState([]);
     const [loaded, setLoaded] = useState(false);
 
+    // Firebase query
     useEffect(() => {
         db.ref(ROOT_REF).on('value', querySnapShot => {
             let data = querySnapShot.val() ? querySnapShot.val() : {};
@@ -36,44 +37,55 @@ const SearchComponents = () => {
         setSearchField(!searchFieldOpen);
     }
 
+    // Wipes whitespace of given string and turns it into lowercase
+    const formatString = (string) => {
+        return string.split(' ').join('').toLowerCase().trim();
+    }
+
     // Search from category or name
     const filterData = (data, term) => {
         if (term.trim() === '') {
             return []
         }
-        const array = data.map((item) => item).filter((item) => {
-            const search = term.split(' ').join('').toLowerCase().trim();
-            const itemName = item.Nimike.split(' ').join('').toLowerCase().trim();
-            const itemCategory = item.Kategoria.split(' ').join('').toLowerCase().trim();
+        const searchItemsArray = data.map((item) => item).filter((item) => {
+            let search = formatString(term);
+            let itemName = formatString(item.Nimike);
+            let itemCategory = formatString(item.Kategoria);
             return itemName.includes(search) || itemCategory.includes(search)
         });
-        return array
+        return searchItemsArray
     }
 
     // Filtered list render
     const listItems = filteredItems.length > 0 ? filteredItems.map((item) => <SearchListItem item={item} key={uuid()} />)
-        : <Text style={styles.bodyTextWhite}>Ei hakutuloksia</Text>
+        : <View>
+            <Text style={[styles.bodyTextWhite, styles.h5]}>Ei hakutuloksia</Text>
+        </View>
 
     return (
-        <View style={{ flex: 1, paddingBottom: 50 }}>
+        <View style={styles.flexBox}>
             <View>
                 <Text style={[styles.bodyTextWhite, styles.h1]}>
                     Hae komponentteja
                 </Text>
             </View>
-            <View style={styles.results}>
-                <Text style={[styles.bodyTextWhite, styles.h4]}>
-                    Hakutulokset
-                </Text>
-                {!loaded ? <ActivityIndicator size="large" color="#00ff00" /> :
-                    <ScrollView style={[styles.stretch, styles.scrollView]}>
+            <Text style={[styles.bodyTextWhite, styles.h4]}>
+                Hakutulokset: {searchTerm}
+            </Text>
+            <View style={[styles.results, styles.boxShadow]}>
+
+                {!loaded
+                    ? <ActivityIndicator size="large" color="#1DFFBB" />
+                    : <ScrollView style={[styles.stretch]}>
                         {listItems}
                     </ScrollView>
                 }
             </View>
-            {searchFieldOpen && <SearchField setSearchTerm={setSearchTerm} setLoaded={setLoaded} />}
-            {!searchFieldOpen && <SearchFab toggle={toggleSearchField} />}
-        </View>
+
+            {/* Conditionally render either FAB or search field */}
+            {searchFieldOpen ? <SearchField setSearchTerm={setSearchTerm} setLoaded={setLoaded} />
+                : <SearchFab toggle={toggleSearchField} />}
+        </View >
     )
 }
 

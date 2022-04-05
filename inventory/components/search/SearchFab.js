@@ -7,7 +7,7 @@ const SearchFab = ({ toggle }) => {
 
 
     return (
-        <Pressable style={styles.searchFAB} onPress={toggle}>
+        <Pressable style={[styles.searchFAB, styles.boxShadow]} onPress={toggle}>
             <MaterialIcons name="search" size={36} color={styles.bodyTextDark.color} />
         </Pressable>
     )

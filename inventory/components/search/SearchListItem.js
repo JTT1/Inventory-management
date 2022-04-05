@@ -4,10 +4,17 @@ import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const SearchListItem = ({ item }) => {
+
+
+    // insert functionality to open map here
+    const handleMapOpen = () => {
+        console.log('Press')
+    }
+
     return (
-        <View style={[styles.searchListItem, styles.borderStart]}>
+        <View style={[styles.searchListItem]}>
             <View style={styles.flexRow}>
-                <Text style={[styles.bodyTextWhite, styles.h4]}>
+                <Text style={[styles.bodyTextWhite, styles.upperCase, styles.h5]}>
                     {item.Nimike}
                 </Text>
             </View>
@@ -27,12 +34,17 @@ const SearchListItem = ({ item }) => {
                         {item.Maara} kpl varastossa
                     </Text>
                 </View>
-                <View style={[styles.flexRow, styles.location]}>
-                    <MaterialIcons name="map" size={30} color="white" />
-                    <Text style={[styles.bodyTextWhite]}>
-                        {item.Sijainti}
-                    </Text>
-                </View>
+                {item.Sijainti != "" &&
+                    <Pressable onPress={handleMapOpen}>
+                        <View style={[styles.flexRow]}>
+                            <MaterialIcons name="map" size={30} color="white" />
+                            <Text style={[styles.bodyTextGreen]}>
+                                {item.Sijainti}
+                            </Text>
+                        </View>
+                    </Pressable>
+                }
+
             </View>
         </View >
     )

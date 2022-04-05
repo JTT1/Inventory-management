@@ -18,7 +18,7 @@ const SearchField = ({ setSearchTerm, setLoaded }) => {
     }
 
     return (
-        <View style={styles.searchField}>
+        <View style={[styles.searchField, styles.boxShadow]}>
             <TextInput style={styles.bodyTextWhite}
                 autoFocus={true}
                 value={term}
@@ -27,7 +27,6 @@ const SearchField = ({ setSearchTerm, setLoaded }) => {
                 keyboardType='default'
                 onSubmitEditing={handleSearch}
             />
-
         </View>
     )
 }

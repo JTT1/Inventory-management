@@ -12,6 +12,7 @@ export const styles = StyleSheet.create({
         fontFamily: 'Quicksand700',
         fontSize: 30,
         alignSelf: 'center',
+        marginVertical: 10,
     },
     h2: {
         fontFamily: 'Quicksand700',
@@ -29,10 +30,6 @@ export const styles = StyleSheet.create({
         fontFamily: 'Quicksand700',
         fontSize: 16,
     },
-    bodyTextMedium: {
-        fontFamily: 'Quicksand500',
-        fontSize: 18,
-    },
     bodyTextDark: {
         fontFamily: 'Quicksand500',
         fontSize: 16,
@@ -43,12 +40,29 @@ export const styles = StyleSheet.create({
         fontSize: 16,
         color: '#ffffff',
     },
+    bodyTextGreen: {
+        fontFamily: 'Quicksand500',
+        fontSize: 16,
+        color: "#96E9CB"
+    },
+    bodyTextRed: {
+        fontFamily: 'Quicksand500',
+        fontSize: 16,
+        color: "#F4247C",
+    },
+    upperCase: {
+        textTransform: 'uppercase',
+    },
     backgroundImage: {
         position: 'absolute',
         top: 0,
         left: 0,
         bottom: 0,
         right: 0,
+    },
+    boxShadow: {
+        shadowColor: '#000',
+        elevation: 15,
     },
 
 });
