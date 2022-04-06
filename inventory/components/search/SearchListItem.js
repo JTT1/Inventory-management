@@ -5,7 +5,6 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 const SearchListItem = ({ item }) => {
 
-
     // insert functionality to open map here
     const handleMapOpen = () => {
         console.log('Press')
@@ -13,8 +12,10 @@ const SearchListItem = ({ item }) => {
 
     return (
         <View style={[styles.searchListItem]}>
+
+            {/* Needs routing to Component.js */}
             <View style={styles.flexRow}>
-                <Text style={[styles.bodyTextWhite, styles.upperCase, styles.h5]}>
+                <Text style={[styles.bodyTextWhite, styles.upperCase, styles.h5, { color: '#6EEEFF' }]}>
                     {item.Nimike}
                 </Text>
             </View>
@@ -44,7 +45,6 @@ const SearchListItem = ({ item }) => {
                         </View>
                     </Pressable>
                 }
-
             </View>
         </View >
     )

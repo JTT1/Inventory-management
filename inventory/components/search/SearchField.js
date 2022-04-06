@@ -7,7 +7,7 @@ const SearchField = ({ setSearchTerm, setLoaded }) => {
 
     // Helper to handle search term state
     const handleSearchInput = (text) => {
-        setTerm(text)
+        setTerm(text);
     }
 
     // When user submits the search, update parent state
@@ -19,13 +19,14 @@ const SearchField = ({ setSearchTerm, setLoaded }) => {
 
     return (
         <View style={[styles.searchField, styles.boxShadow]}>
-            <TextInput style={styles.bodyTextWhite}
+            <TextInput style={[styles.bodyTextWhite]}
                 autoFocus={true}
                 value={term}
                 onChangeText={text => handleSearchInput(text)}
                 placeholder="Hae komponentteja"
                 keyboardType='default'
                 onSubmitEditing={handleSearch}
+                clearTextOnFocus={true}
             />
         </View>
     )

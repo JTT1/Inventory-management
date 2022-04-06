@@ -17,15 +17,15 @@ const SearchComponents = () => {
     // Firebase query
     useEffect(() => {
         db.ref(ROOT_REF).on('value', querySnapShot => {
-            let data = querySnapShot.val() ? querySnapShot.val() : {};
-            let items = { ...data };
-            let keys = Object.keys(items);
+            const data = querySnapShot.val() ? querySnapShot.val() : {};
+            const items = { ...data };
+            const keys = Object.keys(items);
             const mappedItems = keys.map((key) => items[key])
             setData(mappedItems);
         });
     }, []);
 
-    // When search is submitted
+    // Search submitted -> hide search field, filter the data array, and finish loading
     useEffect(() => {
         setSearchField(false)
         setFilteredItems(filterData(data, searchTerm))
@@ -42,7 +42,7 @@ const SearchComponents = () => {
         return string.split(' ').join('').toLowerCase().trim();
     }
 
-    // Search from category or name
+    // Search by category or name
     const filterData = (data, term) => {
         if (term.trim() === '') {
             return []
@@ -57,7 +57,8 @@ const SearchComponents = () => {
     }
 
     // Filtered list render
-    const listItems = filteredItems.length > 0 ? filteredItems.map((item) => <SearchListItem item={item} key={uuid()} />)
+    const listItems = filteredItems.length > 0
+        ? filteredItems.map((item) => <SearchListItem item={item} key={uuid()} />)
         : <View>
             <Text style={[styles.bodyTextWhite, styles.h5]}>Ei hakutuloksia</Text>
         </View>
@@ -73,7 +74,6 @@ const SearchComponents = () => {
                 Hakutulokset: {searchTerm}
             </Text>
             <View style={[styles.results, styles.boxShadow]}>
-
                 {!loaded
                     ? <ActivityIndicator size="large" color="#1DFFBB" />
                     : <ScrollView style={[styles.stretch]}>
@@ -83,7 +83,8 @@ const SearchComponents = () => {
             </View>
 
             {/* Conditionally render either FAB or search field */}
-            {searchFieldOpen ? <SearchField setSearchTerm={setSearchTerm} setLoaded={setLoaded} />
+            {searchFieldOpen
+                ? <SearchField setSearchTerm={setSearchTerm} setLoaded={setLoaded} />
                 : <SearchFab toggle={toggleSearchField} />}
         </View >
     )
