@@ -9,6 +9,7 @@ import TopBar from './components/topbar/TopBar.js';
 // import Componentlist from './components/Componentlist';
 // import { db, ROOT_REF } from './firebase/Config';
 // import { Components } from './components/Items';
+//Testi
 
 const App = () => {
   // This has to be in app root as far as I know
