@@ -1,11 +1,15 @@
-import { View, Text } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import React from 'react';
+import { searchStyles as styles } from './SearchStyles';
+import { MaterialIcons } from '@expo/vector-icons';
 
-const SearchFab = () => {
+const SearchFab = ({ toggle }) => {
+
+
     return (
-        <View>
-            <Text>SearchFab</Text>
-        </View>
+        <Pressable style={[styles.searchFAB, styles.boxShadow]} onPress={toggle}>
+            <MaterialIcons name="search" size={36} color={styles.bodyTextDark.color} />
+        </Pressable>
     )
 }
 

@@ -4,10 +4,17 @@ import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const SearchListItem = ({ item }) => {
+
+
+    // insert functionality to open map here
+    const handleMapOpen = () => {
+        console.log('Press')
+    }
+
     return (
-        <View style={[styles.searchListItem, styles.borderStart]}>
+        <View style={[styles.searchListItem]}>
             <View style={styles.flexRow}>
-                <Text style={[styles.bodyTextWhite, styles.h4]}>
+                <Text style={[styles.bodyTextWhite, styles.upperCase, styles.h5]}>
                     {item.Nimike}
                 </Text>
             </View>
@@ -20,20 +27,24 @@ const SearchListItem = ({ item }) => {
             <View style={[styles.flexRow, styles.flexBetween]}>
                 <View style={styles.flexRow}>
                     {
-                        item.Määrä !== 0 ? <MaterialIcons name="check" size={30} color="#13FF80" />
+                        item.Maara !== "" ? <MaterialIcons name="check" size={30} color="#13FF80" />
                             : <MaterialIcons name="do-not-disturb" size={30} color="#F4307C" />
                     }
                     <Text style={styles.bodyTextWhite}>
-                        {item.Määrä}
+                        {item.Maara} kpl varastossa
                     </Text>
                 </View>
-                <View style={[styles.flexRow, styles.location]}>
-                    <Text style={styles.bodyTextWhite}>  Sijainti: </Text>
-                    <MaterialIcons name="map" size={30} color="white" />
-                    <Text style={[styles.bodyTextWhite, styles.selfEnd]}>
-                        {item.Sijainti}
-                    </Text>
-                </View>
+                {item.Sijainti != "" &&
+                    <Pressable onPress={handleMapOpen}>
+                        <View style={[styles.flexRow]}>
+                            <MaterialIcons name="map" size={30} color="white" />
+                            <Text style={[styles.bodyTextGreen]}>
+                                {item.Sijainti}
+                            </Text>
+                        </View>
+                    </Pressable>
+                }
+
             </View>
         </View >
     )

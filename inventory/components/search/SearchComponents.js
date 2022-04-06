@@ -1,133 +1,91 @@
-import { ScrollView, View, Text } from 'react-native';
-import React from 'react';
-import { searchStyles } from './SearchStyles';
+import { ScrollView, View, Text, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { searchStyles as styles } from './SearchStyles';
 import SearchListItem from './SearchListItem.js';
 import SearchFab from './SearchFab.js';
+import SearchField from './SearchField';
 import uuid from 'react-uuid';
+import { db, ROOT_REF } from '../../firebase/Config';
 
 const SearchComponents = () => {
-    // const handleError = (e) => { console.log(e.nativeEvent.error); };
+    const [data, setData] = useState([]);
+    const [searchFieldOpen, setSearchField] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredItems, setFilteredItems] = useState([]);
+    const [loaded, setLoaded] = useState(false);
 
-    // Sample data
-    const data = [
-        {
-            ID: "2323",
-            Kategoria:
-                "Sähkömoottorit ja ohjaimet",
-            Lisätieto: "",
-            Määrä: 200,
-            Nimike: "Onrobot kolmisormitarttuja 3FG15",
-            Sijainti: "1.3.1",
-        }, {
-            ID: "2323",
-            Kategoria:
-                "Sähkömoottorit ja ohjaimet",
-            Lisätieto: "",
-            Määrä: 200,
-            Nimike: "Onrobot kolmisormitarttuja 3FG15",
-            Sijainti: "1.3.1",
-        }, {
-            ID: "2323",
-            Kategoria:
-                "Sähkömoottorit ja ohjaimet",
-            Lisätieto: "",
-            Määrä: 0,
-            Nimike: "Onrobot kolmisormitarttuja 3FG15",
-            Sijainti: "1.3.1",
-        }, {
-            ID: "2323",
-            Kategoria:
-                "Sähkömoottorit ja ohjaimet",
-            Lisätieto: "",
-            Määrä: 200,
-            Nimike: "Onrobot kolmisormitarttuja 3FG15",
-            Sijainti: "1.3.1",
-        }, {
-            ID: "2323",
-            Kategoria:
-                "Sähkömoottorit ja ohjaimet",
-            Lisätieto: "",
-            Määrä: 200,
-            Nimike: "Onrobot kolmisormitarttuja 3FG15",
-            Sijainti: "1.3.1",
-        }, {
-            ID: "2323",
-            Kategoria:
-                "Sähkömoottorit ja ohjaimet",
-            Lisätieto: "",
-            Määrä: 200,
-            Nimike: "Onrobot kolmisormitarttuja 3FG15",
-            Sijainti: "1.3.1",
-        }, {
-            ID: "2323",
-            Kategoria:
-                "Sähkömoottorit ja ohjaimet",
-            Lisätieto: "",
-            Määrä: 0,
-            Nimike: "Onrobot kolmisormitarttuja 3FG15",
-            Sijainti: "1.3.1",
-        }, {
-            ID: "2323",
-            Kategoria:
-                "Sähkömoottorit ja ohjaimet",
-            Lisätieto: "",
-            Määrä: 200,
-            Nimike: "Onrobot kolmisormitarttuja 3FG15",
-            Sijainti: "1.3.1",
-        }, {
-            ID: "2323",
-            Kategoria:
-                "Sähkömoottorit ja ohjaimet",
-            Lisätieto: "",
-            Määrä: 200,
-            Nimike: "Onrobot kolmisormitarttuja 3FG15",
-            Sijainti: "1.3.1",
-        }, {
-            ID: "2323",
-            Kategoria:
-                "Sähkömoottorit ja ohjaimet",
-            Lisätieto: "",
-            Määrä: 200,
-            Nimike: "Onrobot kolmisormitarttuja 3FG15",
-            Sijainti: "1.3.1",
-        }, {
-            ID: "2323",
-            Kategoria:
-                "Sähkömoottorit ja ohjaimet",
-            Lisätieto: "",
-            Määrä: 200,
-            Nimike: "Onrobot kolmisormitarttuja 3FG15",
-            Sijainti: "1.3.1",
-        }, {
-            ID: "2323",
-            Kategoria:
-                "Sähkömoottorit ja ohjaimet",
-            Lisätieto: "",
-            Määrä: 200,
-            Nimike: "Onrobot kolmisormitarttuja 3FG15",
-            Sijainti: "1.3.1",
-        },
-    ]
-    // Map data for list render
-    const listItems = data.map((item) => <SearchListItem item={item} key={uuid()} />)
+    // Firebase query
+    useEffect(() => {
+        db.ref(ROOT_REF).on('value', querySnapShot => {
+            let data = querySnapShot.val() ? querySnapShot.val() : {};
+            let items = { ...data };
+            let keys = Object.keys(items);
+            const mappedItems = keys.map((key) => items[key])
+            setData(mappedItems);
+        });
+    }, []);
+
+    // When search is submitted
+    useEffect(() => {
+        setSearchField(false)
+        setFilteredItems(filterData(data, searchTerm))
+        setLoaded(true)
+    }, [searchTerm])
+
+    // Toggle search field when FAB is pressed
+    const toggleSearchField = () => {
+        setSearchField(!searchFieldOpen);
+    }
+
+    // Wipes whitespace of given string and turns it into lowercase
+    const formatString = (string) => {
+        return string.split(' ').join('').toLowerCase().trim();
+    }
+
+    // Search from category or name
+    const filterData = (data, term) => {
+        if (term.trim() === '') {
+            return []
+        }
+        const searchItemsArray = data.map((item) => item).filter((item) => {
+            let search = formatString(term);
+            let itemName = formatString(item.Nimike);
+            let itemCategory = formatString(item.Kategoria);
+            return itemName.includes(search) || itemCategory.includes(search)
+        });
+        return searchItemsArray
+    }
+
+    // Filtered list render
+    const listItems = filteredItems.length > 0 ? filteredItems.map((item) => <SearchListItem item={item} key={uuid()} />)
+        : <View>
+            <Text style={[styles.bodyTextWhite, styles.h5]}>Ei hakutuloksia</Text>
+        </View>
 
     return (
-        <View style={searchStyles.container}>
+        <View style={styles.flexBox}>
             <View>
-                <Text style={[searchStyles.bodyTextWhite, searchStyles.h1]}>
+                <Text style={[styles.bodyTextWhite, styles.h1]}>
                     Hae komponentteja
                 </Text>
             </View>
-            <View style={searchStyles.results}>
-                <Text style={[searchStyles.bodyText, searchStyles.bodyTextWhite, { paddingVertical: 10 }]}>
-                    Hakutulokset
-                </Text>
-                <ScrollView style={searchStyles.stretch}>
-                    {listItems}
-                </ScrollView>
+            <Text style={[styles.bodyTextWhite, styles.h4]}>
+                Hakutulokset: {searchTerm}
+            </Text>
+            <View style={[styles.results, styles.boxShadow]}>
+
+                {!loaded
+                    ? <ActivityIndicator size="large" color="#1DFFBB" />
+                    : <ScrollView style={[styles.stretch]}>
+                        {listItems}
+                    </ScrollView>
+                }
             </View>
-            <SearchFab />
-        </View>
+
+            {/* Conditionally render either FAB or search field */}
+            {searchFieldOpen ? <SearchField setSearchTerm={setSearchTerm} setLoaded={setLoaded} />
+                : <SearchFab toggle={toggleSearchField} />}
+        </View >
     )
 }
 
