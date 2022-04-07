@@ -12,7 +12,6 @@ const SearchListItem = ({ item }) => {
 
     return (
         <View style={[styles.searchListItem]}>
-
             {/* Needs routing to Component.js */}
             <View style={styles.flexRow}>
                 <Text style={[styles.bodyTextWhite, styles.upperCase, styles.h5, { color: '#6EEEFF' }]}>
@@ -20,7 +19,11 @@ const SearchListItem = ({ item }) => {
                 </Text>
             </View>
             <View style={styles.flexRow}>
-                <MaterialIcons name="category" size={30} color="white" />
+                <MaterialIcons
+                    name="category"
+                    size={30}
+                    color="white"
+                />
                 <Text style={styles.bodyTextWhite}>
                     {item.Kategoria}
                 </Text>
@@ -28,17 +31,31 @@ const SearchListItem = ({ item }) => {
             <View style={[styles.flexRow, styles.flexBetween]}>
                 <View style={styles.flexRow}>
                     {
-                        item.Maara !== "" ? <MaterialIcons name="check" size={30} color="#13FF80" />
-                            : <MaterialIcons name="do-not-disturb" size={30} color="#F4307C" />
+                        item.Maara !== ""
+                            ? <MaterialIcons
+                                name="check"
+                                size={30}
+                                color="#13FF80"
+                            />
+                            : <MaterialIcons
+                                name="do-not-disturb"
+                                size={30}
+                                color="#F4307C"
+                            />
                     }
                     <Text style={styles.bodyTextWhite}>
                         {item.Maara} kpl varastossa
                     </Text>
                 </View>
-                {item.Sijainti != "" &&
-                    <Pressable onPress={handleMapOpen}>
+                {
+                    item.Sijainti != ""
+                    && <Pressable onPress={handleMapOpen}>
                         <View style={[styles.flexRow]}>
-                            <MaterialIcons name="map" size={30} color="white" />
+                            <MaterialIcons
+                                name="map"
+                                size={30}
+                                color="white"
+                            />
                             <Text style={[styles.bodyTextGreen]}>
                                 {item.Sijainti}
                             </Text>

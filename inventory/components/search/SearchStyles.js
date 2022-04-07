@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import { styles } from '../../styles/AppRootStyle';
 export const searchStyles = StyleSheet.create({
     ...styles,
-    results: {
+    searchResults: {
         justifyContent: 'center',
         alignItems: 'center',
         borderTopWidth: 2,
@@ -11,27 +11,13 @@ export const searchStyles = StyleSheet.create({
         backgroundColor: '#393663',
         marginVertical: 5,
         maxHeight: 430,
+        color: 'white',
     },
     searchListItem: {
         padding: 5,
         alignSelf: 'stretch',
         borderColor: '#605A91',
         borderTopWidth: 2,
-    },
-    flexBox: {
-        flex: 1,
-    },
-    flexRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        marginBottom: 1,
-    },
-    flexBetween: {
-        justifyContent: 'space-between',
-    },
-    stretch: {
-        alignSelf: 'stretch',
     },
     searchFAB: {
         alignSelf: 'center',

@@ -22,8 +22,9 @@ const SearchComponents = () => {
             const keys = Object.keys(items);
             const mappedItems = keys.map((key) => items[key])
             setData(mappedItems);
+            console.log(mappedItems);
         });
-    }, []);
+    }, [isLoaded]);
 
     // On search submit -> hide search field, filter the data array, and finish loading
     useEffect(() => {
@@ -80,7 +81,7 @@ const SearchComponents = () => {
             {/* <Text style={[styles.bodyTextWhite, styles.h4]}>
                 Hakutulokset
             </Text> */}
-            <View style={[styles.results, styles.boxShadow]}>
+            <View style={[styles.searchResults, styles.boxShadow]}>
                 {!isLoaded
                     ? <ActivityIndicator size="large" color="#1DFFBB" />
                     : <ScrollView style={[styles.stretch]}>
