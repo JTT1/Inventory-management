@@ -6,6 +6,7 @@ import AppLoading from 'expo-app-loading';
 import SearchComponents from './components/search/SearchComponents';
 import { StatusBar } from 'expo-status-bar';
 import TopBar from './components/topbar/TopBar.js';
+import Login from './components/login/Login.js';
 // import Componentlist from './components/Componentlist';
 // import { db, ROOT_REF } from './firebase/Config';
 // import { Components } from './components/Items';

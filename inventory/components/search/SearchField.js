@@ -12,9 +12,18 @@ const SearchField = ({ setSearchTerm, setLoaded }) => {
 
     // When user submits the search, update parent state
     const handleSearch = () => {
-        // Trim to remove any unnecessary whitespace from the search term
-        setSearchTerm(term.trim())
-        setLoaded(false);
+        // if empty field, or only whitespace submitted
+        if (term.trim() === '') {
+            setTerm('');
+            return
+        }
+        else {
+            // Remove any unnecessary whitespace from the search term
+            setSearchTerm(term.trim())
+
+            // Loading indicator
+            setLoaded(false);
+        }
     }
 
     return (

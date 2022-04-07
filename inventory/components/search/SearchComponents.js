@@ -12,7 +12,7 @@ const SearchComponents = () => {
     const [searchFieldOpen, setSearchField] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredItems, setFilteredItems] = useState([]);
-    const [loaded, setLoaded] = useState(false);
+    const [isLoaded, setLoaded] = useState(false);
 
     // Firebase query
     useEffect(() => {
@@ -25,11 +25,11 @@ const SearchComponents = () => {
         });
     }, []);
 
-    // Search submitted -> hide search field, filter the data array, and finish loading
+    // On search submit -> hide search field, filter the data array, and finish loading
     useEffect(() => {
-        setSearchField(false)
-        setFilteredItems(filterData(data, searchTerm))
-        setLoaded(true)
+        setSearchField(false);
+        setFilteredItems(filterData(data, searchTerm));
+        setLoaded(true);
     }, [searchTerm])
 
     // Toggle search field when FAB is pressed
@@ -59,8 +59,15 @@ const SearchComponents = () => {
     // Filtered list render
     const listItems = filteredItems.length > 0
         ? filteredItems.map((item) => <SearchListItem item={item} key={uuid()} />)
-        : <View>
-            <Text style={[styles.bodyTextWhite, styles.h5]}>Ei hakutuloksia</Text>
+        : <View style={{ textAlign: 'center', padding: 20 }}>
+            <Text style={[styles.bodyTextWhite, styles.h5]}>
+                {
+                    // On initial load, guide the user to press the search button
+                    searchTerm.length === 0
+                        ? 'Aloita painamalla alla olevaa hakupainiketta'
+                        : 'Ei hakutuloksia'
+                }
+            </Text>
         </View>
 
     return (
@@ -70,18 +77,17 @@ const SearchComponents = () => {
                     Hae komponentteja
                 </Text>
             </View>
-            <Text style={[styles.bodyTextWhite, styles.h4]}>
-                Hakutulokset: {searchTerm}
-            </Text>
+            {/* <Text style={[styles.bodyTextWhite, styles.h4]}>
+                Hakutulokset
+            </Text> */}
             <View style={[styles.results, styles.boxShadow]}>
-                {!loaded
+                {!isLoaded
                     ? <ActivityIndicator size="large" color="#1DFFBB" />
                     : <ScrollView style={[styles.stretch]}>
                         {listItems}
                     </ScrollView>
                 }
             </View>
-
             {/* Conditionally render either FAB or search field */}
             {searchFieldOpen
                 ? <SearchField setSearchTerm={setSearchTerm} setLoaded={setLoaded} />
