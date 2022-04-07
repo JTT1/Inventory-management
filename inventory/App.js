@@ -22,7 +22,7 @@ const App = () => {
     return (
       <View style={styles.container}>
         {/* <TopBar /> */}
-        <ConfirmScreen returnLoan={true} />
+        {/* <ConfirmScreen returnLoan={true} /> */}
         {/* <SearchComponents /> */}
         <StatusBar style="light" />
       </View>
