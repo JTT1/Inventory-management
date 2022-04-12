@@ -6,6 +6,8 @@ import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
 import TopBar from './components/topbar/TopBar.js';
 import ConfirmScreen from './components/confirm/ConfirmScreen.js';
+import Login from './components/login/Login';
+import Register from './components/login/Register';
 
 
 const App = () => {
@@ -21,6 +23,8 @@ const App = () => {
   } else {
     return (
       <View style={styles.container}>
+        {/* <Login /> */}
+        { <Register /> }
         {/* <TopBar /> */}
         {/* <ConfirmScreen returnLoan={true} /> */}
         {/* <SearchComponents /> */}
