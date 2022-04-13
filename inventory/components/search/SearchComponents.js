@@ -22,7 +22,7 @@ const SearchComponents = () => {
             const keys = Object.keys(items);
             const mappedItems = keys.map((key) => items[key])
             setData(mappedItems);
-            console.log(mappedItems);
+            // console.log(mappedItems);
         });
     }, [isLoaded]);
 

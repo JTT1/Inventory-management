@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, TouchableOpacity, Pressable } from 'react-native'
+import React, { useState } from 'react'
 import { confirmStyles as styles } from './ConfirmStyles'
 import ConfirmIcon from './ConfirmIcon';
 
@@ -7,10 +7,11 @@ const ConfirmScreen = ({ returnLoan }) => {
     const confirmText = returnLoan ? 'Palautus vahvistettu' : 'Lainaus vahvistettu';
     const buttonText = returnLoan ? 'Komponenttihaku' : 'Palaa hakuun';
 
-    function handlePress() {
+    const handlePress = () => {
         // Route to wherever
-        console.log('pressed')
+        console.log('Press')
     }
+
 
     return (
         <View style={styles.confirmScreenContainer}>
