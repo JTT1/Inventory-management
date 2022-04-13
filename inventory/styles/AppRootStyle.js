@@ -59,6 +59,11 @@ export const styles = StyleSheet.create({
         fontSize: 16,
         color: "#F4247C",
     },
+    bodyTextYellow: {
+        fontFamily: 'Quicksand500',
+        fontSize: 16,
+        color: "#FFCB20",
+    },
     upperCase: {
         textTransform: 'uppercase',
     },
@@ -102,6 +107,39 @@ export const styles = StyleSheet.create({
     },
     buttonSmaller: {
         width: 230,
-    }
+    },
+    TextInput: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        alignItems: "center",
+        paddingTop: 9,
+        paddingBottom: 9,
+        paddingLeft: 9,
+        paddingRight: 9,
+        borderRadius: 20,
+        backgroundColor: "rgba(143,138,191,0.5)",
+        width: 270,
+        height: 40,
+    },
+    testi1: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        alignItems: "center",
+        width: 296,
+        height: 80,
+      },
+      testi2: {
+        fontSize: 18,
+        fontFamily: "Quicksand, sans-serif",
+        fontWeight: "700",
+        color: "rgba(255, 255, 255, 1)",
+        marginRight: 20,
+      },
+      testi3: {
+        width: 80,
+        height: 80,
+      },
 });
 

@@ -6,8 +6,9 @@ import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
 import TopBar from './components/topbar/TopBar.js';
 import ConfirmScreen from './components/confirm/ConfirmScreen.js';
-import Login from './components/login/Login'
-import SearchComponents from './components/search/SearchComponents'
+import Login from './components/login/Login';
+import Register from './components/login/Register';
+
 
 const App = () => {
   const [fontsLoaded] = useFonts({
@@ -22,9 +23,10 @@ const App = () => {
   } else {
     return (
       <View style={styles.container}>
-        <SearchComponents />
-        {/* <ConfirmScreen returnLoan={true} /> */}
         {/* <Login /> */}
+        {/* <Register /> */}
+        {/* <TopBar /> */}
+        {/* <ConfirmScreen returnLoan={true} /> */}
         <StatusBar style="light" />
       </View>
     );
