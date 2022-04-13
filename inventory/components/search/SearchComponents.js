@@ -6,6 +6,7 @@ import SearchFab from './SearchFab.js';
 import SearchField from './SearchField';
 import uuid from 'react-uuid';
 import { db, ROOT_REF } from '../../firebase/Config';
+import ThemeButton from '../testing_field/ThemeButton';
 
 const SearchComponents = () => {
     const [data, setData] = useState([]);
@@ -22,7 +23,6 @@ const SearchComponents = () => {
             const keys = Object.keys(items);
             const mappedItems = keys.map((key) => items[key])
             setData(mappedItems);
-            // console.log(mappedItems);
         });
     }, [isLoaded]);
 
