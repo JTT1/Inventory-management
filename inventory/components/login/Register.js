@@ -1,13 +1,51 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, Touchable, } from "react-native";
+import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, Touchable, Alert } from "react-native";
 import { styles } from "../../styles/AppRootStyle";
+import { db, ROOT_REF, USERS_REF } from '../../Firebase/Config';
 import { MaterialIcons } from '@expo/vector-icons';
+import ThemeButton from "../testing_field/ThemeButton";
+
+
+
+const checkInput = () => {
+  if (!etunimi.trim()) {
+    Alert.alert("Syötä nimesi");
+  }
+}
+
 
 export default function Register() {
     const [etunimi, setEtunimi] = useState("");
     const [sukunimi, setSukunimi] = useState("");
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [password1, setPassword1] = useState("");
+    const [password2, setPassword2] = useState("");
+    const [tark, setTark] = useState(false);
+    
+
+
+    function addUser() {
+      if (password1 !== password2) {
+        Alert.alert("Salasanasi ei täsmää!")
+      } else {
+        if (check() == true) {
+          db.ref(USERS_REF).push({
+            all
+          })
+          setEtunimi('');
+          setSukunimi('');
+          setEmail('');
+          setPassword1('');
+          setPassword2('');
+        }
+      }
+      }
+
+
+      
+
+
+
 
     return (
         <View style={styles.container}>
@@ -63,7 +101,7 @@ export default function Register() {
           placeholder="Salasana"
           placeholderTextColor="#B4B4B4"
           secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
+          onChangeText={(password1) => setPassword1(password1)}
         />
       </View>
 
@@ -74,20 +112,20 @@ export default function Register() {
           placeholder="Salasana"
           placeholderTextColor="#B4B4B4"
           secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
+          onChangeText={(password2) => setPassword2(password2)}
         />
       </View>
 
  
       <View style={styles}>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.h3}>Rekisteröidy</Text>
-      </TouchableOpacity>
+      
+        <ThemeButton color="#F4247C" text="Rekisteröidy" onPress={addUser}/>
+      
       </View>
 
         <Text style={styles.bodyTextWhite}
         >Rekisteröiytynyt jo?</Text> 
-        <Text style={styles.bodyTextYellow}><TouchableOpacity>Kirjaudu</TouchableOpacity></Text>
+        <TouchableOpacity><Text style={styles.bodyTextYellow}>Kirjaudu</Text></TouchableOpacity>
     </View>
   );
 }

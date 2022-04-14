@@ -4,6 +4,8 @@ import { View, } from 'react-native';
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
+import Login from './components/login/Login';
+import Register from './components/login/Register';
 
 
 const App = () => {
@@ -19,7 +21,11 @@ const App = () => {
   } else {
     return (
       <View style={styles.container}>
-
+        { <Register/> }
+        {/* <Register /> */}
+        {/* <TopBar /> */}
+        {/* <ConfirmScreen returnLoan={true} /> */}
+        {/* <SearchComponents /> */}
         <StatusBar style="light" />
       </View>
     );
