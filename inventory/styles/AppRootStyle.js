@@ -144,5 +144,12 @@ export const styles = StyleSheet.create({
 
     modal: {
     },
+    registerCenter: {
+        paddingTop: Constants.statusBarHeight,
+        flex: 1,
+        backgroundColor: '#2C2A4C',
+        color: 'white',
+        alignItems: "center",
+    }
 });
 

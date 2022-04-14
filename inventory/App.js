@@ -7,7 +7,6 @@ import { StatusBar } from 'expo-status-bar';
 import Register from "./components/login/Register";
 import Componentlist from"./components/testing_field/Componentlist";
 import Login from './components/login/Login';
-import Register from './components/login/Register';
 
 
 const App = () => {
@@ -23,7 +22,8 @@ const App = () => {
   } else {
     return (
       <View style={styles.container}>
-        { <Register/> }
+        {/* <Componentlist/> */}
+         <Register/> 
         {/* <Register /> */}
         {/* <TopBar /> */}
         {/* <ConfirmScreen returnLoan={true} /> */}
