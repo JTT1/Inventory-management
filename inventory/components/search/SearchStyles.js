@@ -33,18 +33,22 @@ export const searchStyles = StyleSheet.create({
         borderWidth: 2,
         borderColor: '#fff',
     },
-    searchField: {
-        bottom: 10,
-        position: 'absolute',
-        marginTop: 20,
+    searchFieldContainer: {
+        marginTop: 40,
         width: 312,
         height: 56,
         backgroundColor: '#5E5A86',
         borderWidth: 2,
         borderRadius: 30,
         borderColor: '#96E9CB',
-        justifyContent: 'center',
-        alignSelf: 'center',
         paddingHorizontal: 15,
+    },
+    searchInput: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    suggestionListItem: {
+        marginVertical: 5
     },
 });

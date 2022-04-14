@@ -1,23 +1,28 @@
-import { Text, View, ScrollView, Pressable, Image } from 'react-native';
+import { Text, View, ScrollView, Pressable, TouchableOpacity } from 'react-native';
 import { searchStyles as styles } from './SearchStyles';
 import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const SearchListItem = ({ item }) => {
-
     // insert functionality to open map here
     const handleMapOpen = () => {
-        console.log('Press')
+        console.log('map')
+    }
+
+    // Route to component.js
+    const handleRouting = () => {
+        console.log('route')
     }
 
     return (
         <View style={[styles.searchListItem]}>
-            {/* Needs routing to Component.js */}
+            <TouchableOpacity onPress={handleRouting}>
             <View style={styles.flexRow}>
                 <Text style={[styles.bodyTextWhite, styles.upperCase, styles.h5, { color: '#6EEEFF' }]}>
                     {item.Nimike}
                 </Text>
             </View>
+            </TouchableOpacity>
             <View style={styles.flexRow}>
                 <MaterialIcons
                     name="category"
@@ -25,7 +30,7 @@ const SearchListItem = ({ item }) => {
                     color="white"
                 />
                 <Text style={styles.bodyTextWhite}>
-                    {item.Kategoria}
+                    {item.Tarjotin}
                 </Text>
             </View>
             <View style={[styles.flexRow, styles.flexBetween]}>
@@ -49,7 +54,7 @@ const SearchListItem = ({ item }) => {
                 </View>
                 {
                     item.Sijainti != ""
-                    && <Pressable onPress={handleMapOpen}>
+                    && <TouchableOpacity onPress={handleMapOpen}>
                         <View style={[styles.flexRow]}>
                             <MaterialIcons
                                 name="map"
@@ -60,7 +65,7 @@ const SearchListItem = ({ item }) => {
                                 {item.Sijainti}
                             </Text>
                         </View>
-                    </Pressable>
+                        </TouchableOpacity>
                 }
             </View>
         </View >

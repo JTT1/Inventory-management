@@ -8,6 +8,8 @@ import TopBar from './components/topbar/TopBar.js';
 import ConfirmScreen from './components/confirm/ConfirmScreen.js';
 import Login from './components/login/Login';
 import Register from './components/login/Register';
+import SearchComponents from './components/search/SearchComponents.js';
+import ThemeButton from './components/testing_field/ThemeButton.js';
 
 
 const App = () => {
@@ -23,10 +25,11 @@ const App = () => {
   } else {
     return (
       <View style={styles.container}>
+        <TopBar />
         {/* <Login /> */}
         {/* <Register /> */}
-        {/* <TopBar /> */}
-        {/* <ConfirmScreen returnLoan={true} /> */}
+
+        <SearchComponents />
         <StatusBar style="light" />
       </View>
     );

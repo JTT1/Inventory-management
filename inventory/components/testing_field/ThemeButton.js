@@ -5,7 +5,8 @@ import React from 'react'
 const ThemeButton = (props) => {
     const color = props.color;
     const text = props.text;
-    let width = props?.width === 'smaller' ? 230 : 275;
+    const width = props?.width === 'small' ? 230 : 275;
+    const onPress = props.onPress;
 
 
     /* Tätä voi käyttää missä ikinä tarviikaan:
@@ -15,15 +16,13 @@ const ThemeButton = (props) => {
     */
 
     return (
-        <Pressable>
-            <TouchableOpacity
+        <TouchableOpacity onPress={onPress}
                 style={[styles.button, styles.boxShadow, { backgroundColor: color, width: width }]}
             >
                 <Text style={[styles.upperCase, styles.h3]}>
                     {text}
                 </Text>
-            </TouchableOpacity>
-        </Pressable>
+        </TouchableOpacity>
     )
 }
 

@@ -5,8 +5,9 @@ import SearchListItem from './SearchListItem.js';
 import SearchFab from './SearchFab.js';
 import SearchField from './SearchField';
 import uuid from 'react-uuid';
-import { db, ROOT_REF } from '../../firebase/Config';
-import ThemeButton from '../testing_field/ThemeButton';
+import { fetchAllItems } from '../../helpers/firebaseFunctions';
+import Modal from 'react-native-modal'
+
 
 const SearchComponents = () => {
     const [data, setData] = useState([]);
@@ -17,21 +18,15 @@ const SearchComponents = () => {
 
     // Firebase query
     useEffect(() => {
-        db.ref(ROOT_REF).on('value', querySnapShot => {
-            const data = querySnapShot.val() ? querySnapShot.val() : {};
-            const items = { ...data };
-            const keys = Object.keys(items);
-            const mappedItems = keys.map((key) => items[key])
-            setData(mappedItems);
-        });
-    }, [isLoaded]);
+        fetchAllItems(setData);
+    }, []);
 
     // On search submit -> hide search field, filter the data array, and finish loading
     useEffect(() => {
         setSearchField(false);
         setFilteredItems(filterData(data, searchTerm));
         setLoaded(true);
-    }, [searchTerm])
+    }, [searchTerm]);
 
     // Toggle search field when FAB is pressed
     const toggleSearchField = () => {
@@ -46,15 +41,15 @@ const SearchComponents = () => {
     // Search by category or name
     const filterData = (data, term) => {
         if (term.trim() === '') {
-            return []
+            return [];
         }
         const searchItemsArray = data.map((item) => item).filter((item) => {
             let search = formatString(term);
             let itemName = formatString(item.Nimike);
-            let itemCategory = formatString(item.Kategoria);
-            return itemName.includes(search) || itemCategory.includes(search)
+            let trayNumber = formatString(item.Tarjotin.toString());
+            return itemName.includes(search) || trayNumber.includes(search);
         });
-        return searchItemsArray
+        return searchItemsArray;
     }
 
     // Filtered list render
@@ -78,9 +73,6 @@ const SearchComponents = () => {
                     Hae komponentteja
                 </Text>
             </View>
-            {/* <Text style={[styles.bodyTextWhite, styles.h4]}>
-                Hakutulokset
-            </Text> */}
             <View style={[styles.searchResults, styles.boxShadow]}>
                 {!isLoaded
                     ? <ActivityIndicator size="large" color="#1DFFBB" />
@@ -89,10 +81,13 @@ const SearchComponents = () => {
                     </ScrollView>
                 }
             </View>
+
             {/* Conditionally render either FAB or search field */}
-            {searchFieldOpen
-                ? <SearchField setSearchTerm={setSearchTerm} setLoaded={setLoaded} />
-                : <SearchFab toggle={toggleSearchField} />}
+
+            <Modal isVisible={searchFieldOpen} animationIn={'fadeIn'} animationOut={'fadeOut'}>
+                <SearchField data={data} setSearchTerm={setSearchTerm} setLoaded={setLoaded} />
+            </Modal>
+            <SearchFab toggle={toggleSearchField} />
         </View >
     )
 }
