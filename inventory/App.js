@@ -1,27 +1,29 @@
-import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, ScrollView, View, Button, Alert, TextInput } from 'react-native';
-import Componentlist from './components/Componentlist';
-
-import { db, ROOT_REF } from './firebase/Config';
-import { Components } from './components/Items';
-
-export default function App() {
-
-  const [items, setItems] = useState({});
+import React from 'react'
+import { styles } from './styles/AppRootStyle.js';
+import { View, } from 'react-native';
+import { useFonts } from 'expo-font';
+import AppLoading from 'expo-app-loading';
+import { StatusBar } from 'expo-status-bar';
 
 
-  return (
-    <View style={styles.container}>
-      <Componentlist/>
-    </View>
-  );
+const App = () => {
+  const [fontsLoaded] = useFonts({
+    Quicksand400: require('./assets/fonts/Quicksand400Regular.ttf'),
+    Quicksand500: require('./assets/fonts/Quicksand500Medium.ttf'),
+    Quicksand600: require('./assets/fonts/Quicksand600SemiBold.ttf'),
+    Quicksand700: require('./assets/fonts/Quicksand700Bold.ttf'),
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  } else {
+    return (
+      <View style={styles.container}>
+
+        <StatusBar style="light" />
+      </View>
+    );
+  }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;

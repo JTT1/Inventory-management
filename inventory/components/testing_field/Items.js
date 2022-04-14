@@ -22,9 +22,6 @@ export const Components = ({ component: { item: title, done }, id }) => {
         db.ref(ROOT_REF + [id]).remove();
     };
 
-
-
-
     return (
         <View style={styles.component}>
             <Pressable onPress={onCheck}>
