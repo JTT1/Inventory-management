@@ -23,7 +23,7 @@ const App = () => {
     return (
       <View style={styles.container}>
         {/* <Componentlist/> */}
-         <Register/> 
+         {/* <Register/>  */}
         {/* <Register /> */}
         {/* <TopBar /> */}
         {/* <ConfirmScreen returnLoan={true} /> */}
