@@ -4,11 +4,18 @@ import { View, } from 'react-native';
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
+<<<<<<< HEAD
 import SearchComponents from './components/search/SearchComponents';
 import ConfirmScreen from './components/confirm/ConfirmScreen';
 import LoanListItem from './components/returnloan/LoanListItem.js';
 import UserLoans from './components/returnloan/UserLoans.js';
 import TopBar from './components/topbar/TopBar';
+=======
+import Register from "./components/login/Register";
+import Componentlist from"./components/testing_field/Componentlist";
+import Login from './components/login/Login';
+
+>>>>>>> f40ab9bed9424216e717c1d947b34d264b93c930
 
 const App = () => {
   const [fontsLoaded] = useFonts({
@@ -23,8 +30,17 @@ const App = () => {
   } else {
     return (
       <View style={styles.container}>
+<<<<<<< HEAD
         <TopBar />
         <UserLoans />
+=======
+        {/* <Componentlist/> */}
+         {/* <Register/>  */}
+        {/* <Register /> */}
+        {/* <TopBar /> */}
+        {/* <ConfirmScreen returnLoan={true} /> */}
+        {/* <SearchComponents /> */}
+>>>>>>> f40ab9bed9424216e717c1d947b34d264b93c930
         <StatusBar style="light" />
       </View>
     );

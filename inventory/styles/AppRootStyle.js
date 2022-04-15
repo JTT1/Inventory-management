@@ -146,5 +146,12 @@ export const styles = StyleSheet.create({
         width: 80,
           height: 80,
     },
+    registerCenter: {
+        paddingTop: Constants.statusBarHeight,
+        flex: 1,
+        backgroundColor: '#2C2A4C',
+        color: 'white',
+        alignItems: "center",
+    }
 });
 

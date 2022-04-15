@@ -1,16 +1,117 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, Touchable, } from "react-native";
+import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, Touchable, Alert, ScrollView } from "react-native";
 import { styles } from "../../styles/AppRootStyle";
+import { db, ROOT_REF, USERS_REF } from '../../firebase/Config';
 import { MaterialIcons } from '@expo/vector-icons';
+import ThemeButton from "../testing_field/ThemeButton";
+
+
+
+const checkInput = () => {
+  if (!etunimi.trim()) {
+    Alert.alert("Syötä nimesi");
+    return false;
+  }
+
+  if (!sukunimi.trim()) {
+    Alert.alert("Syötä nimesi");
+    return false;
+  }
+
+  if (!email.trim()) {
+    Alert.alert("Syötä sähköpostisi");
+    return false;
+  }
+
+  if (!password1.trim()) {
+    Alert.alert("Syötä salasana");
+    return false;
+  }
+
+  if (!password2.trim()) {
+    Alert.alert("Vahvista salasana");
+    return false;
+  }
+
+  return true;
+
+}
+
 
 export default function Register() {
     const [etunimi, setEtunimi] = useState("");
     const [sukunimi, setSukunimi] = useState("");
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [password1, setPassword1] = useState("");
+    const [password2, setPassword2] = useState("");
+    const [tark, setTark] = useState(true);
+    
+
+    const checkInput = () => {
+      if (!etunimi.trim()) {
+        Alert.alert("Syötä nimesi");
+        return false;
+      }
+    
+      if (!sukunimi.trim()) {
+        Alert.alert("Syötä nimesi");
+        return false;
+      }
+    
+      if (!email.trim()) {
+        Alert.alert("Syötä sähköpostisi");
+        return false;
+      }
+    
+      if (!password1.trim()) {
+        Alert.alert("Syötä salasana");
+        return false;
+      }
+    
+      if (!password2.trim()) {
+        Alert.alert("Vahvista salasana");
+        return false;
+      }
+    
+      return true;
+    
+    }
+
+    function clear() {
+      setEtunimi("");
+      setSukunimi("");
+      setEmail("");
+      setPassword1("");
+      setPassword2("");
+      console.log("testi");
+    }
+
+
+    function addUser() {
+      if (password1 !== password2) {
+        Alert.alert("Salasanasi ei täsmää!")
+      } else {
+        if (checkInput() !== false) {
+          db.ref(USERS_REF).push({
+            etunimi: etunimi,
+            sukunimi: sukunimi,
+            email: email,
+            password: password1,
+          })
+          clear();
+        }
+      }
+      }
+
+
+      
+
+
+
 
     return (
-        <View style={styles.container}>
+        <ScrollView Style={styles.container}>
+          <View style={styles.registerCenter}>
         <Text style={styles.h3}>Rekisteröidy käyttäjäksi</Text>
         <Text style={styles.bodyTextWhite}>Täytä tietosi alla oleviin kenttiin luodaksesi käyttäjän</Text>
 
@@ -20,7 +121,7 @@ export default function Register() {
           style={styles.TextInput}
           placeholder="Etunimi"
           placeholderTextColor="#B4B4B4"
-          onChangeText={(etunimi) => setEtunimi(etunimi)}
+          onChangeText={setEtunimi}
         />
       </View>
  
@@ -30,7 +131,7 @@ export default function Register() {
           style={styles.TextInput}
           placeholder="Sukunimi"
           placeholderTextColor="#B4B4B4"
-          onChangeText={(sukunimi) => setSukunimi(sukunimi)}
+          onChangeText={setSukunimi}
         />
       </View>
 
@@ -52,7 +153,7 @@ export default function Register() {
           style={styles.TextInput}
           placeholder="Sähköposti"
           placeholderTextColor="#B4B4B4"
-          onChangeText={(email) => setEmail(email)}
+          onChangeText={setEmail}
         />
       </View>
 
@@ -63,7 +164,7 @@ export default function Register() {
           placeholder="Salasana"
           placeholderTextColor="#B4B4B4"
           secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
+          onChangeText={setPassword1}
         />
       </View>
 
@@ -74,20 +175,22 @@ export default function Register() {
           placeholder="Salasana"
           placeholderTextColor="#B4B4B4"
           secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
+          onChangeText={setPassword2}
         />
       </View>
 
  
       <View style={styles}>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.h3}>Rekisteröidy</Text>
-      </TouchableOpacity>
+      
+        <ThemeButton color="#F4247C" text="Rekisteröidy" onPress={addUser}/>
+      
+
       </View>
 
         <Text style={styles.bodyTextWhite}
         >Rekisteröiytynyt jo?</Text> 
-        <Text style={styles.bodyTextYellow}><TouchableOpacity>Kirjaudu</TouchableOpacity></Text>
-    </View>
+        <TouchableOpacity><Text style={styles.bodyTextYellow}>Kirjaudu</Text></TouchableOpacity>
+        </View>
+    </ScrollView>
   );
 }
