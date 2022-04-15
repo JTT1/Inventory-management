@@ -83,7 +83,6 @@ const SearchComponents = () => {
             </View>
 
             {/* Conditionally render either FAB or search field */}
-
             <Modal isVisible={searchFieldOpen} animationIn={'fadeIn'} animationOut={'fadeOut'}>
                 <SearchField data={data} setSearchTerm={setSearchTerm} setLoaded={setLoaded} />
             </Modal>

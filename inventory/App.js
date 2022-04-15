@@ -4,7 +4,11 @@ import { View, } from 'react-native';
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
-
+import SearchComponents from './components/search/SearchComponents';
+import ConfirmScreen from './components/confirm/ConfirmScreen';
+import LoanListItem from './components/returnloan/LoanListItem.js';
+import UserLoans from './components/returnloan/UserLoans.js';
+import TopBar from './components/topbar/TopBar';
 
 const App = () => {
   const [fontsLoaded] = useFonts({
@@ -19,7 +23,8 @@ const App = () => {
   } else {
     return (
       <View style={styles.container}>
-
+        <TopBar />
+        <UserLoans />
         <StatusBar style="light" />
       </View>
     );

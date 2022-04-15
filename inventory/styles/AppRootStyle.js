@@ -87,6 +87,11 @@ export const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         marginBottom: 1,
     },
+    flexCol: {
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        marginBottom: 1,
+    },
     flexBetween: {
         justifyContent: 'space-between',
     },
@@ -139,10 +144,7 @@ export const styles = StyleSheet.create({
       },
       testi3: {
         width: 80,
-        height: 80,
-      },
-
-    modal: {
+          height: 80,
     },
 });
 

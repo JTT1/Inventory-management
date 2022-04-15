@@ -46,8 +46,8 @@ const SearchField = ({ data, setSearchTerm, setLoaded }) => {
     }
 
     return (
-        <View style={[styles.searchFieldContainer, styles.boxShadow]}>
-            <View>
+        <View>
+            <View style={[styles.searchFieldContainer, styles.boxShadow]}>
                 <TextInput style={[styles.bodyTextWhite, styles.searchInput]}
                 autoFocus={true}
                 value={term}

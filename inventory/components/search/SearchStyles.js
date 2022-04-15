@@ -47,8 +47,9 @@ export const searchStyles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        paddingLeft: 10,
     },
     suggestionListItem: {
-        marginVertical: 5
+        marginVertical: 3
     },
 });
