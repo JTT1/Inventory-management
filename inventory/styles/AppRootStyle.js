@@ -14,25 +14,21 @@ export const styles = StyleSheet.create({
         alignSelf: 'center',
         marginVertical: 10,
         color: 'white',
-
     },
     h2: {
         fontFamily: 'Quicksand700',
         fontSize: 24,
         color: 'white',
-
     },
     h3: {
         fontFamily: 'Quicksand700',
         fontSize: 20,
         color: 'white',
-
     },
     h4: {
         fontFamily: 'Quicksand700',
         fontSize: 18,
         color: 'white',
-
     },
     h5: {
         fontFamily: 'Quicksand700',
@@ -85,7 +81,6 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        marginBottom: 1,
     },
     flexCol: {
         flexDirection: 'column',
@@ -98,6 +93,12 @@ export const styles = StyleSheet.create({
     stretch: {
         alignSelf: 'stretch',
     },
+    centerHorizontal: {
+        alignItems: 'center'
+    },
+    centerVertical: {
+        justifyContent: 'center'
+    },
 
     button: {
         marginTop: 25,
@@ -106,6 +107,7 @@ export const styles = StyleSheet.create({
         borderRadius: 28, // height / 2
         alignItems: 'center',
         justifyContent: 'center',
+        alignSelf: 'center',
         textTransform: 'uppercase',
         backgroundColor: '#F4247C',
         color: 'white',

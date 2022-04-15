@@ -27,7 +27,7 @@ const App = () => {
   } else {
     return (
       <View style={styles.container}>
-        <TopBar />
+        {/* <TopBar /> */}
         {/* <UserLoans /> */}
         {/* <Componentlist/> */}
          {/* <Register/>  */}

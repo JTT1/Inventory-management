@@ -1,4 +1,4 @@
-import { TouchableOpacity, Pressable, Text } from 'react-native'
+import { TouchableOpacity, Text } from 'react-native'
 import { styles } from '../../styles/AppRootStyle'
 import React from 'react'
 
@@ -10,7 +10,7 @@ const ThemeButton = (props) => {
 
 
     /* Tätä voi käyttää missä ikinä tarviikaan:
-    <ThemeButton width='smaller' color="#F4247C" text='Kotinäkymään' />
+    <ThemeButton width='small' color="#F4247C" text='Kotinäkymään' />
 
     Width ei ole pakollinen, renderöi silloin leveämmän buttonin
     */
