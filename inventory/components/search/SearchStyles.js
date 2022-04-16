@@ -10,7 +10,7 @@ export const searchStyles = StyleSheet.create({
         borderColor: '#605A91',
         backgroundColor: '#393663',
         marginVertical: 5,
-        maxHeight: 430,
+        maxHeight: "75%",
         color: 'white',
     },
     searchListItem: {
@@ -25,7 +25,7 @@ export const searchStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center',
-        bottom: 20,
+        bottom: "7%",
         backgroundColor: '#96E9CB',
         width: 70,
         height: 70,
@@ -33,9 +33,14 @@ export const searchStyles = StyleSheet.create({
         borderWidth: 2,
         borderColor: '#fff',
     },
+    searchModal: {
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+        padding: 10,
+    },
     searchFieldContainer: {
         marginTop: 40,
-        width: 312,
+        width: 310,
         height: 56,
         backgroundColor: '#5E5A86',
         borderWidth: 2,
@@ -49,7 +54,18 @@ export const searchStyles = StyleSheet.create({
         justifyContent: 'center',
         paddingLeft: 10,
     },
+    suggestionsList: {
+        elevation: 20,
+        maxHeight: 150,
+        paddingLeft: 25,
+    },
     suggestionListItem: {
         marginVertical: 3
     },
+    cancelFAB: {
+        borderRadius: 100,
+        backgroundColor: '#5E5A86',
+        padding: 5,
+        marginRight: 5,
+    }
 });

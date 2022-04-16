@@ -8,7 +8,6 @@ const ThemeButton = (props) => {
     const width = props?.width === 'small' ? 230 : 275;
     const onPress = props.onPress;
 
-
     /* Tätä voi käyttää missä ikinä tarviikaan:
     <ThemeButton width='small' color="#F4247C" text='Kotinäkymään' />
 
@@ -17,7 +16,7 @@ const ThemeButton = (props) => {
 
     return (
         <TouchableOpacity onPress={onPress}
-                style={[styles.button, styles.boxShadow, { backgroundColor: color, width: width }]}
+            style={[styles.button, styles.boxShadow, { backgroundColor: color, width: width }, props.style]}
             >
                 <Text style={[styles.upperCase, styles.h3]}>
                     {text}

@@ -10,6 +10,7 @@ const LoanListItem = ({ item }) => {
     const animation = useRef(new Animated.Value(60)).current;
     const shouldAnimate = useRef(false);
     const checkBoxRef = useRef(false);
+    const currentlyLoanedAmount = item.lainattuMaara - item.palautukset;
 
 
     // When check box is checked
@@ -29,16 +30,17 @@ const LoanListItem = ({ item }) => {
 
     const handleBrokenItemInfo = () => {
 
-        console.log('im broken af')
+        console.log('rikkinäinen')
     }
 
 
     const handleTextInput = (text) => {
-        if (text > item.lainattuMaara) {
+
+        if (text > currentlyLoanedAmount) {
             console.log('ei pysty, liian hapokasta')
         } else {
             console.log(text)
-
+        // setAmount(text);
         }
     }
 
@@ -48,8 +50,8 @@ const LoanListItem = ({ item }) => {
         Animated.spring(animation, {
             // When checkbox checked -> animate X to 0
             toValue: checkBoxRef.current ? 15 : 60,
-            friction: 6,
-            tension: 50,
+            friction: 7,
+            tension: 70,
             useNativeDriver: false,
         }).start();
     }
@@ -58,8 +60,8 @@ const LoanListItem = ({ item }) => {
         Animated.spring(animation, {
             // When checkbox checked -> animate X to 0
             toValue: shouldAnimate.current ? -Dimensions.get('window').width / 1.5 : 15,
-            friction: 6,
-            tension: 50,
+            friction: 7,
+            tension: 40,
             useNativeDriver: false,
         }).start();
     }
@@ -74,7 +76,7 @@ const LoanListItem = ({ item }) => {
 
                     <Text style={[styles.bodyTextWhite]}>Projekti: {item.projekti}</Text>
                     <Text style={[styles.bodyTextWhite]}>
-                        Lainassa: {item.lainattuMaara} kpl
+                        Lainassa: {currentlyLoanedAmount} kpl
                     </Text>
                 </View>
                 <Pressable onPress={(e) => handleSelection(e)}>
@@ -130,7 +132,7 @@ const LoanListItem = ({ item }) => {
                                         keyboardType='number-pad'
                                         onChangeText={(text) => handleTextInput(text)}
                                     />
-                                    <Text style={[styles.bodyTextWhite, { marginLeft: 5 }]}>/ {item.lainattuMaara}</Text>
+                                    <Text style={[styles.bodyTextWhite, { marginLeft: 5 }]}>/ {currentlyLoanedAmount}</Text>
                                 </View>
                             </View>
                             <View style={[styles.detailsColumn, styles.centerHorizontal, styles.centerVertical]}>

@@ -1,5 +1,5 @@
 import { View, TextInput, Text, ScrollView, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { searchStyles as styles } from './SearchStyles';
 import Fuse from 'fuse.js';
 import uuid from 'react-uuid';
@@ -7,7 +7,7 @@ import uuid from 'react-uuid';
 const SearchField = ({ data, setSearchTerm, setLoaded }) => {
     const [term, setTerm] = useState('');
     const [suggestions, setSuggestions] = useState([]);
-
+    const inputRef = useRef();
     // Fuse search configuration
     const fuse = new Fuse(data, {
         keys: [
@@ -49,7 +49,8 @@ const SearchField = ({ data, setSearchTerm, setLoaded }) => {
         <View>
             <View style={[styles.searchFieldContainer, styles.boxShadow]}>
                 <TextInput style={[styles.bodyTextWhite, styles.searchInput]}
-                autoFocus={true}
+                    ref={inputRef}
+                    onLayout={() => inputRef.current.focus()}
                 value={term}
                 onChangeText={text => handleSearchInput(text)}
                     placeholder='Hae komponentteja'
@@ -58,10 +59,10 @@ const SearchField = ({ data, setSearchTerm, setLoaded }) => {
                 clearTextOnFocus={true}
             />
         </View>
-            <ScrollView>
+            <ScrollView style={styles.suggestionsList} keyboardDismissMode={'on-drag'}>
                 {suggestions.map((item) =>
                     <TouchableOpacity key={uuid()} onPress={() => setSearchTerm(item)}>
-                        <Text style={[styles.bodyTextWhite, styles.suggestionListItem]}>
+                        <Text style={[styles.bodyTextWhite, styles.h5, styles.suggestionListItem]}>
                             {item}
                         </Text>
                     </TouchableOpacity>

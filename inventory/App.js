@@ -4,17 +4,33 @@ import { View, } from 'react-native';
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
-import SearchComponents from './components/search/SearchComponents';
-import ConfirmScreen from './components/confirm/ConfirmScreen';
-import LoanListItem from './components/returnloan/LoanListItem.js';
-import UserLoans from './components/returnloan/UserLoans.js';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TopBar from './components/topbar/TopBar';
-import Register from "./components/login/Register";
-import Componentlist from"./components/testing_field/Componentlist";
-import Login from './components/login/Login';
-
+import { routesList } from './app-routes/routes.js';
+import uuid from 'react-uuid';
+import Login from './components/login/Login.js';
 
 const App = () => {
+  // Navigation stack
+  const Stack = createNativeStackNavigator();
+
+  // Dynamic routes list, new routes can be added from /app-routes/routes.js (ctrl + click on routesList)
+  const routes = routesList.map((screen) => {
+    return <Stack.Screen
+      key={uuid()}
+      name={screen.name}
+      component={screen.component}
+      options={{
+        headerShown: screen?.header,
+        animationTypeForReplace: 'push',
+        animation: "slide_from_right",
+        presentation: 'modal',
+      }}
+    />
+  });
+
+  // Load fonts
   const [fontsLoaded] = useFonts({
     Quicksand400: require('./assets/fonts/Quicksand400Regular.ttf'),
     Quicksand500: require('./assets/fonts/Quicksand500Medium.ttf'),
@@ -27,15 +43,24 @@ const App = () => {
   } else {
     return (
       <View style={styles.container}>
-        {/* <TopBar /> */}
-        {/* <UserLoans /> */}
-        {/* <Componentlist/> */}
-         {/* <Register/>  */}
-        {/* <Register /> */}
-        {/* <TopBar /> */}
-        {/* <ConfirmScreen returnLoan={true} /> */}
-        {/* <SearchComponents /> */}
         <StatusBar style="light" />
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRoute="Koti"
+            screenOptions={{
+              header: (props) => <TopBar {...props} />,
+              headerStyle: styles.header,
+            }}
+          >
+            {routes}
+            {/* 
+            <Stack.Screen
+              name={'Koti'}
+              component={Login}
+              options={{ headerShown: false }}
+            /> */}
+          </Stack.Navigator>
+        </NavigationContainer>
       </View>
     );
   }

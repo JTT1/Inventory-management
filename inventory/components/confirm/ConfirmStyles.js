@@ -4,11 +4,13 @@ import { styles } from '../../styles/AppRootStyle'
 export const confirmStyles = StyleSheet.create({
     ...styles,
     confirmScreenContainer: {
+        flex: 1,
         alignItems: 'center',
+        justifyContent: 'center'
     },
 
     iconContainer: {
-        marginTop: 50,
+        // marginTop: 20,
         justifyContent: 'center',
         alignItems: 'center',
         marginLeft: -10,
@@ -20,7 +22,6 @@ export const confirmStyles = StyleSheet.create({
         borderRadius: 150,
         width: 200,
         height: 200,
-        marginLeft: -10
     },
     checkMark: {
         position: 'relative',
@@ -28,6 +29,6 @@ export const confirmStyles = StyleSheet.create({
         marginLeft: 50,
     },
     confirmationText: {
-        marginBottom: 50,
+        marginBottom: 30,
     }
 });

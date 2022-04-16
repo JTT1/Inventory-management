@@ -1,25 +1,40 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, } from "react-native";
+import { Text, View, TextInput, TouchableOpacity, } from "react-native";
 import { styles } from "../../styles/AppRootStyle";
 import { MaterialIcons } from '@expo/vector-icons';
+import ThemeButton from "../testing_field/ThemeButton";
  
-export default function Login() {
+export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
- 
-  return (
-        <View style={styles.container}>
-        <Text style={styles.h1}>Kirjautuminen vaaditaan</Text>
-        <Text style={styles.bodyTextWhite}>Ole hyvä ja kirjaudu sisään jatkaaksesi</Text>
 
+  const routeToRegister = () => {
+    navigation.navigate('Rekisteröinti')
+  }
+
+  const handleLogin = () => {
+    // check login credentials -> route/redirect to home screen
+
+    navigation.navigate('Haku')
+  }
+
+  return (
+    <View style={[styles.container, styles.centerHorizontal]}>
+        <Text style={styles.h1}>Kirjautuminen vaaditaan</Text>
+      <Text style={styles.bodyTextWhite}>Ole hyvä ja kirjaudu sisään jatkaaksesi</Text>
       <View style={styles.InputView}>
         <Text style={styles.h3}>Sähköposti tai käyttäjänimi</Text>
+        <View style={[styles.inputWrapper]}>
+          <MaterialIcons
+            style={styles.inputIcon}
+            name="alternate-email" size={24} color="#6EEEFF" />
         <TextInput
-          style={styles.TextInput}
+            style={[styles.TextInput]}
           placeholder="Sähköpostiosoite"
           placeholderTextColor="#B4B4B4"
           onChangeText={(email) => setEmail(email)}
         />
+        </View>
       </View>
  
       <View style={styles.inputView}>
@@ -35,9 +50,7 @@ export default function Login() {
 
  
       <View style={styles}>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.h3}>Kirjaudu</Text>
-      </TouchableOpacity>
+        <ThemeButton color="#F4247C" text="Kirjaudu" onPress={handleLogin} />
       </View>
 
       <TouchableOpacity>
@@ -48,7 +61,9 @@ export default function Login() {
 
         <Text style={styles.bodyTextWhite}
         >Ei vielä käyttäjätunnusta?</Text> 
-        <Text style={styles.bodyTextYellow}><TouchableOpacity>Rekisteröidy</TouchableOpacity></Text>
+      <TouchableOpacity onPress={routeToRegister}>
+        <Text style={styles.bodyTextYellow}>Rekisteröidy</Text>
+      </TouchableOpacity>
     </View>
   );
 }

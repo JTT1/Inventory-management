@@ -6,7 +6,9 @@ export const styles = StyleSheet.create({
         paddingTop: Constants.statusBarHeight,
         flex: 1,
         backgroundColor: '#2C2A4C',
-        color: 'white',
+    },
+    header: {
+        backgroundColor: '#2C2A4C',
     },
     h1: {
         fontFamily: 'Quicksand700',
@@ -122,12 +124,22 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         paddingTop: 9,
         paddingBottom: 9,
-        paddingLeft: 9,
+        paddingLeft: 40,
         paddingRight: 9,
         borderRadius: 20,
         backgroundColor: "rgba(143,138,191,0.5)",
         width: 270,
         height: 40,
+        color: 'white'
+    },
+    inputWrapper: {
+        flexDirection: 'row',
+        alignItems: "center",
+    },
+    inputIcon: {
+        elevation: 1,
+        position: 'absolute',
+        paddingLeft: 10
     },
     testi1: {
         display: "flex",
@@ -139,7 +151,7 @@ export const styles = StyleSheet.create({
       },
       testi2: {
         fontSize: 18,
-        fontFamily: "Quicksand, sans-serif",
+          fontFamily: "Quicksand500",
         fontWeight: "700",
         color: "rgba(255, 255, 255, 1)",
         marginRight: 20,
@@ -154,6 +166,6 @@ export const styles = StyleSheet.create({
         backgroundColor: '#2C2A4C',
         color: 'white',
         alignItems: "center",
-    }
+    },
 });
 

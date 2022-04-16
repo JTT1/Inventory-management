@@ -3,7 +3,7 @@ import { searchStyles as styles } from './SearchStyles';
 import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 
-const SearchListItem = ({ item }) => {
+const SearchListItem = ({ item, navigation, }) => {
     // insert functionality to open map here
     const handleMapOpen = () => {
         console.log('map')
@@ -11,7 +11,7 @@ const SearchListItem = ({ item }) => {
 
     // Route to component.js
     const handleRouting = () => {
-        console.log('route')
+        return
     }
 
     return (
@@ -49,7 +49,7 @@ const SearchListItem = ({ item }) => {
                             />
                     }
                     <Text style={styles.bodyTextWhite}>
-                        {item.Maara} kpl varastossa
+                        {item.Maara} kpl
                     </Text>
                 </View>
                 {

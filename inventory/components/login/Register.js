@@ -38,7 +38,7 @@ const checkInput = () => {
 }
 
 
-export default function Register() {
+export default function Register({ navigation }) {
     const [etunimi, setEtunimi] = useState("");
     const [sukunimi, setSukunimi] = useState("");
     const [email, setEmail] = useState("");
@@ -103,8 +103,9 @@ export default function Register() {
       }
       }
 
-
-      
+  const routeToLogin = () => {
+    navigation.navigate('Kirjautuminen');
+  }
 
 
 
@@ -182,14 +183,16 @@ export default function Register() {
  
       <View style={styles}>
       
-        <ThemeButton color="#F4247C" text="Rekisteröidy" onPress={addUser}/>
+            <ThemeButton color="#F4247C" text="Rekisteröidy" onPress={addUser} />
       
 
       </View>
 
         <Text style={styles.bodyTextWhite}
-        >Rekisteröiytynyt jo?</Text> 
-        <TouchableOpacity><Text style={styles.bodyTextYellow}>Kirjaudu</Text></TouchableOpacity>
+          >Rekisteröitynyt jo?</Text>
+          <TouchableOpacity onPress={routeToLogin}>
+            <Text style={styles.bodyTextYellow}>Kirjaudu</Text>
+          </TouchableOpacity>
         </View>
     </ScrollView>
   );

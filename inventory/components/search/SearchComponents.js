@@ -1,4 +1,4 @@
-import { ScrollView, View, Text, ActivityIndicator } from 'react-native';
+import { ScrollView, View, Text, ActivityIndicator, TouchableOpacity, Keyboard } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { searchStyles as styles } from './SearchStyles';
 import SearchListItem from './SearchListItem.js';
@@ -6,10 +6,11 @@ import SearchFab from './SearchFab.js';
 import SearchField from './SearchField';
 import uuid from 'react-uuid';
 import { fetchAllItems } from '../../helpers/firebaseFunctions';
-import Modal from 'react-native-modal'
+import Modal from 'react-native-modal';
+import { MaterialIcons } from '@expo/vector-icons';
 
 
-const SearchComponents = () => {
+const SearchComponents = (props) => {
     const [data, setData] = useState([]);
     const [searchFieldOpen, setSearchField] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -21,7 +22,7 @@ const SearchComponents = () => {
         fetchAllItems(setData);
     }, []);
 
-    // On search submit -> hide search field, filter the data array, and finish loading
+    // On search submit -> hide search field, filter the data array to show search results, and finish loading
     useEffect(() => {
         setSearchField(false);
         setFilteredItems(filterData(data, searchTerm));
@@ -54,7 +55,7 @@ const SearchComponents = () => {
 
     // Filtered list render
     const listItems = filteredItems.length > 0
-        ? filteredItems.map((item) => <SearchListItem item={item} key={uuid()} />)
+        ? filteredItems.map((item) => <SearchListItem {...props} item={item} key={uuid()} />)
         : <View style={{ textAlign: 'center', padding: 20 }}>
             <Text style={[styles.bodyTextWhite, styles.h5]}>
                 {
@@ -67,7 +68,7 @@ const SearchComponents = () => {
         </View>
 
     return (
-        <View style={styles.flexBox}>
+        <View style={[styles.flexBox, { backgroundColor: '#2C2A4C' }]}>
             <View>
                 <Text style={[styles.bodyTextWhite, styles.h1]}>
                     Hae komponentteja
@@ -83,8 +84,18 @@ const SearchComponents = () => {
             </View>
 
             {/* Conditionally render either FAB or search field */}
-            <Modal isVisible={searchFieldOpen} animationIn={'fadeIn'} animationOut={'fadeOut'}>
-                <SearchField data={data} setSearchTerm={setSearchTerm} setLoaded={setLoaded} />
+            <Modal style={[styles.searchModal]}
+                isVisible={searchFieldOpen} animationIn={'fadeIn'} animationOut={'fadeOut'}>
+                <View style={[styles.flexRow]}>
+                    <TouchableOpacity onPress={() => setSearchField(false)} style={[styles.cancelFAB]}>
+                        <MaterialIcons name="close" size={30} color="white" />
+                    </TouchableOpacity>
+                    <Text style={[styles.bodyTextWhite]}>
+                        Sulje
+                    </Text>
+                </View>
+                <SearchField data={data} setSearchTerm={setSearchTerm} setLoaded={setLoaded}
+                />
             </Modal>
             <SearchFab toggle={toggleSearchField} />
         </View >

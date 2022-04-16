@@ -10,9 +10,8 @@ export function fetchAllItems(fn) {
     });
 }
 
-
 // WIP - hakee kaikki lainat atm
-// Pitäisi hakea hakea kirjautuneen käyttäjän aktiiviset lainat ja komponenteista tiedot
+// Pitäisi hakea kirjautuneen käyttäjän aktiiviset lainat ja komponenteista tiedot
 export function getCurrentUserLoans(fn) {
     return db.ref(LOANS_REF).on('value', querySnapShot => {
         const data = querySnapShot.val() ? querySnapShot.val() : {};
