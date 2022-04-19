@@ -46,19 +46,13 @@ const App = () => {
         <StatusBar style="light" />
         <NavigationContainer>
           <Stack.Navigator
-            initialRoute="Koti"
+            initialRoute="Palautus"
             screenOptions={{
               header: (props) => <TopBar {...props} />,
               headerStyle: styles.header,
             }}
           >
             {routes}
-            {/* 
-            <Stack.Screen
-              name={'Koti'}
-              component={Login}
-              options={{ headerShown: false }}
-            /> */}
           </Stack.Navigator>
         </NavigationContainer>
       </View>

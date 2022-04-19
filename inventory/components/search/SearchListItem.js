@@ -1,4 +1,4 @@
-import { Text, View, ScrollView, Pressable, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 import { searchStyles as styles } from './SearchStyles';
 import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -11,6 +11,7 @@ const SearchListItem = ({ item, navigation, }) => {
 
     // Route to component.js
     const handleRouting = () => {
+        console.log(item)
         return
     }
 

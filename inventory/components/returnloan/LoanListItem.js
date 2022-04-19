@@ -1,25 +1,32 @@
 import { View, Text, Pressable, Animated, Dimensions, TextInput, TouchableOpacity } from 'react-native';
-import React, { useState, useRef, } from 'react';
+import React, { useState, useRef } from 'react';
 import { returnLoanStyles as styles } from './ReturnLoanStyles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
-const LoanListItem = ({ item }) => {
+const LoanListItem = ({ item, updateItemList }) => {
     const [checked, setChecked] = useState(false);
-    const [amount, setAmount] = useState("");
+    const [validInput, setValidInput] = useState(true);
+    const [currentlyLoanedAmount, setCurrentlyLoanedAmount] = useState(item.lainattuMaara - item.palautukset);
+    const [returnedBefore, setReturnedBefore] = useState(item.palautukset);
     const animation = useRef(new Animated.Value(60)).current;
     const shouldAnimate = useRef(false);
-    const checkBoxRef = useRef(false);
-    const currentlyLoanedAmount = item.lainattuMaara - item.palautukset;
+    // const currentlyLoanedAmount = item.lainattuMaara - item.palautukset;
+    // const returnedBefore = item.palautukset;
 
-
-    // When check box is checked
-    const handleSelection = (e) => {
-        setChecked(!checked);
+    // Check box handler
+    const handleSelection = () => {
+        // Add item to the list of items to be returned
+        if (!checked) {
+            updateItemList.push(item);
+        } else {
+            // remove when unchecked
+            updateItemList.splice(updateItemList.indexOf(item));
+        }
         if (item.lainattuMaara > 1) {
-            checkBoxRef.current = !checkBoxRef.current;
             toggleSwipeSuggestion();
         }
+        setChecked(!checked);
     }
 
     // When swiped left
@@ -29,27 +36,35 @@ const LoanListItem = ({ item }) => {
     }
 
     const handleBrokenItemInfo = () => {
-
         console.log('rikkinäinen')
     }
 
-
+    // Amount validation and handling 
     const handleTextInput = (text) => {
+        setValidInput(true);
 
-        if (text > currentlyLoanedAmount) {
-            console.log('ei pysty, liian hapokasta')
-        } else {
-            console.log(text)
-        // setAmount(text);
+        const itemIndex = updateItemList.indexOf(item);
+
+        // If higher amount than currently loaned
+        if (Number(text) > currentlyLoanedAmount) {
+            setValidInput(false);
+            updateItemList[itemIndex].palautukset = currentlyLoanedAmount;
+            // return
+        }
+        else {
+            updateItemList[itemIndex].palautukset = returnedBefore + Number(text);
+
+            if (updateItemList[itemIndex].palautukset === updateItemList[itemIndex].lainattuMaara) {
+                updateItemList[itemIndex].palautettuKokonaan = true;
+            }
         }
     }
-
 
     // animation functions
     const toggleSwipeSuggestion = () => {
         Animated.spring(animation, {
             // When checkbox checked -> animate X to 0
-            toValue: checkBoxRef.current ? 15 : 60,
+            toValue: !checked ? 15 : 60,
             friction: 7,
             tension: 70,
             useNativeDriver: false,
@@ -107,6 +122,7 @@ const LoanListItem = ({ item }) => {
                         transform: [{ translateX: animation }],
                     }
                     ]}>
+
                     <View style={styles.loanDetails}>
                         <Pressable
                             style={[styles.swipableArrowContainer,]}
@@ -116,21 +132,22 @@ const LoanListItem = ({ item }) => {
                                 name="chevron-double-left"
                                 size={20}
                                 color="white" />
-
                         </Pressable>
+                        {checked && 
                         <View style={[styles.innerContainer]}>
-                            <View style={[styles.detailsColumn, styles.centerVertical]}>
-
+                                <View style={[styles.detailsColumn, styles.centerVertical]}>
                                 <Text style={[styles.bodyTextWhite]}>
                                     Määrä
                                 </Text>
                                 <View style={[styles.flexRow, styles.detailsGap]}>
-                                    <TextInput
-                                        style={styles.returnInputField}
-                                        placeholder="1"
+                                        <TextInput 
+                                            style={[styles.returnInputField,
+                                            !validInput ? { borderWidth: 1, borderColor: '#F4247C' } : ""]}
+                                            placeholder="0"
                                         placeholderTextColor="#B4B4B4"
                                         keyboardType='number-pad'
-                                        onChangeText={(text) => handleTextInput(text)}
+                                            onChangeText={text => handleTextInput(text)}
+                                            maxLength={6}
                                     />
                                     <Text style={[styles.bodyTextWhite, { marginLeft: 5 }]}>/ {currentlyLoanedAmount}</Text>
                                 </View>
@@ -148,6 +165,7 @@ const LoanListItem = ({ item }) => {
                                 </TouchableOpacity>
                             </View>
                         </View>
+                        }
                     </View>
                 </Animated.View>
             </View>
