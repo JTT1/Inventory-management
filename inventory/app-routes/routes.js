@@ -9,6 +9,7 @@ import Component from '../components/componentScreen/Component';
 
 // Routes and components to use in stack navigator
 export const routesList = [
+    
     {
         name: 'Kirjautuminen',
         component: Login,
@@ -19,7 +20,6 @@ export const routesList = [
         component: Component,
         
     },
-    
     {
         name: 'Koti',
         component: Home,

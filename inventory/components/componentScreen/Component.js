@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native';
 import { useState } from 'react';
-import { styles } from "../../styles/AppRootStyle";
+import { componentStyles as styles } from './componentStyles';
 
 export default function Home() {
 

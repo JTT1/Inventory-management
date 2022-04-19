@@ -1,5 +1,6 @@
 import React from "react";
-import { styles } from "../../styles/AppRootStyle";
+
+import { homeStyles as styles } from './homeStyles';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
