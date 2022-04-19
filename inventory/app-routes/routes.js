@@ -7,13 +7,13 @@ import Login from '../components/login/Login';
 // Routes and components to use in stack navigator
 export const routesList = [
     {
+        name: 'Palautus',
+        component: CurrentLoans
+    },
+    {
         name: 'Kirjautuminen',
         component: Login,
         header: false, // this needs to be false for screens that dont render the header
-    },
-    {
-        name: 'Palautus',
-        component: CurrentLoans
     },
     {
         name: 'Haku',

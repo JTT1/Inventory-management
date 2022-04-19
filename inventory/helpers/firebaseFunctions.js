@@ -10,14 +10,28 @@ export function fetchAllItems(fn) {
     });
 }
 
-// WIP - hakee kaikki lainat atm
-// Pitäisi hakea kirjautuneen käyttäjän aktiiviset lainat ja komponenteista tiedot
-export function getCurrentUserLoans(fn) {
+export function getCurrentUserLoans(fn, userId) {
     return db.ref(LOANS_REF).on('value', querySnapShot => {
         const data = querySnapShot.val() ? querySnapShot.val() : {};
         const items = { ...data };
         const keys = Object.keys(items);
-        const mappedItems = keys.map((key) => items[key])
-        fn(mappedItems);
+        const userLoans = keys.map((key) => items[key]).filter((item) => item.userID === userId);
+        fn(userLoans);
     });
+}
+
+export function updateUserLoans(data) {
+    // Loan return timestamp
+    const now = new Date();
+    const month = Number(now.getMonth() + 1) < 10 ? '0' + Number(now.getMonth() + 1) : Number(now.getMonth() + 1);
+    const day = now.getDate() < 10 ? '0' + now.getDate() : now.getDate();
+    const currentDate = day + '/' + month + '/' + now.getFullYear();
+
+    return db.ref(LOANS_REF + data.ID).update({
+        lainattuMaara: data.lainattuMaara,
+        palautettuKokonaan: data.palautettuKokonaan,
+        palautukset: data.palautukset,
+        palautusPvm: currentDate,
+    });
+
 }
