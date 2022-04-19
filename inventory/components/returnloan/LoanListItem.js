@@ -11,23 +11,43 @@ const LoanListItem = ({ item, updateItemList }) => {
     const [returnedBefore, setReturnedBefore] = useState(item.palautukset);
     const animation = useRef(new Animated.Value(60)).current;
     const shouldAnimate = useRef(false);
-    // const currentlyLoanedAmount = item.lainattuMaara - item.palautukset;
-    // const returnedBefore = item.palautukset;
+    const itemCopy = { ...item };
 
     // Check box handler
     const handleSelection = () => {
         // Add item to the list of items to be returned
         if (!checked) {
-            updateItemList.push(item);
+            updateItemList.push(itemCopy);
         } else {
             // remove when unchecked
-            updateItemList.splice(updateItemList.indexOf(item));
+            updateItemList.splice(updateItemList.indexOf(itemCopy));
         }
-        if (item.lainattuMaara > 1) {
+        if (currentlyLoanedAmount > 1) { // if multiple items bound to a loan, show additional functionalities
             toggleSwipeSuggestion();
         }
         setChecked(!checked);
     }
+
+    // Amount validation and handling 
+    const handleTextInput = (text) => {
+        const index = updateItemList.findIndex(itemCopy => {
+            return itemCopy.ID === item.ID;
+        });
+        setValidInput(true);
+
+        // If higher amount than currently loaned
+        if (Number(text) > currentlyLoanedAmount) {
+            setValidInput(false);
+            updateItemList[index].palautukset = currentlyLoanedAmount;
+        } else {
+            updateItemList[index].palautukset = returnedBefore + Number(text)
+
+            if (updateItemList[index].palautukset === updateItemList[index].lainattuMaara) {
+                updateItemList[index].palautettuKokonaan = true;
+            }
+        }
+    }
+
 
     // When swiped left
     const handleSwipeGesture = (e) => {
@@ -39,26 +59,6 @@ const LoanListItem = ({ item, updateItemList }) => {
         console.log('rikkinäinen')
     }
 
-    // Amount validation and handling 
-    const handleTextInput = (text) => {
-        setValidInput(true);
-
-        const itemIndex = updateItemList.indexOf(item);
-
-        // If higher amount than currently loaned
-        if (Number(text) > currentlyLoanedAmount) {
-            setValidInput(false);
-            updateItemList[itemIndex].palautukset = currentlyLoanedAmount;
-            // return
-        }
-        else {
-            updateItemList[itemIndex].palautukset = returnedBefore + Number(text);
-
-            if (updateItemList[itemIndex].palautukset === updateItemList[itemIndex].lainattuMaara) {
-                updateItemList[itemIndex].palautettuKokonaan = true;
-            }
-        }
-    }
 
     // animation functions
     const toggleSwipeSuggestion = () => {
@@ -112,9 +112,20 @@ const LoanListItem = ({ item, updateItemList }) => {
                                 size={40}
                                 color="#1DFFBB"
                                 style={styles.returnListCheckMark} />
-                        </View>}
+                        </View>
+                    }
                 </Pressable>
 
+                {/* Rendered only for loans with just one loaned item */}
+                {currentlyLoanedAmount <= 1 &&
+                    <TouchableOpacity onPress={handleBrokenItemInfo}
+                    >
+                        <MaterialIcons
+                            style={[styles.detailsGap]}
+                            name="error-outline" size={40} color="#F4247C"
+                        />
+                    </TouchableOpacity>
+                }
                 <Animated.View
                     style={[styles.swipableView,
                     {

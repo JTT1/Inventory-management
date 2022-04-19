@@ -33,5 +33,4 @@ export function updateUserLoans(data) {
         palautukset: data.palautukset,
         palautusPvm: currentDate,
     });
-
 }

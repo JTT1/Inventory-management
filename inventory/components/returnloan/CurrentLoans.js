@@ -1,5 +1,5 @@
-import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
-import React, { useState, useEffect, useRef } from 'react';
+import { ScrollView, Text, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import LoanListItem from './LoanListItem';
 import ThemeButton from '../testing_field/ThemeButton';
 import { returnLoanStyles as styles } from './ReturnLoanStyles';
@@ -13,24 +13,22 @@ const CurrentLoans = ({ navigation }) => {
     const [loanData, setLoanData] = useState([]);
     const [modalVisible, toggleModal] = useState(false);
     let updateItemList = [];
-
     // Get the real user id from login information
     const userId = 1224;
+    console.log(Object.keys(loanData));
 
     useEffect(() => {
         getCurrentUserLoans(setLoanData, userId);
     }, []);
 
     // Render user's active loans
-    const userLoans =
+    const userLoans = 
         // If user's every loan is fully returned
         loanData.every((item) => item.palautettuKokonaan === true)
-            ?
-            <Text style={[styles.bodyTextWhite, { alignSelf: 'center' }]} >Ei aktiivisia lainoja.</Text>
+            ? <Text style={[styles.bodyTextWhite, { alignSelf: 'center' }]} >Ei aktiivisia lainoja.</Text>
 
             // If user has active loans
-            :
-            loanData.map((item) => {
+            : loanData.map((item) => {
                 if (!item.palautettuKokonaan) {
                     return <LoanListItem updateItemList={updateItemList} item={item} key={uuid()} />
                 }
@@ -45,8 +43,8 @@ const CurrentLoans = ({ navigation }) => {
 
     // Handle loan return, possibly redirect as well
     const handleReturnItems = () => {
-        updateItemList.forEach((item) => updateUserLoans(item))
-        updateItemList = [];
+        updateItemList.forEach((item) => updateUserLoans(item));
+        // updateItemList = [];
 
         // route
         // navigation.navigate('Vahvistus', {
@@ -61,6 +59,8 @@ const CurrentLoans = ({ navigation }) => {
             </Text>
             <ScrollView>
                 {userLoans}
+
+                {/* {memoizedLoansList} */}
             </ScrollView>
             <TouchableOpacity
                 style={[styles.flexRow, styles.centerVertical, { marginTop: 10 }]}

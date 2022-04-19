@@ -61,7 +61,7 @@ const SearchComponents = (props) => {
                 {
                     // On initial load, guide the user to press the search button
                     searchTerm.length === 0
-                        ? 'Aloita painamalla alla olevaa hakupainiketta'
+                        ? 'Aloita painamalla alla olevaa hakupainiketta.'
                         : 'Ei hakutuloksia'
                 }
             </Text>

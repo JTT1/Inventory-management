@@ -12,7 +12,6 @@ const SearchListItem = ({ item, navigation, }) => {
     // Route to component.js
     const handleRouting = () => {
         console.log(item)
-        return
     }
 
     return (
