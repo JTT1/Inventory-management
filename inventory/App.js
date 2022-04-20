@@ -10,6 +10,8 @@ import TopBar from './components/topbar/TopBar';
 import { routesList } from './app-routes/routes.js';
 import uuid from 'react-uuid';
 import Login from './components/login/Login.js';
+import Register from './components/login/Register.js';
+import Testing from './components/testing_field/Testing.js';
 
 const App = () => {
   // Navigation stack
@@ -42,6 +44,7 @@ const App = () => {
     return <AppLoading />;
   } else {
     return (
+        // <Register/>
       <View style={styles.container}>
         <StatusBar style="light" />
         <NavigationContainer>

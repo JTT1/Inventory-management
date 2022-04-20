@@ -1,41 +1,12 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, Touchable, Alert, ScrollView } from "react-native";
 import { styles } from "../../styles/AppRootStyle";
-import { db, ROOT_REF, USERS_REF } from '../../firebase/Config';
+import { db, ROOT_REF, USERS_REF, firebase } from '../../firebase/Config';
 import { MaterialIcons } from '@expo/vector-icons';
 import ThemeButton from "../testing_field/ThemeButton";
-
-
-
-const checkInput = () => {
-  if (!etunimi.trim()) {
-    Alert.alert("Syötä nimesi");
-    return false;
-  }
-
-  if (!sukunimi.trim()) {
-    Alert.alert("Syötä nimesi");
-    return false;
-  }
-
-  if (!email.trim()) {
-    Alert.alert("Syötä sähköpostisi");
-    return false;
-  }
-
-  if (!password1.trim()) {
-    Alert.alert("Syötä salasana");
-    return false;
-  }
-
-  if (!password2.trim()) {
-    Alert.alert("Vahvista salasana");
-    return false;
-  }
-
-  return true;
-
-}
+import  { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { FirebaseApp } from "@firebase/app";
+import { async } from "@firebase/util";
 
 
 export default function Register({ navigation }) {
@@ -44,7 +15,20 @@ export default function Register({ navigation }) {
     const [email, setEmail] = useState("");
     const [password1, setPassword1] = useState("");
     const [password2, setPassword2] = useState("");
-    const [tark, setTark] = useState(true);
+
+    const createAccount = async () => {
+      try {
+        await firebase.auth().createUserWithEmailAndPassword(email, password1);
+        const currentUser = firebase.auth().currentUser;
+        firebase.database().ref(USERS_REF + currentUser.uid).set({
+          email: currentUser.email,
+          isAdmin: false
+        })
+      } catch (err) {
+          console.log('Registration failed', err);
+        }
+      
+    }
     
 
     const checkInput = () => {
@@ -62,6 +46,18 @@ export default function Register({ navigation }) {
         Alert.alert("Syötä sähköpostisi");
         return false;
       }
+
+      if (!email.includes('@')) {
+        Alert.alert("Kirjoita sähköpostiosoite!");
+        return false;
+      }
+
+      if (!email.includes('@students.oamk.fi')) {
+        Alert.alert("Käytä koulun sähköpostia!");
+        return false;
+      }
+
+      
     
       if (!password1.trim()) {
         Alert.alert("Syötä salasana");
@@ -77,7 +73,7 @@ export default function Register({ navigation }) {
     
     }
 
-    function clear() {
+    const clear = () => {
       setEtunimi("");
       setSukunimi("");
       setEmail("");
@@ -97,8 +93,10 @@ export default function Register({ navigation }) {
             sukunimi: sukunimi,
             email: email,
             password: password1,
+            rooli: "user",
           })
           clear();
+          createAccount();
         }
       }
       }
