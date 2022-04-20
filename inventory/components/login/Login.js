@@ -3,8 +3,7 @@ import { Text, View, TextInput, TouchableOpacity, Alert} from "react-native";
 import { styles } from "../../styles/AppRootStyle";
 import { MaterialIcons } from '@expo/vector-icons';
 import ThemeButton from "../testing_field/ThemeButton";
-import { db, ROOT_REF, USERS_REF } from '../../Firebase/Config';
-import auth from '@react-native-firebase/auth';
+import { db, ROOT_REF, USERS_REF } from '../../firebase/Config';
 
 
 
@@ -42,7 +41,10 @@ export default function Login({ navigation }) {
 
 
   const routeToRegister = () => {
-    navigation.navigate('Rekisteröinti')
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'Rekisteröinti'}]
+    });
   }
 
   

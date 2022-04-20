@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, Touchable, Alert, ScrollView } from "react-native";
 import { styles } from "../../styles/AppRootStyle";
-import { db, ROOT_REF, USERS_REF } from '../../Firebase/Config';
+import { db, ROOT_REF, USERS_REF, firebase } from '../../firebase/Config';
 import { MaterialIcons } from '@expo/vector-icons';
 import ThemeButton from "../testing_field/ThemeButton";
 
@@ -14,7 +14,10 @@ export default function Register({ navigation }) {
     const [password2, setPassword2] = useState("");
 
     const routeToLogin = () => {
-      navigation.navigate('Kirjautuminen');
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Kirjautuminen'}]
+      });
     }
 
     const createAccount = async () => {
