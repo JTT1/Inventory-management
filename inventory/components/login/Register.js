@@ -1,9 +1,18 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, Touchable, Alert, ScrollView } from "react-native";
 import { styles } from "../../styles/AppRootStyle";
+<<<<<<< HEAD
 import { db, ROOT_REF, USERS_REF } from '../../Firebase/Config';
 import { MaterialIcons } from '@expo/vector-icons';
 import ThemeButton from "../testing_field/ThemeButton";
+=======
+import { db, ROOT_REF, USERS_REF, firebase } from '../../firebase/Config';
+import { MaterialIcons } from '@expo/vector-icons';
+import ThemeButton from "../testing_field/ThemeButton";
+import  { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { FirebaseApp } from "@firebase/app";
+import { async } from "@firebase/util";
+>>>>>>> a4d02747cc17931863a86ec48617f1e1c8324046
 
 
 export default function Register({ navigation }) {
@@ -12,7 +21,20 @@ export default function Register({ navigation }) {
     const [email, setEmail] = useState("");
     const [password1, setPassword1] = useState("");
     const [password2, setPassword2] = useState("");
-    const [tark, setTark] = useState(true);
+
+    const createAccount = async () => {
+      try {
+        await firebase.auth().createUserWithEmailAndPassword(email, password1);
+        const currentUser = firebase.auth().currentUser;
+        firebase.database().ref(USERS_REF + currentUser.uid).set({
+          email: currentUser.email,
+          isAdmin: false
+        })
+      } catch (err) {
+          console.log('Registration failed', err);
+        }
+      
+    }
     
 
     const checkInput = () => {
@@ -30,6 +52,18 @@ export default function Register({ navigation }) {
         Alert.alert("Syötä sähköpostisi");
         return false;
       }
+
+      if (!email.includes('@')) {
+        Alert.alert("Kirjoita sähköpostiosoite!");
+        return false;
+      }
+
+      if (!email.includes('@students.oamk.fi')) {
+        Alert.alert("Käytä koulun sähköpostia!");
+        return false;
+      }
+
+      
     
       if (!password1.trim()) {
         Alert.alert("Syötä salasana");
@@ -45,7 +79,7 @@ export default function Register({ navigation }) {
     
     }
 
-    function clear() {
+    const clear = () => {
       setEtunimi("");
       setSukunimi("");
       setEmail("");
@@ -65,8 +99,10 @@ export default function Register({ navigation }) {
             sukunimi: sukunimi,
             email: email,
             password: password1,
+            rooli: "user",
           })
           clear();
+          createAccount();
         }
       }
       }

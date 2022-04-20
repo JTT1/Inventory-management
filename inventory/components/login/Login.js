@@ -13,6 +13,17 @@ export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const LoginAccount = async () => {
+    try {
+      await firebase.auth().signInWithEmailAndPassword(email, password);
+    } catch (err) {
+        console.log('Kirjautuminen epäonnistui.', err);
+        Alert.alert('Kirjautuminen epäonnistui. ', err.message);
+
+      }
+    
+  }
+
   const handleLogin = () => {
     // check login credentials -> route/redirect to home screen
     if (!email.trim()) {
