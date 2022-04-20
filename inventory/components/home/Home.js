@@ -1,6 +1,7 @@
 import React from "react";
-import { styles } from "../../styles/AppRootStyle";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+
+import { homeStyles as styles } from './homeStyles';
+import { Text, View, Image, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
