@@ -1,22 +1,54 @@
 import React, { useState } from "react";
-import { Text, View, TextInput, TouchableOpacity, } from "react-native";
+import { Text, View, TextInput, TouchableOpacity, Alert} from "react-native";
 import { styles } from "../../styles/AppRootStyle";
 import { MaterialIcons } from '@expo/vector-icons';
 import ThemeButton from "../testing_field/ThemeButton";
+import { db, ROOT_REF, USERS_REF } from '../../Firebase/Config';
+import auth from '@react-native-firebase/auth';
+
+
+
  
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const routeToRegister = () => {
-    navigation.navigate('Rekisteröinti')
+  const Login = async () => {
+    try {
+      await firebase.auth().signInWithEmailAndPassword(email, password);
+    } catch (err) {
+        console.log('Kirjautuminen epäonnistui.', err);
+        Alert.alert('Kirjautuminen epäonnistui. ', err.message);
+
+      }
+    
   }
 
   const handleLogin = () => {
     // check login credentials -> route/redirect to home screen
-
-    navigation.navigate('Haku')
+    if (!email.trim()) {
+      Alert.alert("Syötä sähköpostisi");
+      return false;
+    }
+  
+    if (!password.trim()) {
+      Alert.alert("Syötä salasana");
+      return false;
+    }
+  
+    return true;
   }
+
+
+
+  const routeToRegister = () => {
+    navigation.navigate('Rekisteröinti')
+  }
+
+  
+
+    //navigation.navigate('Haku')
+  
 
   return (
     <View style={[styles.container, styles.centerHorizontal]}>
@@ -66,4 +98,4 @@ export default function Login({ navigation }) {
       </TouchableOpacity>
     </View>
   );
-}
+  }
