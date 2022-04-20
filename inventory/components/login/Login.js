@@ -13,7 +13,7 @@ export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const LoginAccount = async () => {
+  const Login = async () => {
     try {
       await firebase.auth().signInWithEmailAndPassword(email, password);
     } catch (err) {

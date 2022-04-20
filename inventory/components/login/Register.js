@@ -1,18 +1,9 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, Touchable, Alert, ScrollView } from "react-native";
 import { styles } from "../../styles/AppRootStyle";
-<<<<<<< HEAD
 import { db, ROOT_REF, USERS_REF } from '../../Firebase/Config';
 import { MaterialIcons } from '@expo/vector-icons';
 import ThemeButton from "../testing_field/ThemeButton";
-=======
-import { db, ROOT_REF, USERS_REF, firebase } from '../../firebase/Config';
-import { MaterialIcons } from '@expo/vector-icons';
-import ThemeButton from "../testing_field/ThemeButton";
-import  { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { FirebaseApp } from "@firebase/app";
-import { async } from "@firebase/util";
->>>>>>> a4d02747cc17931863a86ec48617f1e1c8324046
 
 
 export default function Register({ navigation }) {

@@ -10,19 +10,14 @@ import TopBar from './components/topbar/TopBar';
 import { routesList } from './app-routes/routes.js';
 import uuid from 'react-uuid';
 import Login from './components/login/Login.js';
-<<<<<<< HEAD
 import Register from './components/login/Register';
-=======
-import Register from './components/login/Register.js';
-import Testing from './components/testing_field/Testing.js';
->>>>>>> a4d02747cc17931863a86ec48617f1e1c8324046
 
 const App = () => {
   // Navigation stack
   const Stack = createNativeStackNavigator();
 
   // Dynamic routes list, new routes can be added from /app-routes/routes.js (ctrl + click on routesList)
-  /* const routes = routesList.map((screen) => {
+   const routes = routesList.map((screen) => {
     return <Stack.Screen
       key={uuid()}
       name={screen.name}
@@ -34,7 +29,7 @@ const App = () => {
         presentation: 'modal',
       }}
     />
-  }); */
+  }); 
 
   // Load fonts
   const [fontsLoaded] = useFonts({
@@ -44,10 +39,10 @@ const App = () => {
     Quicksand700: require('./assets/fonts/Quicksand700Bold.ttf'),
   });
 
-  return <Login />
+  // return <Login />
 
 
-   /*if (!fontsLoaded) {
+   if (!fontsLoaded) {
     return  <AppLoading />; 
   } else {
     return (
@@ -67,7 +62,7 @@ const App = () => {
         </NavigationContainer> 
       </View> 
     ); 
-  } */
+  } 
 } 
 
 export default App;
