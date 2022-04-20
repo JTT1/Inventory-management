@@ -1,41 +1,9 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, Touchable, Alert, ScrollView } from "react-native";
 import { styles } from "../../styles/AppRootStyle";
-import { db, ROOT_REF, USERS_REF } from '../../firebase/Config';
+import { db, ROOT_REF, USERS_REF } from '../../Firebase/Config';
 import { MaterialIcons } from '@expo/vector-icons';
 import ThemeButton from "../testing_field/ThemeButton";
-
-
-
-const checkInput = () => {
-  if (!etunimi.trim()) {
-    Alert.alert("Syötä nimesi");
-    return false;
-  }
-
-  if (!sukunimi.trim()) {
-    Alert.alert("Syötä nimesi");
-    return false;
-  }
-
-  if (!email.trim()) {
-    Alert.alert("Syötä sähköpostisi");
-    return false;
-  }
-
-  if (!password1.trim()) {
-    Alert.alert("Syötä salasana");
-    return false;
-  }
-
-  if (!password2.trim()) {
-    Alert.alert("Vahvista salasana");
-    return false;
-  }
-
-  return true;
-
-}
 
 
 export default function Register({ navigation }) {
