@@ -11,6 +11,11 @@ import Component from '../components/componentScreen/Component';
 export const routesList = [
 
     {
+        name: 'Rekisteröinti',
+        component: Register,
+        header: false,
+    },
+    {
         name: 'Koti',
         component: Home,
     },
@@ -34,11 +39,6 @@ export const routesList = [
     {
         name: 'Vahvistus',
         component: ConfirmScreen,
-        header: false,
-    },
-    {
-        name: 'Rekisteröinti',
-        component: Register,
         header: false,
     },
 ]

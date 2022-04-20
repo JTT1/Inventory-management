@@ -44,7 +44,6 @@ const App = () => {
     return <AppLoading />;
   } else {
     return (
-        // <Register/>
       <View style={styles.container}>
         <StatusBar style="light" />
         <NavigationContainer>
