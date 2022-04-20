@@ -10,13 +10,14 @@ export function fetchAllItems(fn) {
     });
 }
 
-export function getCurrentUserLoans(fn, userId) {
+export function getCurrentUserLoans(fnData, fnKeys, userId) {
     return db.ref(LOANS_REF).on('value', querySnapShot => {
         const data = querySnapShot.val() ? querySnapShot.val() : {};
         const items = { ...data };
         const keys = Object.keys(items);
         const userLoans = keys.map((key) => items[key]).filter((item) => item.userID === userId);
-        fn(userLoans);
+        fnData(userLoans);
+        fnKeys(keys);
     });
 }
 

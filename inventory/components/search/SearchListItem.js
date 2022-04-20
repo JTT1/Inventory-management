@@ -3,7 +3,7 @@ import { searchStyles as styles } from './SearchStyles';
 import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 
-const SearchListItem = ({ item, navigation, }) => {
+const SearchListItem = ({ item, navigation }) => {
     // insert functionality to open map here
     const handleMapOpen = () => {
         console.log('map')
@@ -11,7 +11,7 @@ const SearchListItem = ({ item, navigation, }) => {
 
     // Route to component.js
     const handleRouting = () => {
-        console.log(item)
+        navigation.navigate('Komponentti', { item: item })
     }
 
     return (

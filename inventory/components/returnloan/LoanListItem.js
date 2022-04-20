@@ -7,17 +7,27 @@ import { MaterialIcons } from '@expo/vector-icons';
 const LoanListItem = ({ item, updateItemList }) => {
     const [checked, setChecked] = useState(false);
     const [validInput, setValidInput] = useState(true);
-    const [currentlyLoanedAmount, setCurrentlyLoanedAmount] = useState(item.lainattuMaara - item.palautukset);
-    const [returnedBefore, setReturnedBefore] = useState(item.palautukset);
+    const currentlyLoanedAmount = item.lainattuMaara - item.palautukset;
+    const returnedBefore = item.palautukset;
     const animation = useRef(new Animated.Value(60)).current;
     const shouldAnimate = useRef(false);
     const itemCopy = { ...item };
+
 
     // Check box handler
     const handleSelection = () => {
         // Add item to the list of items to be returned
         if (!checked) {
             updateItemList.push(itemCopy);
+
+            const index = updateItemList.findIndex(itemCopy => {
+                return itemCopy.ID === item.ID;
+            });
+
+            if (currentlyLoanedAmount <= 1) {
+                updateItemList[index].palautukset = returnedBefore + 1;
+                updateItemList[index].palautettuKokonaan = true;
+            }
         } else {
             // remove when unchecked
             updateItemList.splice(updateItemList.indexOf(itemCopy));
@@ -30,20 +40,24 @@ const LoanListItem = ({ item, updateItemList }) => {
 
     // Amount validation and handling 
     const handleTextInput = (text) => {
+        setValidInput(true);
+
         const index = updateItemList.findIndex(itemCopy => {
             return itemCopy.ID === item.ID;
         });
-        setValidInput(true);
 
         // If higher amount than currently loaned
         if (Number(text) > currentlyLoanedAmount) {
             setValidInput(false);
             updateItemList[index].palautukset = currentlyLoanedAmount;
+            return
         } else {
-            updateItemList[index].palautukset = returnedBefore + Number(text)
-
+            updateItemList[index].palautukset = returnedBefore + Number(text);
             if (updateItemList[index].palautukset === updateItemList[index].lainattuMaara) {
                 updateItemList[index].palautettuKokonaan = true;
+            }
+            else {
+                updateItemList[index].palautettuKokonaan = false;
             }
         }
     }

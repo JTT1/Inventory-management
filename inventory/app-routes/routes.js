@@ -10,6 +10,14 @@ import Component from '../components/componentScreen/Component';
 // Routes and components to use in stack navigator
 export const routesList = [
     {
+        name: 'Koti',
+        component: Home,
+    },
+    {
+        name: 'Palautus',
+        component: CurrentLoans
+    },
+    {
         name: 'Kirjautuminen',
         component: Login,
         header: false, // this needs to be false for screens that dont render the header
@@ -17,17 +25,7 @@ export const routesList = [
     {
         name: 'Komponentti',
         component: Component,
-        
-    },
-    
-    {
-        name: 'Koti',
-        component: Home,
-        
-    },
-    {
-        name: 'Palautus',
-        component: CurrentLoans
+
     },
     {
         name: 'Haku',

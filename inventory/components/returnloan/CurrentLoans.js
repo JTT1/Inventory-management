@@ -10,16 +10,23 @@ import HistoryListItem from './HistoryListItem';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const CurrentLoans = ({ navigation }) => {
+    const [keys, setKeys] = useState([]);
     const [loanData, setLoanData] = useState([]);
     const [modalVisible, toggleModal] = useState(false);
     let updateItemList = [];
     // Get the real user id from login information
     const userId = 1224;
-    console.log(Object.keys(loanData));
 
     useEffect(() => {
-        getCurrentUserLoans(setLoanData, userId);
-    }, []);
+        getCurrentUserLoans(setLoanData, setKeys, userId);
+        return () => {
+            setLoanData([]);
+            setKeys([]);
+        }
+    }, [])
+
+    console.log(keys)
+
 
     // Render user's active loans
     const userLoans = 
@@ -43,7 +50,9 @@ const CurrentLoans = ({ navigation }) => {
 
     // Handle loan return, possibly redirect as well
     const handleReturnItems = () => {
-        updateItemList.forEach((item) => updateUserLoans(item));
+
+        console.log(updateItemList)
+        // updateItemList.forEach((item) => updateUserLoans(item));
         // updateItemList = [];
 
         // route
@@ -59,8 +68,6 @@ const CurrentLoans = ({ navigation }) => {
             </Text>
             <ScrollView>
                 {userLoans}
-
-                {/* {memoizedLoansList} */}
             </ScrollView>
             <TouchableOpacity
                 style={[styles.flexRow, styles.centerVertical, { marginTop: 10 }]}
@@ -71,7 +78,7 @@ const CurrentLoans = ({ navigation }) => {
                     Palautetut lainat
                 </Text>
             </TouchableOpacity>
-            <ThemeButton style={{ marginBottom: 10 }} color="#F4247C" text="Palauta valitut" onPress={handleReturnItems} />
+            <ThemeButton style={{ marginBottom: 20 }} color="#F4247C" text="Palauta valitut" onPress={handleReturnItems} />
 
             <Modal
                 style={[styles.centerHorizontal]}

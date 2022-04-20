@@ -1,6 +1,6 @@
 import React from "react";
 import { styles } from "../../styles/AppRootStyle";
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
@@ -13,6 +13,7 @@ export default function Home({ navigation }) {
 
        <View style = {styles.mainBox}>
 
+          <TouchableOpacity onPress={() => navigation.navigate('Haku')}>
         <View style = {styles.flexRow}>
 
           <View style = {[styles.secondaryBox, styles.removeSpacer]}>
@@ -22,15 +23,15 @@ export default function Home({ navigation }) {
             </View>
             <Text style = {styles.bodyTextWhite}>Etsi työkaluja ja komponentteja nimellä tai kategorialla.</Text>
 
-          </View>
-
+              </View>
           <View style = {styles.imageBox}>
             <MaterialCommunityIcons style={[styles.imageBox]} name="chevron-right" size={80} color="#1DFFBB" />
           </View>
 
         </View>
-
-                <View style = {styles.flexRow}>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Palautus')}>
+            <View style={styles.flexRow}>
 
           <View style = {styles.secondaryBox}>
           <View style = {styles.flexRow}>
@@ -46,7 +47,10 @@ export default function Home({ navigation }) {
           </View>
 
         </View>
+          </TouchableOpacity>
 
+
+          <TouchableOpacity onPress={() => console.log('QR-koodiin')}>
                 <View style = {styles.flexRow}>
           
           <View style = {styles.secondaryBox}>
@@ -63,6 +67,7 @@ export default function Home({ navigation }) {
           </View>
 
         </View>
+          </TouchableOpacity>
 
        </View>
 
