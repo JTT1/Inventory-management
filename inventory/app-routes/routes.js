@@ -10,6 +10,11 @@ import Component from '../components/componentScreen/Component';
 // Routes and components to use in stack navigator
 export const routesList = [
     {
+        name: 'Rekisteröinti',
+        component: Register,
+        header: false,
+    },
+    {
         name: 'Koti',
         component: Home,
     },
@@ -33,11 +38,6 @@ export const routesList = [
     {
         name: 'Vahvistus',
         component: ConfirmScreen,
-        header: false,
-    },
-    {
-        name: 'Rekisteröinti',
-        component: Register,
         header: false,
     },
 ]

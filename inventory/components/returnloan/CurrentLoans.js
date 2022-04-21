@@ -18,7 +18,7 @@ const CurrentLoans = ({ navigation }) => {
     let brokenItemList = [];
 
     // Get the real user id from login information
-    const userId = 1224;
+    const userId = "1224";
 
     useEffect(() => {
         getCurrentUserLoans(setLoanData, userId);

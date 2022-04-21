@@ -31,6 +31,7 @@ export const styles = StyleSheet.create({
         fontFamily: 'Quicksand700',
         fontSize: 18,
         color: 'white',
+        marginLeft: 5,
     },
     h5: {
         fontFamily: 'Quicksand700',
@@ -133,7 +134,8 @@ export const styles = StyleSheet.create({
         backgroundColor: "rgba(143,138,191,0.5)",
         width: 270,
         height: 40,
-        color: 'white'
+        color: 'white',
+        marginTop: "2%"
     },
     inputWrapper: {
         flexDirection: 'row',
@@ -170,6 +172,18 @@ export const styles = StyleSheet.create({
         color: 'white',
         alignItems: "center",
     },
+    registerScroll: {
+        paddingTop: "15%",
+        paddingBottom: "15%",
+        alignItems: "center",
+    },
+    inputView: {
+        padding: 10,
+    },
+    registerBottom: {
+        paddingTop: "5%",
+        alignItems: "center"
+    }
    
 });
 

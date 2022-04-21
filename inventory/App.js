@@ -10,13 +10,14 @@ import TopBar from './components/topbar/TopBar';
 import { routesList } from './app-routes/routes.js';
 import uuid from 'react-uuid';
 import Login from './components/login/Login.js';
+import Register from './components/login/Register';
 
 const App = () => {
   // Navigation stack
   const Stack = createNativeStackNavigator();
 
   // Dynamic routes list, new routes can be added from /app-routes/routes.js (ctrl + click on routesList)
-  const routes = routesList.map((screen) => {
+   const routes = routesList.map((screen) => {
     return <Stack.Screen
       key={uuid()}
       name={screen.name}
@@ -28,7 +29,7 @@ const App = () => {
         presentation: 'modal',
       }}
     />
-  });
+  }); 
 
   // Load fonts
   const [fontsLoaded] = useFonts({
@@ -38,26 +39,29 @@ const App = () => {
     Quicksand700: require('./assets/fonts/Quicksand700Bold.ttf'),
   });
 
-  if (!fontsLoaded) {
-    return <AppLoading />;
+  // return <Login />
+
+
+   if (!fontsLoaded) {
+    return  <AppLoading />; 
   } else {
     return (
       <View style={styles.container}>
         <StatusBar style="light" />
         <NavigationContainer>
           <Stack.Navigator
-            initialRoute="Palautus"
+            initialRouteName="Koti"
             screenOptions={{
               header: (props) => <TopBar {...props} />,
               headerStyle: styles.header,
-            }}
+            }} 
           >
             {routes}
           </Stack.Navigator>
-        </NavigationContainer>
-      </View>
-    );
-  }
-}
+        </NavigationContainer> 
+      </View> 
+    ); 
+  } 
+} 
 
 export default App;
