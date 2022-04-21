@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, Touchable, Alert, ScrollView } from "react-native";
-import { styles } from "../../styles/AppRootStyle";
+import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, Touchable, Alert, ScrollView, ImageBackground } from "react-native";
+import { loginStyles as styles } from './loginStyles';
 import { db, ROOT_REF, USERS_REF, firebase } from '../../firebase/Config';
 import { MaterialIcons } from '@expo/vector-icons';
 import ThemeButton from "../testing_field/ThemeButton";
@@ -12,7 +12,6 @@ export default function Register({ navigation }) {
     const [email, setEmail] = useState("");
     const [password1, setPassword1] = useState("");
     const [password2, setPassword2] = useState("");
-    const [status, setStatus] = useState(false);
 
     const routeToLogin = () => {
       navigation.reset({
@@ -32,10 +31,11 @@ export default function Register({ navigation }) {
           password: password1,
           rooli: "user",
         })
-        setStatus(true);
+        clear();
+        routeToLogin();
       } catch (err) {
           Alert.alert("Rekisteröinti epäonnistui!", err.toString());
-          setStatus(false);
+          return;
         }
       
     }
@@ -109,11 +109,7 @@ export default function Register({ navigation }) {
       } else {
         if (checkInput() !== false) {
             createAccount();
-          }
-        if (status !== false) {
-          clear();
-          routeToLogin();
-        } 
+          } 
         }
       }
 
@@ -123,9 +119,11 @@ export default function Register({ navigation }) {
 
     return (
       <View style={styles.registerCenter}>
+        <ImageBackground style={styles.backgroundImage} source={require('../../assets/images/login-screen-background.png')}>
+      <View style={[styles.centerHorizontal, styles.loginBox, styles.centerVertical]}>
         <ScrollView contentContainerStyle={styles.registerScroll}>
-        <Text style={styles.h3}>Rekisteröidy käyttäjäksi</Text>
-        <Text style={styles.bodyTextWhite}>Täytä tietosi alla oleviin kenttiin luodaksesi käyttäjän</Text>
+        <Text style={[styles.h2, styles.marginFix]}>Rekisteröidy käyttäjäksi</Text>
+        <Text style={[styles.bodyTextWhite, styles.marginFix, styles.widthFix]}>Täytä tietosi alla oleviin kenttiin luodaksesi käyttäjän</Text>
 
       <View style={styles.inputView}>
         <Text style={styles.h4}>Etunimi</Text>
@@ -207,6 +205,8 @@ export default function Register({ navigation }) {
           </TouchableOpacity>
       </View>
         </ScrollView>
+        </View>
+      </ImageBackground>
         </View>
     
   );

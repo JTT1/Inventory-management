@@ -19,5 +19,9 @@ export const loginStyles = StyleSheet.create({
         textAlign: "left",
         width: "80%"
     },
+    widthFix: {
+        marginRight: 25,
+        marginLeft: 5,
+    },
     
 });
