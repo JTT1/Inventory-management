@@ -96,13 +96,8 @@ export default function Login({ navigation }) {
       </View>
 
  
-<<<<<<< HEAD
       <View style={styles.marginFix}>
         <ThemeButton color="#F4247C" text="Kirjaudu" onPress={handleLogin} />
-=======
-      <View style={styles}>
-        <ThemeButton color="#F4247C" text="Kirjaudu" onPress={Login} />
->>>>>>> 7e158d6960251ada539b2210d843f83928dc7dbf
       </View>
 
       <TouchableOpacity>
