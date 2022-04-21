@@ -15,7 +15,7 @@ import { UserContext } from './components/context/userContext.js';
 
 const App = () => {
   const user = {
-    1224: {
+    'P4I6peP6PkbSxnvbtRhXZcKyfKc2': {
       email: "test@test.test",
       etunimi: "Essi",
       sukunimi: "Esimerkki",
@@ -49,25 +49,28 @@ const App = () => {
     Quicksand700: require('./assets/fonts/Quicksand700Bold.ttf'),
   });
 
+  // return <Login />
+
+
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
     return (
       <UserContext.Provider value={user}>
-      <View style={styles.container}>
-        <StatusBar style="light" />
-        <NavigationContainer>
-          <Stack.Navigator
+        <View style={styles.container}>
+          <StatusBar style="light" />
+          <NavigationContainer>
+            <Stack.Navigator
               initialRouteName="Koti"
-            screenOptions={{
-              header: (props) => <TopBar {...props} />,
-              headerStyle: styles.header,
-            }}
-          >
+              screenOptions={{
+                header: (props) => <TopBar {...props} />,
+                headerStyle: styles.header,
+              }}
+            >
               {routes}
-          </Stack.Navigator>
-        </NavigationContainer>
-      </View>
+            </Stack.Navigator>
+          </NavigationContainer>
+        </View>
       </UserContext.Provider>
     );
   }

@@ -75,5 +75,34 @@ export const returnLoanStyles = StyleSheet.create({
         height: 40,
         width: 70,
         color: 'white'
+    },
+    historyListContainer: {
+        marginTop: 10,
+        maxHeight: "65%",
+        backgroundColor: '#393663',
+        borderWidth: 2,
+        borderColor: '#605A91',
+        elevation: 20,
+    },
+    historyListItem: {
+        borderBottomWidth: 2,
+        borderColor: '#605A91',
+    },
+    brokenItemInput: {
+        marginTop: 10,
+        paddingVertical: 15,
+        paddingHorizontal: 20,
+        borderRadius: 20,
+        backgroundColor: "rgba(143,138,191,0.9)",
+        width: 270,
+        height: "25%",
+        color: 'white'
+    },
+    saveButton: {
+        marginTop: 10,
+        backgroundColor: "#1DFFBB",
+        padding: 10,
+        borderRadius: 15,
+        color: '#393663',
     }
 });

@@ -3,19 +3,23 @@ import React, { useState, useRef } from 'react';
 import { returnLoanStyles as styles } from './ReturnLoanStyles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
+import Modal from 'react-native-modal';
 
-const LoanListItem = ({ item, updateItemList }) => {
+const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
     const [checked, setChecked] = useState(false);
     const [validInput, setValidInput] = useState(true);
+    const [modalOpen, toggleModal] = useState(false);
+    const [brokenItemDetails, setBrokenItemDetails] = useState('');
     const currentlyLoanedAmount = item.lainattuMaara - item.palautukset;
     const returnedBefore = item.palautukset;
     const animation = useRef(new Animated.Value(60)).current;
     const shouldAnimate = useRef(false);
     const itemCopy = { ...item };
 
-
     // Check box handler
     const handleSelection = () => {
+        setChecked(!checked);
+
         // Add item to the list of items to be returned
         if (!checked) {
             updateItemList.push(itemCopy);
@@ -35,7 +39,15 @@ const LoanListItem = ({ item, updateItemList }) => {
         if (currentlyLoanedAmount > 1) { // if multiple items bound to a loan, show additional functionalities
             toggleSwipeSuggestion();
         }
-        setChecked(!checked);
+        if (checked) {
+            setBrokenItemDetails('');
+            brokenItemList.some((elem) => {
+                if (elem.itemID === item.ID) {
+                    brokenItemList.pop(elem)
+                    return
+                }
+            })
+        }
     }
 
     // Amount validation and handling 
@@ -62,7 +74,6 @@ const LoanListItem = ({ item, updateItemList }) => {
         }
     }
 
-
     // When swiped left
     const handleSwipeGesture = (e) => {
         shouldAnimate.current = !shouldAnimate.current;
@@ -70,9 +81,43 @@ const LoanListItem = ({ item, updateItemList }) => {
     }
 
     const handleBrokenItemInfo = () => {
-        console.log('rikkinäinen')
+        toggleModal(true);
+
+        if (brokenItemList.some((elem) => elem.itemID === item.ID)) {
+            return
+        }
+
+        const brokenItem = {
+            user: itemCopy.userID,
+            itemID: itemCopy.ID,
+            description: brokenItemDetails,
+        }
+        brokenItemList.push(brokenItem)
     }
 
+    const handleBrokenItemDetails = (input) => {
+        setBrokenItemDetails(input);
+    }
+
+    const handleSave = () => {
+        toggleModal(!modalOpen);
+        brokenItemList.some((elem) => {
+            if (elem.itemID === item.ID) {
+                elem.description = brokenItemDetails
+            }
+        })
+    }
+
+    const handleCancel = () => {
+        toggleModal(!modalOpen);
+        setBrokenItemDetails('');
+        brokenItemList.some((elem) => {
+            if (elem.itemID === item.ID) {
+                brokenItemList.pop(elem)
+                return
+            }
+        })
+    }
 
     // animation functions
     const toggleSwipeSuggestion = () => {
@@ -94,6 +139,19 @@ const LoanListItem = ({ item, updateItemList }) => {
             useNativeDriver: false,
         }).start();
     }
+
+    const additionalInfoButton =
+        brokenItemDetails.length > 0
+            ? <MaterialIcons
+                style={[styles.detailsGap]}
+                name="error-outline" size={40} color="#F4247C"
+            />
+            :
+            <MaterialIcons
+                style={[styles.detailsGap]}
+                name="error-outline" size={40} color="#C4C4C4"
+            />
+
 
     return (
         <View style={styles.loanListItem}>
@@ -134,10 +192,7 @@ const LoanListItem = ({ item, updateItemList }) => {
                 {currentlyLoanedAmount <= 1 &&
                     <TouchableOpacity onPress={handleBrokenItemInfo}
                     >
-                        <MaterialIcons
-                            style={[styles.detailsGap]}
-                            name="error-outline" size={40} color="#F4247C"
-                        />
+                        {additionalInfoButton}
                     </TouchableOpacity>
                 }
                 <Animated.View
@@ -179,14 +234,11 @@ const LoanListItem = ({ item, updateItemList }) => {
                             </View>
                             <View style={[styles.detailsColumn, styles.centerHorizontal, styles.centerVertical]}>
                                 <Text style={[styles.bodyTextWhite]}>
-                                    Huom.
+                                        Ilmoita vika
                                 </Text>
                                 <TouchableOpacity onPress={handleBrokenItemInfo}
                                 >
-                                    <MaterialIcons
-                                        style={[styles.detailsGap]}
-                                        name="error-outline" size={40} color="#F4247C"
-                                    />
+                                        {additionalInfoButton}
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -194,6 +246,37 @@ const LoanListItem = ({ item, updateItemList }) => {
                     </View>
                 </Animated.View>
             </View>
+            <Modal
+                style={[styles.centerHorizontal]}
+                isVisible={modalOpen}
+                animationIn={'fadeIn'}
+                animationOut={'fadeOut'}
+                hideModalContentWhileAnimating={true}
+                useNativeDriver={true}
+            >
+                <Text style={[styles.h2]}>Ilmoita rikkinäiseksi</Text>
+                <View style={[styles.boxShadow, styles.brokenItemInput]}>
+                    <TextInput style={[styles.bodyTextWhite]}
+                        maxLength={255}
+                        multiline
+                        onChangeText={text => handleBrokenItemDetails(text)}
+                        value={brokenItemDetails}
+                        keyboardType='default'
+                        clearTextOnFocus={true}
+                    />
+                </View>
+                <View style={styles.flexRow}>
+                    <TouchableOpacity onPress={handleSave} style={[styles.cancelFAB, styles.flexRow]}>
+                        <View style={[styles.saveButton]}>
+                            <Text style={[styles.h2, styles.bodyTextDark]}>Tallenna</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={handleCancel} style={[styles.cancelFAB, styles.flexRow]}>
+                        <MaterialIcons name="close" size={30} color="white" />
+                        <Text style={[styles.bodyTextWhite]}>Peruuta</Text>
+                    </TouchableOpacity>
+                </View>
+            </Modal>
         </View>
     )
 }
