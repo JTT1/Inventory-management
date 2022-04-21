@@ -5,10 +5,15 @@ import Register from "../components/login/Register";
 import Login from '../components/login/Login';
 import Home from '../components/home/Home';
 import Component from '../components/componentScreen/Component';
+import LoadingScreen from '../components/login/Loading';
 
 
 // Routes and components to use in stack navigator
 export const routesList = [
+    {
+        name: 'Loading',
+        component: LoadingScreen,
+    },
     {
         name: 'Rekisteröinti',
         component: Register,

@@ -2,7 +2,12 @@ import { View, Text, Image, BackHandler, TouchableOpacity } from 'react-native'
 import React, { useEffect, useContext } from 'react'
 import { topBarStyles as styles } from './TopBarStyles.js'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+<<<<<<< HEAD
 import { UserContext } from '../context/userContext';
+=======
+import { logout } from '../../helpers/firebaseFunctions';
+import { firebase } from '../../firebase/Config';
+>>>>>>> c03e0ed3136552ba5aaa7fc3ba29a1ca9966d964
 
 const TopBar = (props) => {
     const user = useContext(UserContext);
@@ -23,8 +28,11 @@ const TopBar = (props) => {
     }
 
     const handleDrawerOpen = () => {
-        return
+        logout();
+        return 
+        
     }
+
 
     return (
         <View style={styles.topBarContainer}>
