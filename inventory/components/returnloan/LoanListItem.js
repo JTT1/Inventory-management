@@ -15,6 +15,7 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
     const animation = useRef(new Animated.Value(60)).current;
     const shouldAnimate = useRef(false);
     const itemCopy = { ...item };
+    const inputRef = useRef();
 
     // Check box handler
     const handleSelection = () => {
@@ -255,8 +256,11 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
                 useNativeDriver={true}
             >
                 <Text style={[styles.h2]}>Ilmoita rikkinäiseksi</Text>
-                <View style={[styles.boxShadow, styles.brokenItemInput]}>
+                <Pressable onPress={() => inputRef.current.focus()}
+                    style={[styles.boxShadow, styles.brokenItemInput]}
+                >
                     <TextInput style={[styles.bodyTextWhite]}
+                        ref={inputRef}
                         maxLength={255}
                         multiline
                         onChangeText={text => handleBrokenItemDetails(text)}
@@ -264,16 +268,18 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
                         keyboardType='default'
                         clearTextOnFocus={true}
                     />
-                </View>
+                </Pressable>
                 <View style={styles.flexRow}>
-                    <TouchableOpacity onPress={handleSave} style={[styles.cancelFAB, styles.flexRow]}>
+                    <TouchableOpacity onPress={handleSave} style={[styles.flexRow]}>
                         <View style={[styles.saveButton]}>
                             <Text style={[styles.h2, styles.bodyTextDark]}>Tallenna</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={handleCancel} style={[styles.cancelFAB, styles.flexRow]}>
-                        <MaterialIcons name="close" size={30} color="white" />
+                    <TouchableOpacity onPress={handleCancel} style={[styles.flexRow]}>
+                        {/* <MaterialIcons name="close" size={30} color="white" /> */}
+                        <View style={[styles.cancelButton]}>
                         <Text style={[styles.bodyTextWhite]}>Peruuta</Text>
+                        </View>
                     </TouchableOpacity>
                 </View>
             </Modal>

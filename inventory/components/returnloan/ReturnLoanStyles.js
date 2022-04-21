@@ -93,16 +93,25 @@ export const returnLoanStyles = StyleSheet.create({
         paddingVertical: 15,
         paddingHorizontal: 20,
         borderRadius: 20,
-        backgroundColor: "rgba(143,138,191,0.9)",
+        backgroundColor: "#302D53",
         width: 270,
-        height: "25%",
+        height: 200,
         color: 'white'
     },
     saveButton: {
         marginTop: 10,
+        marginLeft: 10,
         backgroundColor: "#1DFFBB",
         padding: 10,
         borderRadius: 15,
         color: '#393663',
+    },
+    cancelButton: {
+        marginTop: 10,
+        marginLeft: 10,
+        backgroundColor: "#1DFFBB",
+        padding: 10,
+        borderRadius: 15,
+        backgroundColor: '#F4247C'
     }
 });

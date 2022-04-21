@@ -7,33 +7,34 @@ import styles from '../../styles/AppRootStyle';
 
 
 export default function LoadingScreen({ navigation }) {
-    // useEffect(() => {
-    //   firebase.auth().onAuthStateChanged((user) => {
-    //       if (user) {
-    //         navigation.reset({
-    //             index: 0,
-    //             routes: [{name: 'Koti'}]
-    //           });
-    //       } else {
-    //         navigation.reset({
-    //             index: 0,
-    //             routes: [{name: 'Kirjautuminen'}]
-    //           });          
-    //         }
-    //   });
-    // }, [])
-
-    if (getUserData() !== false) {
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Koti'}]
+    useEffect(() => {
+      firebase.auth().onAuthStateChanged((user) => {
+          if (user) {
+            navigation.reset({
+                index: 0,
+                routes: [{name: 'Koti'}]
+              });
+          } else {
+            navigation.reset({
+                index: 0,
+                routes: [{name: 'Kirjautuminen'}]
+              });          
+            }
       });
-    } else {
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Kirjautuminen'}]
-      }); 
-    }
+    }, [])
+
+
+    // if (getUserData() !== null) {
+    //   navigation.reset({
+    //     index: 0,
+    //     routes: [{name: 'Koti'}]
+    //   });
+    // } else {
+    //   navigation.reset({
+    //     index: 0,
+    //     routes: [{name: 'Kirjautuminen'}]
+    //   }); 
+    // }
     
 
     return (
