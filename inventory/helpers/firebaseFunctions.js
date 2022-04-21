@@ -10,13 +10,14 @@ export function fetchAllItems(fn) {
     });
 }
 
-export function getCurrentUserLoans(fnData, userId) {
+export function getCurrentUserLoans(fnData, fnLoaded, userId) {
     return db.ref(LOANS_REF).on('value', querySnapShot => {
         const data = querySnapShot.val() ? querySnapShot.val() : {};
         const items = { ...data };
         const keys = Object.keys(items);
-        const userLoans = keys.map((key) => items[key]).filter((item) => item.userID === userId);
+        const userLoans = keys.map((key) => items[key]).filter((item) => (item.userID === userId));
         fnData(userLoans);
+        fnLoaded(true);
     });
 }
 
@@ -34,6 +35,21 @@ export function updateUserLoans(data) {
         palautettuKokonaan: data.palautettuKokonaan,
         palautukset: data.palautukset,
         palautusPvm: getCurrentDate(),
+    });
+}
+
+export const createNewLoan = (data) => {
+    const nodeId = db.ref(LOANS_REF).push().getKey();
+    return db.ref(LOANS_REF).push({
+        ID: nodeId,
+        komponentti: data.komponentti,
+        lainattuMaara: data.lainattuMaara,
+        lainausPvm: getCurrentDate(),
+        palautettuKokonaan: false,
+        palautukset: 0,
+        palautusPvm: "",
+        projekti: data.projekti,
+        userID: data.userID,
     });
 }
 

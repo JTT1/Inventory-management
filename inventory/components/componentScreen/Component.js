@@ -1,13 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native';
+import { Text, View, TextInput, Pressable } from 'react-native';
 import { useState } from 'react';
 import { componentStyles as styles } from './componentStyles';
 
 export default function Home({ navigation, route }) {
     const item = route?.params.item;
-
-const [text, setText] = useState(null);
-const [number, setNumber] = useState(null);    
+    const [text, setText] = useState(null);
+    const [number, setNumber] = useState(null);
 
     return (
       <View style={styles.center}>

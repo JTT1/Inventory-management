@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { ScrollView, Text, TouchableOpacity, ActivityIndicator, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import LoanListItem from './LoanListItem';
 import ThemeButton from '../testing_field/ThemeButton';
 import { returnLoanStyles as styles } from './ReturnLoanStyles';
@@ -8,27 +8,22 @@ import { getCurrentUserLoans, updateUserLoans, addNewBrokenItem } from '../../he
 import Modal from 'react-native-modal';
 import HistoryListItem from './HistoryListItem';
 import { MaterialIcons } from '@expo/vector-icons';
-import { UserContext } from '../context/userContext.js';
+import { UserContext } from '../context/userContext';
 
 const CurrentLoans = ({ navigation }) => {
     const [loaded, setIsLoaded] = useState(false);
     const [loanData, setLoanData] = useState([]);
     const [modalVisible, toggleModal] = useState(false);
     let updateItemList = [];
-
+    let brokenItemList = [];
 
     // Get the real user id from login information
     const user = useContext(UserContext);
     const [key] = Object.keys(user);
     const userId = key;
 
-    let brokenItemList = [];
-
-    // Get the real user id from login information
-
     useEffect(() => {
-        getCurrentUserLoans(setLoanData, userId);
-        setIsLoaded(true);
+        getCurrentUserLoans(setLoanData, setIsLoaded, userId);
         return () => {
             setLoanData([]);
             setIsLoaded(false);
@@ -37,8 +32,7 @@ const CurrentLoans = ({ navigation }) => {
 
     // Render user's active loans
     const userLoans =
-        // If user's every loan is fully returned
-        loanData.every((item) => item.palautettuKokonaan === true)
+        loanData.every((item) => item.palautettuKokonaan === true) // If user's every loan is fully returned
             ? <Text style={[styles.bodyTextWhite, { alignSelf: 'center' }]} >Ei aktiivisia lainoja.</Text>
 
             // If user has active loans
@@ -103,7 +97,9 @@ const CurrentLoans = ({ navigation }) => {
                 </ScrollView>
                 <TouchableOpacity onPress={() => toggleModal(!modalVisible)}>
                     <MaterialIcons name="close" size={30} color="white" />
-                    <Text style={[styles.bodyTextWhite]}>Sulje</Text>
+                    <Text style={[styles.bodyTextWhite]}>
+                        Sulje
+                    </Text>
                 </TouchableOpacity>
             </Modal>
         </ScrollView >
