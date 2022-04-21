@@ -9,11 +9,16 @@ const ConfirmScreen = ({ navigation, route }) => {
     const buttonText = route.params.returnLoan ? 'Komponenttihaku' : 'Palaa hakuun';
 
     const handlePress = () => {
-        // Route to wherever
-        navigation.navigate('');
+        navigation.reset({
+            index: 1,
+            routes: [{ name: 'Koti' }, { name: 'Haku' }],
+        })
     }
     const handlePressHome = () => {
-        navigation.navigate('Koti');
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'Koti' }],
+        })
     }
 
     return (

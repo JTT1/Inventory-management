@@ -14,7 +14,6 @@ const TopBar = (props) => {
 
 
     const close = () => {
-        console.log('press')
         props.navigation.goBack(null);
         return true;
     }
