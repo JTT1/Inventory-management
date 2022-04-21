@@ -47,8 +47,13 @@ export function addNewBrokenItem(data) {
     });
 }
 
-export function logout() {
-
+export async function logout() {
+    try {
+        await firebase.auth().signOut();
+    } catch (err) {
+        console.log("Logout error. ", err.message);
+        alert.alert("Logout error. ", err.message);
+    }
 }
 
 export const storeUserData = async (value) => {
