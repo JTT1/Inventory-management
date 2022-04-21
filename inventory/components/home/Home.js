@@ -3,10 +3,13 @@ import React from "react";
 import { homeStyles as styles } from './homeStyles';
 import { Text, View, Image, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { userStatus } from "../../helpers/firebaseFunctions";
 
 
 
 export default function Home({ navigation }) {
+
+
   return (
     <View style={styles.backgroundColor}>
 

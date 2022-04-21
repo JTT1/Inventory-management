@@ -12,6 +12,7 @@ export default function Register({ navigation }) {
     const [email, setEmail] = useState("");
     const [password1, setPassword1] = useState("");
     const [password2, setPassword2] = useState("");
+    const [status, setStatus] = useState(false);
 
     const routeToLogin = () => {
       navigation.reset({
@@ -31,9 +32,10 @@ export default function Register({ navigation }) {
           password: password1,
           rooli: "user",
         })
-        
+        setStatus(true);
       } catch (err) {
           Alert.alert("Rekisteröinti epäonnistui!", err.toString());
+          setStatus(false);
         }
       
     }
@@ -107,9 +109,11 @@ export default function Register({ navigation }) {
       } else {
         if (checkInput() !== false) {
             createAccount();
-            clear();
-            routeToLogin();
           }
+        if (status !== false) {
+          clear();
+          routeToLogin();
+        } 
         }
       }
 
