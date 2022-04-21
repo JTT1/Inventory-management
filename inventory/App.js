@@ -9,7 +9,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TopBar from './components/topbar/TopBar';
 import { routesList } from './app-routes/routes.js';
 import uuid from 'react-uuid';
-import { UserContext } from './components/context/userContext.js';
+import { UserContext } from './components/context/userContext';
 
 const App = () => {
 
@@ -58,7 +58,7 @@ const App = () => {
           <StatusBar style="light" />
           <NavigationContainer>
             <Stack.Navigator
-              initialRouteName="Koti"
+              initialRouteName="Loading"
               screenOptions={{
                 header: (props) => <TopBar {...props} />,
                 headerStyle: styles.header,

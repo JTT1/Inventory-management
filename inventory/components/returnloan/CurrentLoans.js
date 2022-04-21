@@ -8,7 +8,7 @@ import { getCurrentUserLoans, updateUserLoans, addNewBrokenItem } from '../../he
 import Modal from 'react-native-modal';
 import HistoryListItem from './HistoryListItem';
 import { MaterialIcons } from '@expo/vector-icons';
-import { UserContext } from '../context/userContext.js';
+import { UserContext } from '../context/userContext';
 
 const CurrentLoans = ({ navigation }) => {
     const [loaded, setIsLoaded] = useState(false);

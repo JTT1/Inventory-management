@@ -1,4 +1,4 @@
-import { db, ROOT_REF, LOANS_REF, BROKEN_REF } from '../firebase/Config';
+import { db, ROOT_REF, LOANS_REF, BROKEN_REF, firebase } from '../firebase/Config';
 
 export function fetchAllItems(fn) {
     return db.ref(ROOT_REF).on('value', querySnapShot => {
@@ -45,4 +45,36 @@ export function addNewBrokenItem(data) {
         ilmoitusPvm: getCurrentDate(),
         havitetty: false,
     });
+}
+
+export async function logout() {
+    try {
+        await firebase.auth().signOut();
+    } catch (err) {
+        console.log("Logout error. ", err.message);
+        alert.alert("Logout error. ", err.message);
+    }
+}
+
+export const storeUserData = async (value) => {
+        try {
+          await AsyncStorage.setItem('@userInfo', value)
+        } catch (error) {
+          // saving error
+        }
+      }
+
+
+
+export const getUserData = async () => {
+  try {
+    const value = await AsyncStorage.getItem('@storage_Key')
+    if(value !== null) {
+      return true;
+    } else {
+        return false;
+    }
+  } catch(e) {
+    // error reading value
+  }
 }
