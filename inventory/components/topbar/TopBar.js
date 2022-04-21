@@ -2,6 +2,7 @@ import { View, Text, Image, BackHandler, TouchableOpacity } from 'react-native'
 import React, { useEffect } from 'react'
 import { topBarStyles as styles } from './TopBarStyles.js'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { logout } from '../../helpers/firebaseFunctions.js';
 
 const TopBar = (props) => {
 
@@ -19,6 +20,7 @@ const TopBar = (props) => {
     }
 
     const handleDrawerOpen = () => {
+        logout();
         return
     }
 

@@ -4,6 +4,7 @@ import { styles } from "../../styles/AppRootStyle";
 import { MaterialIcons } from '@expo/vector-icons';
 import ThemeButton from "../testing_field/ThemeButton";
 import { db, ROOT_REF, USERS_REF, firebase } from '../../firebase/Config';
+import { getUserData, storeUserData } from "../../helpers/firebaseFunctions";
 
 
 
@@ -14,10 +15,14 @@ export default function Login({ navigation }) {
 
   const Login = async () => {
 
+
     if(handleLogin() == true) {
       try {
       await firebase.auth().signInWithEmailAndPassword(email, password);
       console.log("kirjautuminen onnistui!");
+      const currentUser = firebase.auth().currentUser;
+      storeUserData(currentUser.email);
+            
       routeToHome();
     } catch (err) {
         console.log('Kirjautuminen epäonnistui.', err);

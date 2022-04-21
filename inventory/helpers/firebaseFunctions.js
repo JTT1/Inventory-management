@@ -1,4 +1,6 @@
-import { db, ROOT_REF, LOANS_REF, BROKEN_REF } from '../firebase/Config';
+import { Alert } from 'react-native';
+import { db, ROOT_REF, LOANS_REF, BROKEN_REF, firebase } from '../firebase/Config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function fetchAllItems(fn) {
     return db.ref(ROOT_REF).on('value', querySnapShot => {
@@ -47,17 +49,25 @@ export function addNewBrokenItem(data) {
     });
 }
 
-export function logout() {
-
+export async function logout() {
+  try {
+    await firebase.auth().signOut();
+  } catch (err) {
+    console.log("Logout error. ", err.message);
+    Alert.alert("logout error. ", err.message);
+  }
 }
 
 export const storeUserData = async (value) => {
-        try {
-          await AsyncStorage.setItem('@userInfo', value)
-        } catch (error) {
-          // saving error
-        }
+    try {
+      const jsonValue = JSON.stringify(value)
+      await AsyncStorage.setItem('@storage_Key', jsonValue)
+    } catch (e) {
+      // saving error
+    }
       }
+
+
 
 
 
@@ -67,9 +77,11 @@ export const getUserData = async () => {
     if(value !== null) {
       return true;
     } else {
-        return false;
+      return false;
     }
   } catch(e) {
     // error reading value
   }
+
+
 }

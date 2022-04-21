@@ -31,6 +31,7 @@ export default function Register({ navigation }) {
           password: password1,
           rooli: "user",
         })
+        
       } catch (err) {
           Alert.alert("Rekisteröinti epäonnistui!", err.toString());
         }
