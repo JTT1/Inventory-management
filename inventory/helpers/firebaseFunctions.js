@@ -1,4 +1,5 @@
 import { db, ROOT_REF, LOANS_REF } from '../firebase/Config';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function fetchAllItems(fn) {
     return db.ref(ROOT_REF).on('value', querySnapShot => {
@@ -34,4 +35,31 @@ export function updateUserLoans(data) {
         palautukset: data.palautukset,
         palautusPvm: currentDate,
     });
+}
+
+export function logout() {
+
+}
+
+export const storeUserData = async (value) => {
+        try {
+          await AsyncStorage.setItem('@userInfo', value)
+        } catch (error) {
+          // saving error
+        }
+      }
+
+
+
+export const getUserData = async () => {
+  try {
+    const value = await AsyncStorage.getItem('@storage_Key')
+    if(value !== null) {
+      return true;
+    } else {
+        return false;
+    }
+  } catch(e) {
+    // error reading value
+  }
 }

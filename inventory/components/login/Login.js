@@ -3,7 +3,7 @@ import { Text, View, TextInput, TouchableOpacity, Alert} from "react-native";
 import { styles } from "../../styles/AppRootStyle";
 import { MaterialIcons } from '@expo/vector-icons';
 import ThemeButton from "../testing_field/ThemeButton";
-import { db, ROOT_REF, USERS_REF } from '../../firebase/Config';
+import { db, ROOT_REF, USERS_REF, firebase } from '../../firebase/Config';
 
 
 
@@ -13,14 +13,18 @@ export default function Login({ navigation }) {
   const [password, setPassword] = useState("");
 
   const Login = async () => {
-    try {
+
+    if(handleLogin() == true) {
+      try {
       await firebase.auth().signInWithEmailAndPassword(email, password);
+      console.log("kirjautuminen onnistui!");
+      routeToHome();
     } catch (err) {
         console.log('Kirjautuminen epäonnistui.', err);
-        Alert.alert('Kirjautuminen epäonnistui. ', err.message);
+        Alert.alert('Kirjautuminen epäonnistui. ', err.toString());
 
       }
-    
+    }  
   }
 
   const handleLogin = () => {
@@ -44,6 +48,13 @@ export default function Login({ navigation }) {
     navigation.reset({
       index: 0,
       routes: [{name: 'Rekisteröinti'}]
+    });
+  }
+
+  const routeToHome = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'Koti'}]
     });
   }
 
@@ -84,7 +95,7 @@ export default function Login({ navigation }) {
 
  
       <View style={styles}>
-        <ThemeButton color="#F4247C" text="Kirjaudu" onPress={handleLogin} />
+        <ThemeButton color="#F4247C" text="Kirjaudu" onPress={Login} />
       </View>
 
       <TouchableOpacity>
