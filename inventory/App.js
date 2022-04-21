@@ -1,4 +1,4 @@
-import React, { createContext } from 'react'
+import React from 'react'
 import { styles } from './styles/AppRootStyle.js';
 import { View, } from 'react-native';
 import { useFonts } from 'expo-font';
@@ -9,13 +9,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TopBar from './components/topbar/TopBar';
 import { routesList } from './app-routes/routes.js';
 import uuid from 'react-uuid';
-import Login from './components/login/Login.js';
-import CurrentLoans from './components/returnloan/CurrentLoans.js';
 import { UserContext } from './components/context/userContext.js';
 
 const App = () => {
+
+  // When login works replace this with the user object (needed for UserContext)
   const user = {
-    'P4I6peP6PkbSxnvbtRhXZcKyfKc2': {
+    '1224': {
       email: "test@test.test",
       etunimi: "Essi",
       sukunimi: "Esimerkki",
@@ -48,9 +48,6 @@ const App = () => {
     Quicksand600: require('./assets/fonts/Quicksand600SemiBold.ttf'),
     Quicksand700: require('./assets/fonts/Quicksand700Bold.ttf'),
   });
-
-  // return <Login />
-
 
   if (!fontsLoaded) {
     return <AppLoading />;
