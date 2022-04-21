@@ -1,5 +1,5 @@
 import { ScrollView, Text, TouchableOpacity } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import LoanListItem from './LoanListItem';
 import ThemeButton from '../testing_field/ThemeButton';
 import { returnLoanStyles as styles } from './ReturnLoanStyles';
@@ -8,14 +8,22 @@ import { getCurrentUserLoans, updateUserLoans } from '../../helpers/firebaseFunc
 import Modal from 'react-native-modal';
 import HistoryListItem from './HistoryListItem';
 import { MaterialIcons } from '@expo/vector-icons';
+import { UserContext } from '../context/userContext.js';
+
+
 
 const CurrentLoans = ({ navigation }) => {
     const [keys, setKeys] = useState([]);
     const [loanData, setLoanData] = useState([]);
     const [modalVisible, toggleModal] = useState(false);
     let updateItemList = [];
+
+
     // Get the real user id from login information
-    const userId = 1224;
+    const user = useContext(UserContext);
+    const [key] = Object.keys(user);
+    const userId = key;
+
 
     useEffect(() => {
         getCurrentUserLoans(setLoanData, setKeys, userId);
@@ -24,8 +32,6 @@ const CurrentLoans = ({ navigation }) => {
             setKeys([]);
         }
     }, [])
-
-    console.log(keys)
 
 
     // Render user's active loans
@@ -52,7 +58,7 @@ const CurrentLoans = ({ navigation }) => {
     const handleReturnItems = () => {
 
         console.log(updateItemList)
-        // updateItemList.forEach((item) => updateUserLoans(item));
+        updateItemList.forEach((item) => updateUserLoans(item));
         // updateItemList = [];
 
         // route

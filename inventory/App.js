@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { createContext } from 'react'
 import { styles } from './styles/AppRootStyle.js';
 import { View, } from 'react-native';
 import { useFonts } from 'expo-font';
@@ -10,8 +10,19 @@ import TopBar from './components/topbar/TopBar';
 import { routesList } from './app-routes/routes.js';
 import uuid from 'react-uuid';
 import Login from './components/login/Login.js';
+import CurrentLoans from './components/returnloan/CurrentLoans.js';
+import { UserContext } from './components/context/userContext.js';
 
 const App = () => {
+  const user = {
+    1224: {
+      email: "test@test.test",
+      etunimi: "Essi",
+      sukunimi: "Esimerkki",
+      rooli: "Opiskelija",
+    }
+  };
+
   // Navigation stack
   const Stack = createNativeStackNavigator();
 
@@ -42,20 +53,22 @@ const App = () => {
     return <AppLoading />;
   } else {
     return (
+      <UserContext.Provider value={user}>
       <View style={styles.container}>
         <StatusBar style="light" />
         <NavigationContainer>
           <Stack.Navigator
-            initialRoute="Palautus"
+              initialRouteName="Koti"
             screenOptions={{
               header: (props) => <TopBar {...props} />,
               headerStyle: styles.header,
             }}
           >
-            {routes}
+              {routes}
           </Stack.Navigator>
         </NavigationContainer>
       </View>
+      </UserContext.Provider>
     );
   }
 }
