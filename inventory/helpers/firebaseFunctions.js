@@ -1,4 +1,4 @@
-import { db, ROOT_REF, LOANS_REF, BROKEN_REF } from '../firebase/Config';
+import { db, ROOT_REF, LOANS_REF, BROKEN_REF, firebase } from '../firebase/Config';
 
 export function fetchAllItems(fn) {
     return db.ref(ROOT_REF).on('value', querySnapShot => {
