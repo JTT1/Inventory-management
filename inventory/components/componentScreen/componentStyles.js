@@ -9,8 +9,7 @@ center: {
     height: "100%"
   },
   background: {
-    backgroundColor: 'rgba(57, 54, 99, 1)',
-    maxHeight: 220,
+      backgroundColor: 'rgba(57, 54, 99, 1)',
     marginTop: 45,
     marginBottom: 30,
     borderTopWidth: 2,
@@ -26,6 +25,10 @@ flexRow: {
     flexDirection: "row",
 },
 
+    itemInfo: {
+        padding: 10,
+    },
+
 input: {
     width: 280,
     height: 55,
@@ -35,16 +38,19 @@ input: {
     borderRadius: 12,
     backgroundColor: 'rgba(180, 180, 180, 0.1)',
     padding: 10,
+    color: 'white'
 },
 
 input2: {
     width: 130,
     height: 55,
+    padding: 10,
     margin: 10,
     marginLeft: 20,
     borderRadius: 12,
     backgroundColor: 'rgba(180, 180, 180, 0.1)',
     textAlign: "center",
+    color: 'white',
 },
 
 marginFix: {
@@ -56,6 +62,5 @@ buttonFix: {
 },
 textFix: {
     maxWidth: "50%",
-    marginTop: 13
 },
 });
