@@ -10,7 +10,6 @@ import LoadingScreen from '../components/login/Loading';
 
 // Routes and components to use in stack navigator
 export const routesList = [
-
     {
         name: 'Loading',
         component: LoadingScreen,

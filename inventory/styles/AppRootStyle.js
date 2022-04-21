@@ -118,6 +118,9 @@ export const styles = StyleSheet.create({
     buttonSmaller: {
         width: 230,
     },
+    buttonDisabled: {
+        backgroundColor: 'black'
+    },
     TextInput: {
         display: "flex",
         flexDirection: "row",

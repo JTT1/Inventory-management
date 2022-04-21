@@ -9,15 +9,25 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TopBar from './components/topbar/TopBar';
 import { routesList } from './app-routes/routes.js';
 import uuid from 'react-uuid';
-import Login from './components/login/Login.js';
-import Register from './components/login/Register';
+import { UserContext } from './components/context/userContext';
 
 const App = () => {
+
+  // When login works replace this with the user object (needed for UserContext)
+  const user = {
+    '1224': {
+      email: "test@test.test",
+      etunimi: "Essi",
+      sukunimi: "Esimerkki",
+      rooli: "Opiskelija",
+    }
+  };
+
   // Navigation stack
   const Stack = createNativeStackNavigator();
 
   // Dynamic routes list, new routes can be added from /app-routes/routes.js (ctrl + click on routesList)
-   const routes = routesList.map((screen) => {
+  const routes = routesList.map((screen) => {
     return <Stack.Screen
       key={uuid()}
       name={screen.name}
@@ -29,7 +39,7 @@ const App = () => {
         presentation: 'modal',
       }}
     />
-  }); 
+  });
 
   // Load fonts
   const [fontsLoaded] = useFonts({
@@ -39,29 +49,28 @@ const App = () => {
     Quicksand700: require('./assets/fonts/Quicksand700Bold.ttf'),
   });
 
-  // return <Login />
-
-
-   if (!fontsLoaded) {
-    return  <AppLoading />; 
+  if (!fontsLoaded) {
+    return <AppLoading />;
   } else {
     return (
-      <View style={styles.container}>
-        <StatusBar style="light" />
-        <NavigationContainer>
-          <Stack.Navigator
-            initialRoute="Palautus"
-            screenOptions={{
-              header: (props) => <TopBar {...props} />,
-              headerStyle: styles.header,
-            }} 
-          >
-            {routes}
-          </Stack.Navigator>
-        </NavigationContainer> 
-      </View> 
-    ); 
-  } 
-} 
+      <UserContext.Provider value={user}>
+        <View style={styles.container}>
+          <StatusBar style="light" />
+          <NavigationContainer>
+            <Stack.Navigator
+              initialRouteName="Loading"
+              screenOptions={{
+                header: (props) => <TopBar {...props} />,
+                headerStyle: styles.header,
+              }}
+            >
+              {routes}
+            </Stack.Navigator>
+          </NavigationContainer>
+        </View>
+      </UserContext.Provider>
+    );
+  }
+}
 
 export default App;
