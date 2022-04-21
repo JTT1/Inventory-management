@@ -5,8 +5,15 @@ import { componentStyles as styles } from './componentStyles';
 
 export default function Home({ navigation, route }) {
     const item = route?.params.item;
+<<<<<<< HEAD
     const [text, setText] = useState(null);
     const [number, setNumber] = useState(null);
+=======
+
+const [text, setText] = useState(null);
+const [number, setNumber] = useState(null);    
+const info = "Lisätiedot"
+>>>>>>> c03e0ed3136552ba5aaa7fc3ba29a1ca9966d964
 
     return (
         <View style={styles.center}>
@@ -14,7 +21,11 @@ export default function Home({ navigation, route }) {
                 <View style={styles.background}>
                     <View style={styles.widthFix}>
                         <Text style={[styles.h1, styles.marginFix]}>{item.Nimike}</Text>
+<<<<<<< HEAD
                         <Text style={[styles.h3, styles.marginFix]}>{info}</Text>
+=======
+                <Text style={[styles.h3, styles.marginFix]}>{info}</Text>
+>>>>>>> c03e0ed3136552ba5aaa7fc3ba29a1ca9966d964
                         <Text style={[styles.bodyTextWhite, styles.marginFix]}>{item.Lisatietoa}</Text>
                     </View>
                 </View>
