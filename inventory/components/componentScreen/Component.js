@@ -8,6 +8,7 @@ export default function Home({ navigation, route }) {
 
 const [text, setText] = useState(null);
 const [number, setNumber] = useState(null);    
+const info = "Lisätiedot"
 
     return (
       <View style={styles.center}>
@@ -15,7 +16,7 @@ const [number, setNumber] = useState(null);
        <View style={styles.background}>
             <View style={styles.widthFix}>
                         <Text style={[styles.h1, styles.marginFix]}>{item.Nimike}</Text>
-                <Text style={[styles.h3, styles.marginFix]}>Lisätiedot</Text>
+                <Text style={[styles.h3, styles.marginFix]}>{info}</Text>
                         <Text style={[styles.bodyTextWhite, styles.marginFix]}>{item.Lisatietoa}</Text>
             </View>
         </View>
