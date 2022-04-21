@@ -58,7 +58,7 @@ const App = () => {
           <StatusBar style="light" />
           <NavigationContainer>
             <Stack.Navigator
-              initialRouteName="Loading"
+              initialRouteName="Komponentti"
               screenOptions={{
                 header: (props) => <TopBar {...props} />,
                 headerStyle: styles.header,

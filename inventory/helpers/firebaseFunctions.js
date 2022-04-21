@@ -39,9 +39,8 @@ export function updateUserLoans(data) {
 }
 
 export const createNewLoan = (data) => {
-    const nodeId = db.ref(LOANS_REF).push().getKey();
+    // const nodeId = db.ref(LOANS_REF).push().getKey();
     return db.ref(LOANS_REF).push({
-        ID: nodeId,
         komponentti: data.komponentti,
         lainattuMaara: data.lainattuMaara,
         lainausPvm: getCurrentDate(),
