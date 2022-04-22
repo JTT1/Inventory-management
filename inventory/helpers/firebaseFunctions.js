@@ -22,7 +22,7 @@ export function getCurrentUserLoans(fnData, fnLoaded, userId) {
             fnData(userLoans);
             fnLoaded(true);
     });
-    } catch (err) {
+    } catch (error) {
         return error.message;
     }
 }
@@ -68,13 +68,14 @@ export const createNewLoan = async (data) => {
 export function addNewBrokenItem(data) {
     try {
     return db.ref(BROKEN_REF).push({
-        description: data.description,
         itemID: data.itemID,
+        description: data.description,
         user: data.user,
         ilmoitusPvm: getCurrentDate(),
         havitetty: false,
     });
     } catch (error) {
+        console.log(error.message);
         return error.message;
     }
 

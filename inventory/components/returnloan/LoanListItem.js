@@ -21,6 +21,7 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
     const handleSelection = () => {
         setChecked(!checked);
 
+        // console.log(itemCopy)
         // Add item to the list of items to be returned
         if (!checked) {
             updateItemList.push(itemCopy);

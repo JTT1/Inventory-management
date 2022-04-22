@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { ScrollView, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, ScrollView, Text, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import LoanListItem from './LoanListItem';
 import ThemeButton from '../testing_field/ThemeButton';
 import { returnLoanStyles as styles } from './ReturnLoanStyles';
@@ -9,6 +9,9 @@ import Modal from 'react-native-modal';
 import HistoryListItem from './HistoryListItem';
 import { MaterialIcons } from '@expo/vector-icons';
 import { UserContext } from '../context/userContext';
+
+// Note to self
+// hae firebasesta userin data tähän komponenttiin -> renderöityyn listaan pitäs saada lainan ID key mukaan
 
 const CurrentLoans = ({ navigation }) => {
     const [loaded, setIsLoaded] = useState(false);
@@ -30,19 +33,17 @@ const CurrentLoans = ({ navigation }) => {
         }
     }, [])
 
-    // Render user's active loans
+    // Render user loans
     const userLoans =
         loanData.every((item) => item.palautettuKokonaan === true) // If user's every loan is fully returned
             ? <Text style={[styles.bodyTextWhite, { alignSelf: 'center' }]} >Ei aktiivisia lainoja.</Text>
-
-            // If user has active loans
-            : loanData.map((item) => {
+            : loanData.map((item) => { // Active loans
                 if (!item.palautettuKokonaan) {
                     return <LoanListItem updateItemList={updateItemList} brokenItemList={brokenItemList} item={item} key={uuid()} />
                 }
             });
 
-    // User's loan history (palautettuKokonaan == true)
+    // User's loan history
     const loanHistory = loanData
         .filter(loan => loan.palautettuKokonaan)
         .map((item) =>
@@ -57,9 +58,9 @@ const CurrentLoans = ({ navigation }) => {
 
         try {
         updateItemList.forEach((item) => updateUserLoans(item));
-        brokenItemList.forEach((item) => addNewBrokenItem(item));
+            brokenItemList.forEach((item) => addNewBrokenItem(item));
         } catch (error) {
-            console.log(error)
+            // console.log(error)
             return
         }
         navigation.navigate('Vahvistus', {
@@ -86,6 +87,8 @@ const CurrentLoans = ({ navigation }) => {
                 </Text>
             </TouchableOpacity>
             <ThemeButton style={{ marginBottom: 20, }} color="#F4247C" text="Palauta valitut" onPress={handleReturnItems} />
+
+            {/* Loan history modal */}
             <Modal
                 style={[styles.centerHorizontal]}
                 isVisible={modalVisible}
@@ -94,14 +97,23 @@ const CurrentLoans = ({ navigation }) => {
                 hideModalContentWhileAnimating={true}
                 useNativeDriver={true}
             >
-                <Text style={[styles.bodyTextWhite, styles.h3]}>
+                <Text style={[styles.bodyTextWhite, styles.h3, { alignSelf: 'center' }]}>
                     Lainaushistoria
                 </Text>
-                <ScrollView style={[styles.historyListContainer]}>
-                    {loanHistory}
-                </ScrollView>
-                <TouchableOpacity onPress={() => toggleModal(!modalVisible)}>
+                {loanHistory.length > 0
+                    ?
+                    <ScrollView style={[styles.historyListContainer]}>
+                        {loanHistory}
+                    </ScrollView>
+                    :
+                    <View>
+                        <Text style={[styles.bodyTextWhite, styles.h4, { alignSelf: 'center', marginBottom: 20 }]}>Ei palautettuja lainoja.</Text>
+                    </View>
+                }
+                <TouchableOpacity style={[styles.flexRow, { marginTop: 10 }]} onPress={() => toggleModal(!modalVisible)}>
+                    <View style={styles.closeButton}>
                     <MaterialIcons name="close" size={30} color="white" />
+                    </View>
                     <Text style={[styles.bodyTextWhite]}>
                         Sulje
                     </Text>

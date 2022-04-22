@@ -31,7 +31,6 @@ export const styles = StyleSheet.create({
         fontFamily: 'Quicksand700',
         fontSize: 18,
         color: 'white',
-        marginLeft: 5,
     },
     h5: {
         fontFamily: 'Quicksand700',

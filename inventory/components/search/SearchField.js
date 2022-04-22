@@ -15,18 +15,23 @@ const SearchField = ({ data, setSearchTerm, setLoaded }) => {
             'Tarjotin',
         ],
         // includeMatches: true,
-        minMatchCharLength: 1,
+        // minMatchCharLength: 1,
         threshold: 0.2,
     });
 
     // Helper to handle search term state
     const handleSearchInput = (text) => {
+        let suggestionsList = [];
         setTerm(text);
 
         // Create the suggestion list (fuse.js)
-        const suggestionsList = fuse.search(term).map((item) =>
+        if (text.length > 0) {
+            suggestionsList = fuse.search(term).map((item) =>
             item.item.Nimike
         );
+        } else { // don't show any suggestions if search term is empty
+            suggestionsList = [];
+        }
         setSuggestions(suggestionsList);
     }
 
