@@ -68,8 +68,8 @@ export const styles = StyleSheet.create({
     },
     backgroundImage: {
         position: 'absolute',
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: 'center',
+        alignItems: 'center',
         top: 0,
         left: 0,
         bottom: 0,
@@ -186,5 +186,6 @@ export const styles = StyleSheet.create({
         paddingTop: "5%",
         alignItems: "center"
     }
+   
 });
 

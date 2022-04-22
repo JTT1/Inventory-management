@@ -25,6 +25,10 @@ const TopBar = (props) => {
 
     const handleDrawerOpen = () => {
         logout();
+        props.navigation.reset({
+            index: 0,
+            routes: [{name: 'Kirjautuminen'}]
+        });
         return
 
     }

@@ -1,4 +1,6 @@
+import { Alert } from 'react-native';
 import { db, ROOT_REF, LOANS_REF, BROKEN_REF, firebase } from '../firebase/Config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function fetchAllItems(fn) {
     return db.ref(ROOT_REF).on('value', querySnapShot => {
@@ -78,34 +80,44 @@ export function addNewBrokenItem(data) {
 
 }
 
-export async function logout() {
+
+
+export const storeUserData = async (value) => {
+  try {
+    await AsyncStorage.setItem('@userInfo', value)
+  } catch (e) {
+    Alert.alert("virhe!", e.toString())
+  }
+      }
+
+export const removeUserData = async (target) => {
+  try {
+    await AsyncStorage.removeItem(target)
+  } catch (e) {
+    Alert.alert("virhe!", e.toString())
+  }
+}
+
+export const userStatus = async () => {
     try {
-        await firebase.auth().signOut();
-    } catch (err) {
-        console.log("Logout error. ", err.message);
-        alert.alert("Logout error. ", err.message);
+        let result = await AsyncStorage.getItem('@userInfo')
+        return result;
+        
+    } catch (error) {
+        Alert.alert("Virhe!", error.toString())
     }
 }
 
-export const storeUserData = async (value) => {
-        try {
-          await AsyncStorage.setItem('@userInfo', value)
-        } catch (error) {
-          // saving error
-        }
-      }
 
-
-
-export const getUserData = async () => {
+export async function logout() {
   try {
-    const value = await AsyncStorage.getItem('@storage_Key')
-    if(value !== null) {
-      return true;
-    } else {
-        return false;
-    }
-  } catch(e) {
-    // error reading value
+      await firebase.auth().signOut();
+      console.log("pihalla");
+      removeUserData('@userInfo');
+      let testi = await AsyncStorage.getItem('@userInfo')
+      console.log(testi + " tässä se viesti!");
+  } catch (err) {
+      console.log("Logout error. ", err.message);
+      Alert.alert("Logout error. ", err.message);
   }
 }
