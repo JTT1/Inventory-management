@@ -11,14 +11,18 @@ export function fetchAllItems(fn) {
 }
 
 export function getCurrentUserLoans(fnData, fnLoaded, userId) {
-    return db.ref(LOANS_REF).on('value', querySnapShot => {
+    try {
+        return db.ref(LOANS_REF).on('value', querySnapShot => {
         const data = querySnapShot.val() ? querySnapShot.val() : {};
         const items = { ...data };
         const keys = Object.keys(items);
         const userLoans = keys.map((key) => items[key]).filter((item) => (item.userID === userId));
-        fnData(userLoans);
-        fnLoaded(true);
+            fnData(userLoans);
+            fnLoaded(true);
     });
+    } catch (err) {
+        return error.message;
+    }
 }
 
 function getCurrentDate() {
@@ -30,29 +34,37 @@ function getCurrentDate() {
 }
 
 export function updateUserLoans(data) {
+    try {
     return db.ref(LOANS_REF + data.ID).update({
         lainattuMaara: data.lainattuMaara,
         palautettuKokonaan: data.palautettuKokonaan,
         palautukset: data.palautukset,
         palautusPvm: getCurrentDate(),
     });
+    } catch (error) {
+        return error.message;
+    }
 }
 
-export const createNewLoan = (data) => {
-    // const nodeId = db.ref(LOANS_REF).push().getKey();
-    return db.ref(LOANS_REF).push({
+export const createNewLoan = async (data) => {
+    try {
+        return db.ref(LOANS_REF).push({
         komponentti: data.komponentti,
-        lainattuMaara: data.lainattuMaara,
+            lainattuMaara: Number(data.lainattuMaara),
         lainausPvm: getCurrentDate(),
         palautettuKokonaan: false,
         palautukset: 0,
         palautusPvm: "",
         projekti: data.projekti,
-        userID: data.userID,
+            userID: data.userID,
     });
+    } catch (error) {
+        return error.message;
+    }
 }
 
 export function addNewBrokenItem(data) {
+    try {
     return db.ref(BROKEN_REF).push({
         description: data.description,
         itemID: data.itemID,
@@ -60,6 +72,10 @@ export function addNewBrokenItem(data) {
         ilmoitusPvm: getCurrentDate(),
         havitetty: false,
     });
+    } catch (error) {
+        return error.message;
+    }
+
 }
 
 export async function logout() {

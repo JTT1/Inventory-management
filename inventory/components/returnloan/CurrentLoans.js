@@ -54,9 +54,14 @@ const CurrentLoans = ({ navigation }) => {
         if (updateItemList.length === 0 && brokenItemList.length === 0) {
             return
         };
+
+        try {
         updateItemList.forEach((item) => updateUserLoans(item));
         brokenItemList.forEach((item) => addNewBrokenItem(item));
-
+        } catch (error) {
+            console.log(error)
+            return
+        }
         navigation.navigate('Vahvistus', {
             returnLoan: true
         });
