@@ -6,6 +6,8 @@ import Login from '../components/login/Login';
 import Home from '../components/home/Home';
 import Component from '../components/componentScreen/Component';
 import LoadingScreen from '../components/login/Loading';
+import ScanQrCode from '../components/qrcodescanner/ScanQrCode';
+import ScanResults from '../components/qrcodescanner/ScanResults';
 
 
 // Routes and components to use in stack navigator
@@ -45,4 +47,15 @@ export const routesList = [
         component: ConfirmScreen,
         header: false,
     },
+    {
+        name: 'Skannaus',
+        component: ScanQrCode,
+        // header: false,
+    },
+    {
+        name: 'Laatikko',
+        component: ScanResults,
+        // header: false,
+    },
+
 ]

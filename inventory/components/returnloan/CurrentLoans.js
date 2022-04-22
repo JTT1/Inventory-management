@@ -11,7 +11,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { UserContext } from '../context/userContext';
 
 // Note to self
-// hae firebasesta userin data tähän komponenttiin -> renderöityyn listaan pitäs saada lainan ID key mukaan
+// hae firebasesta userin data tähän komponenttiin -> renderöityyn listaan pitäs saada lainan/noden ID mukaan
 
 const CurrentLoans = ({ navigation }) => {
     const [loaded, setIsLoaded] = useState(false);

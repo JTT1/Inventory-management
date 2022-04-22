@@ -1,5 +1,5 @@
 import { Alert } from 'react-native';
-import { db, ROOT_REF, LOANS_REF, BROKEN_REF, firebase } from '../firebase/Config';
+import { db, ROOT_REF, LOANS_REF, BROKEN_REF, firebase, LOCKERS_REF } from '../firebase/Config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function fetchAllItems(fn) {
@@ -68,14 +68,14 @@ export const createNewLoan = async (data) => {
 export function addNewBrokenItem(data) {
     try {
     return db.ref(BROKEN_REF).push({
-        itemID: data.itemID,
-        description: data.description,
-        user: data.user,
+        lainausID: data.itemID,
+        kuvaus: data.description,
+        käyttäjä: data.user,
         ilmoitusPvm: getCurrentDate(),
         havitetty: false,
     });
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
         return error.message;
     }
 
@@ -121,4 +121,20 @@ export async function logout() {
       console.log("Logout error. ", err.message);
       Alert.alert("Logout error. ", err.message);
   }
+}
+
+export const getDrawerByName = (drawerName) => {
+    return db.ref(LOCKERS_REF).on('value', querySnapShot => {
+        const data = querySnapShot.val() ? querySnapShot.val() : {};
+        const items = { ...data };
+        const keys = Object.keys(items);
+        const mappedItems = keys.map((key) => items[key]).filter((item) => {
+
+            if (item.tarjotinNimi === drawerName) {
+                return item.trayItems
+            }
+        });
+        console.log(mappedItems)
+        // fn(mappedItems);
+    });
 }

@@ -54,7 +54,7 @@ export default function Home({ navigation }) {
         </TouchableOpacity>
 
 
-        <TouchableOpacity onPress={() => console.log('QR-koodiin')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Skannaus')}>
           <View style={styles.flexRow}>
 
             <View style={styles.secondaryBox}>
