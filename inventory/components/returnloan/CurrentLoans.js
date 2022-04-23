@@ -10,15 +10,13 @@ import HistoryListItem from './HistoryListItem';
 import { MaterialIcons } from '@expo/vector-icons';
 import { UserContext } from '../context/userContext';
 
-// Note to self
-// hae firebasesta userin data tähän komponenttiin -> renderöityyn listaan pitäs saada lainan/noden ID mukaan
-
 const CurrentLoans = ({ navigation }) => {
     const [loaded, setIsLoaded] = useState(false);
     const [loanData, setLoanData] = useState([]);
     const [modalVisible, toggleModal] = useState(false);
     let updateItemList = [];
     let brokenItemList = [];
+
 
     // Get the real user id from login information
     const user = useContext(UserContext);
@@ -33,13 +31,16 @@ const CurrentLoans = ({ navigation }) => {
         }
     }, [])
 
+
     // Render user loans
     const userLoans =
         loanData.every((item) => item.palautettuKokonaan === true) // If user's every loan is fully returned
             ? <Text style={[styles.bodyTextWhite, { alignSelf: 'center' }]} >Ei aktiivisia lainoja.</Text>
             : loanData.map((item) => { // Active loans
                 if (!item.palautettuKokonaan) {
-                    return <LoanListItem updateItemList={updateItemList} brokenItemList={brokenItemList} item={item} key={uuid()} />
+                    return <LoanListItem updateItemList={updateItemList} brokenItemList={brokenItemList} item={item} key={uuid()
+                    }
+                    />
                 }
             });
 
@@ -52,9 +53,14 @@ const CurrentLoans = ({ navigation }) => {
 
     // Handle loan return, and redirect to confirmation screen
     const handleReturnItems = () => {
+        if (updateItemList.some((item) => item.validated === false)) {
+            Alert.alert("Tarkista tiedot")
+            return
+        }
+
         if (updateItemList.length === 0 && brokenItemList.length === 0) {
             return
-        };
+        } 
 
         try {
         updateItemList.forEach((item) => updateUserLoans(item));
@@ -78,7 +84,7 @@ const CurrentLoans = ({ navigation }) => {
                     : userLoans}
             </ScrollView>
             <TouchableOpacity
-                style={[styles.flexRow, styles.centerVertical, { marginTop: 10 }]}
+                style={[styles.flexRow, styles.centerVertical, { marginTop: 10, marginBottom: 20 }]}
                 onPress={() => toggleModal(!modalVisible)}>
 
                 <MaterialIcons name="history" size={30} color="white" />
@@ -86,12 +92,14 @@ const CurrentLoans = ({ navigation }) => {
                     Palautetut lainat
                 </Text>
             </TouchableOpacity>
-            <ThemeButton style={{ marginBottom: 20, }} color="#F4247C" text="Palauta valitut" onPress={handleReturnItems} />
-
+            {userLoans.length > 0 &&
+                <ThemeButton style={{ marginBottom: 20, }} color="#F4247C" text="Palauta valitut" onPress={handleReturnItems} />
+            }
             {/* Loan history modal */}
             <Modal
                 style={[styles.centerHorizontal]}
                 isVisible={modalVisible}
+                onBackButtonPress={() => toggleModal(false)}
                 animationIn={'fadeIn'}
                 animationOut={'fadeOut'}
                 hideModalContentWhileAnimating={true}

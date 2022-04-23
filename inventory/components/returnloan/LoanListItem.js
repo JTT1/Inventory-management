@@ -9,20 +9,21 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
     const [checked, setChecked] = useState(false);
     const [validInput, setValidInput] = useState(true);
     const [modalOpen, toggleModal] = useState(false);
+    const [amount, setAmount] = useState('');
     const [brokenItemDetails, setBrokenItemDetails] = useState('');
-    const currentlyLoanedAmount = item.lainattuMaara - item.palautukset;
-    const returnedBefore = item.palautukset;
     const animation = useRef(new Animated.Value(60)).current;
     const shouldAnimate = useRef(false);
-    const itemCopy = { ...item };
+    const itemCopy = { ...item, validated: false };
     const inputRef = useRef();
+    const currentlyLoanedAmount = item.lainattuMaara - item.palautukset;
+    const returnedBefore = item.palautukset;
 
     // Check box handler
     const handleSelection = () => {
+        // toggle state
         setChecked(!checked);
 
-        // console.log(itemCopy)
-        // Add item to the list of items to be returned
+        // Add item to the updateItemList[index] of items to be returned
         if (!checked) {
             updateItemList.push(itemCopy);
 
@@ -31,10 +32,12 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
             });
 
             if (currentlyLoanedAmount <= 1) {
-                updateItemList[index].palautukset = returnedBefore + 1;
+                updateItemList[index].palautukset = updateItemList[index].lainattuMaara;
                 updateItemList[index].palautettuKokonaan = true;
+                updateItemList[index].validated = true;
             }
         } else {
+            setValidInput(true);
             // remove when unchecked
             updateItemList.splice(updateItemList.indexOf(itemCopy));
         }
@@ -56,6 +59,7 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
     const handleTextInput = (text) => {
         setValidInput(true);
 
+        // Get the correct object from the updateItemList[index]
         const index = updateItemList.findIndex(itemCopy => {
             return itemCopy.ID === item.ID;
         });
@@ -63,10 +67,12 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
         // If higher amount than currently loaned
         if (Number(text) > currentlyLoanedAmount) {
             setValidInput(false);
-            updateItemList[index].palautukset = currentlyLoanedAmount;
-            return
+            updateItemList[index].palautukset = itemCopy.lainattuMaara;
+            updateItemList[index].palautettuKokonaan = true;
+            updateItemList[index].validated = false;
         } else {
             updateItemList[index].palautukset = returnedBefore + Number(text);
+            updateItemList[index].validated = true;
             if (updateItemList[index].palautukset === updateItemList[index].lainattuMaara) {
                 updateItemList[index].palautettuKokonaan = true;
             }
@@ -77,7 +83,7 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
     }
 
     // When swiped left
-    const handleSwipeGesture = (e) => {
+    const handleSwipeGesture = () => {
         shouldAnimate.current = !shouldAnimate.current;
         toggleReturnDetails();
     }
@@ -125,7 +131,7 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
     const toggleSwipeSuggestion = () => {
         Animated.spring(animation, {
             // When checkbox checked -> animate X to 0
-            toValue: !checked ? 15 : 60,
+            toValue: !checked ? 20 : 100,
             friction: 7,
             tension: 70,
             useNativeDriver: false,
@@ -135,7 +141,7 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
     const toggleReturnDetails = () => {
         Animated.spring(animation, {
             // When checkbox checked -> animate X to 0
-            toValue: shouldAnimate.current ? -Dimensions.get('window').width / 1.5 : 15,
+            toValue: shouldAnimate.current ? -Dimensions.get('window').width / 1.5 : 20,
             friction: 7,
             tension: 40,
             useNativeDriver: false,
@@ -154,7 +160,6 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
                 name="error-outline" size={40} color="#C4C4C4"
             />
 
-
     return (
         <View style={styles.loanListItem}>
             <View style={[styles.flexRow, styles.stretch]}>
@@ -168,7 +173,7 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
                         Lainassa: {currentlyLoanedAmount} kpl
                     </Text>
                 </View>
-                <Pressable onPress={(e) => handleSelection(e)}>
+                <Pressable onPress={handleSelection}>
                     {!checked
                         ?
                         <View style={[styles.checkBoxContainer]}>
@@ -251,6 +256,8 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
             <Modal
                 style={[styles.centerHorizontal]}
                 isVisible={modalOpen}
+                onBackButtonPress={handleCancel}
+                onModalShow={() => inputRef.current.focus()}
                 animationIn={'fadeIn'}
                 animationOut={'fadeOut'}
                 hideModalContentWhileAnimating={true}
@@ -268,6 +275,8 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
                         value={brokenItemDetails}
                         keyboardType='default'
                         clearTextOnFocus={true}
+                        onSubmitEditing={handleSave}
+                        blurOnSubmit={true}
                     />
                 </Pressable>
                 <View style={styles.flexRow}>

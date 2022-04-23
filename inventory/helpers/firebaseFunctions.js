@@ -1,5 +1,5 @@
 import { Alert } from 'react-native';
-import { db, ROOT_REF, LOANS_REF, BROKEN_REF, firebase, LOCKERS_REF } from '../firebase/Config';
+import { db, ROOT_REF, LOANS_REF, BROKEN_REF, LOCKERS_REF, firebase } from '../firebase/Config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function fetchAllItems(fn) {
@@ -15,19 +15,23 @@ export function fetchAllItems(fn) {
 export function getCurrentUserLoans(fnData, fnLoaded, userId) {
     try {
         return db.ref(LOANS_REF).on('value', querySnapShot => {
-        const data = querySnapShot.val() ? querySnapShot.val() : {};
-        const items = { ...data };
-        const keys = Object.keys(items);
-        const userLoans = keys.map((key) => items[key]).filter((item) => (item.userID === userId));
+            const data = querySnapShot.val() ? querySnapShot.val() : {};
+            const items = { ...data };
+            const keys = Object.keys(items);
+            let loanData = keys.map((key) => {
+                return { ...items[key], ID: key };
+            })
+            const userLoans = loanData.filter((item) => (item.userID === userId));
             fnData(userLoans);
             fnLoaded(true);
-    });
+        });
     } catch (error) {
         return error.message;
     }
 }
 
 function getCurrentDate() {
+    // const serverTime = firebase.database.ServerValue.TIMESTAMP;
     const now = new Date();
     const month = Number(now.getMonth() + 1) < 10 ? '0' + Number(now.getMonth() + 1) : Number(now.getMonth() + 1);
     const day = now.getDate() < 10 ? '0' + now.getDate() : now.getDate();
@@ -37,12 +41,12 @@ function getCurrentDate() {
 
 export function updateUserLoans(data) {
     try {
-    return db.ref(LOANS_REF + data.ID).update({
-        lainattuMaara: data.lainattuMaara,
-        palautettuKokonaan: data.palautettuKokonaan,
-        palautukset: data.palautukset,
-        palautusPvm: getCurrentDate(),
-    });
+        return db.ref(LOANS_REF + data.ID).update({
+            lainattuMaara: data.lainattuMaara,
+            palautettuKokonaan: data.palautettuKokonaan,
+            palautukset: data.palautukset,
+            palautusPvm: getCurrentDate(),
+        });
     } catch (error) {
         return error.message;
     }
@@ -51,15 +55,15 @@ export function updateUserLoans(data) {
 export const createNewLoan = async (data) => {
     try {
         return db.ref(LOANS_REF).push({
-        komponentti: data.komponentti,
+            komponentti: data.komponentti,
             lainattuMaara: Number(data.lainattuMaara),
-        lainausPvm: getCurrentDate(),
-        palautettuKokonaan: false,
-        palautukset: 0,
-        palautusPvm: "",
-        projekti: data.projekti,
+            lainausPvm: getCurrentDate(),
+            palautettuKokonaan: false,
+            palautukset: 0,
+            palautusPvm: "",
+            projekti: data.projekti,
             userID: data.userID,
-    });
+        });
     } catch (error) {
         return error.message;
     }
@@ -67,43 +71,42 @@ export const createNewLoan = async (data) => {
 
 export function addNewBrokenItem(data) {
     try {
-    return db.ref(BROKEN_REF).push({
-        lainausID: data.itemID,
-        kuvaus: data.description,
-        käyttäjä: data.user,
-        ilmoitusPvm: getCurrentDate(),
-        havitetty: false,
-    });
+        return db.ref(BROKEN_REF).push({
+            lainausID: data.itemID,
+            kuvaus: data.description,
+            käyttäjä: data.user,
+            ilmoitusPvm: getCurrentDate(),
+            havitetty: false,
+        });
     } catch (error) {
         console.log(error);
         return error.message;
     }
-
 }
 
 
 
 export const storeUserData = async (value) => {
-  try {
-    await AsyncStorage.setItem('@userInfo', value)
-  } catch (e) {
-    Alert.alert("virhe!", e.toString())
-  }
-      }
+    try {
+        await AsyncStorage.setItem('@userInfo', value)
+    } catch (e) {
+        Alert.alert("virhe!", e.toString())
+    }
+}
 
 export const removeUserData = async (target) => {
-  try {
-    await AsyncStorage.removeItem(target)
-  } catch (e) {
-    Alert.alert("virhe!", e.toString())
-  }
+    try {
+        await AsyncStorage.removeItem(target)
+    } catch (e) {
+        Alert.alert("virhe!", e.toString())
+    }
 }
 
 export const userStatus = async () => {
     try {
         let result = await AsyncStorage.getItem('@userInfo')
         return result;
-        
+
     } catch (error) {
         Alert.alert("Virhe!", error.toString())
     }
@@ -111,16 +114,16 @@ export const userStatus = async () => {
 
 
 export async function logout() {
-  try {
-      await firebase.auth().signOut();
-      console.log("pihalla");
-      removeUserData('@userInfo');
-      let testi = await AsyncStorage.getItem('@userInfo')
-      console.log(testi + " tässä se viesti!");
-  } catch (err) {
-      console.log("Logout error. ", err.message);
-      Alert.alert("Logout error. ", err.message);
-  }
+    try {
+        await firebase.auth().signOut();
+        console.log("pihalla");
+        removeUserData('@userInfo');
+        let testi = await AsyncStorage.getItem('@userInfo')
+        console.log(testi + " tässä se viesti!");
+    } catch (err) {
+        console.log("Logout error. ", err.message);
+        Alert.alert("Logout error. ", err.message);
+    }
 }
 
 export const getDrawerByName = (drawerName) => {

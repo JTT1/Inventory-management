@@ -13,7 +13,7 @@ export default function Home({ navigation }) {
   return (
     <View style={styles.backgroundColor}>
 
-      <Text style={styles.h1}>Mitä haluat Tehdä?</Text>
+      <Text style={styles.h1}>Mitä haluat tehdä?</Text>
 
       <View style={styles.mainBox}>
 

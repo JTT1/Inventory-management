@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
-import { styles } from '../../styles/AppRootStyle'
+import { Text, View, Button, StyleSheet } from 'react-native';
+import { scannerStyles as styles } from './ScannerStyle';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import Modal from 'react-native-modal';
 
 const ScanQrCode = ({ navigation }) => {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
+
     useEffect(() => {
         (async () => {
             const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -13,8 +15,7 @@ const ScanQrCode = ({ navigation }) => {
         })();
     }, []);
 
-
-    const handleBarCodeScanned = ({ data }) => {
+    const handleScannedCode = ({ data }) => {
         setScanned(true);
         navigation.navigate('Laatikko', { scanResult: data });
     };
@@ -26,12 +27,22 @@ const ScanQrCode = ({ navigation }) => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={styles.QRcontainer}>
+            <Modal
+                style={[styles.centerHorizontal]}
+                isVisible={true}
+                animationIn={'fadeIn'}
+                animationOut={'fadeOut'}
+                hideModalContentWhileAnimating={true}
+                useNativeDriver={true}
+            >
             <BarCodeScanner
-                onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-                style={StyleSheet.absoluteFillObject}
+                    barCodeTypes={[BarCodeScanner.Constants.BarCodeType.qr]}
+                    onBarCodeScanned={scanned ? undefined : handleScannedCode}
+                    style={[StyleSheet.absoluteFillObject]}
             />
             {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+            </Modal>
         </View>
     );
 }
