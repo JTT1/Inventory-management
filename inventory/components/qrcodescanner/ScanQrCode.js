@@ -1,22 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Button, StyleSheet } from 'react-native';
+import { Text, View, } from 'react-native';
 import { scannerStyles as styles } from './ScannerStyle';
-import { BarCodeScanner } from 'expo-barcode-scanner';
-import Modal from 'react-native-modal';
+import { Camera } from 'expo-camera';
+import ThemeButton from '../testing_field/ThemeButton';
 
 const ScanQrCode = ({ navigation }) => {
     const [hasPermission, setHasPermission] = useState(null);
+    const [type, setType] = useState(Camera.Constants.Type.back);
     const [scanned, setScanned] = useState(false);
+    const isFocused = navigation.isFocused();
 
     useEffect(() => {
         (async () => {
-            const { status } = await BarCodeScanner.requestPermissionsAsync();
+            const { status } = await Camera.requestCameraPermissionsAsync();
             setHasPermission(status === 'granted');
         })();
     }, []);
 
-    const handleScannedCode = ({ data }) => {
+
+    const handleScannedCode = ({ type, data }) => {
         setScanned(true);
+        navigation.pop();
         navigation.navigate('Laatikko', { scanResult: data });
     };
     if (hasPermission === null) {
@@ -27,22 +31,16 @@ const ScanQrCode = ({ navigation }) => {
     }
 
     return (
-        <View style={styles.QRcontainer}>
-            <Modal
-                style={[styles.centerHorizontal]}
-                isVisible={true}
-                animationIn={'fadeIn'}
-                animationOut={'fadeOut'}
-                hideModalContentWhileAnimating={true}
-                useNativeDriver={true}
-            >
-            <BarCodeScanner
-                    barCodeTypes={[BarCodeScanner.Constants.BarCodeType.qr]}
-                    onBarCodeScanned={scanned ? undefined : handleScannedCode}
-                    style={[StyleSheet.absoluteFillObject]}
-            />
-            {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
-            </Modal>
+        <View style={[styles.QRcontainer]}>
+            {isFocused && <Camera
+                type={type}
+                onBarCodeScanned={handleScannedCode}
+                barCodeScannerSettings={{ barCodeTypes: 'qr' }}
+                style={[styles.camera]}
+            />}
+            {scanned && <ThemeButton text={'Skannaa uudestaan'}
+                style={[styles.bodyTextDark]}
+                onPress={() => setScanned(false)} />}
         </View>
     );
 }

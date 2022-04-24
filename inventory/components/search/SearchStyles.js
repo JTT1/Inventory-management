@@ -56,7 +56,7 @@ export const searchStyles = StyleSheet.create({
         paddingLeft: 10,
     },
     suggestionsList: {
-        maxHeight: '100%',
+        maxHeight: '75%',
         width: '100%',
     },
     suggestionListItem: {

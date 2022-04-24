@@ -2,17 +2,17 @@ import { Alert } from 'react-native';
 import { db, ROOT_REF, LOANS_REF, BROKEN_REF, LOCKERS_REF, firebase } from '../firebase/Config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export function fetchAllItems(fn) {
+export function fetchAllItems(setData) {
     return db.ref(ROOT_REF).on('value', querySnapShot => {
         const data = querySnapShot.val() ? querySnapShot.val() : {};
         const items = { ...data };
         const keys = Object.keys(items);
         const mappedItems = keys.map((key) => items[key])
-        fn(mappedItems);
+        setData(mappedItems);
     });
 }
 
-export function getCurrentUserLoans(fnData, fnLoaded, userId) {
+export function getCurrentUserLoans(setData, setLoaded, userId) {
     try {
         return db.ref(LOANS_REF).on('value', querySnapShot => {
             const data = querySnapShot.val() ? querySnapShot.val() : {};
@@ -22,15 +22,15 @@ export function getCurrentUserLoans(fnData, fnLoaded, userId) {
                 return { ...items[key], ID: key };
             })
             const userLoans = loanData.filter((item) => (item.userID === userId));
-            fnData(userLoans);
-            fnLoaded(true);
+            setData(userLoans);
+            setLoaded(true);
         });
     } catch (error) {
         return error.message;
     }
 }
 
-function getCurrentDate() {
+function currentDate() {
     // const serverTime = firebase.database.ServerValue.TIMESTAMP;
     const now = new Date();
     const month = Number(now.getMonth() + 1) < 10 ? '0' + Number(now.getMonth() + 1) : Number(now.getMonth() + 1);
@@ -45,7 +45,7 @@ export function updateUserLoans(data) {
             lainattuMaara: data.lainattuMaara,
             palautettuKokonaan: data.palautettuKokonaan,
             palautukset: data.palautukset,
-            palautusPvm: getCurrentDate(),
+            palautusPvm: currentDate(),
         });
     } catch (error) {
         return error.message;
@@ -57,7 +57,7 @@ export const createNewLoan = async (data) => {
         return db.ref(LOANS_REF).push({
             komponentti: data.komponentti,
             lainattuMaara: Number(data.lainattuMaara),
-            lainausPvm: getCurrentDate(),
+            lainausPvm: currentDate(),
             palautettuKokonaan: false,
             palautukset: 0,
             palautusPvm: "",
@@ -75,7 +75,7 @@ export function addNewBrokenItem(data) {
             lainausID: data.itemID,
             kuvaus: data.description,
             käyttäjä: data.user,
-            ilmoitusPvm: getCurrentDate(),
+            ilmoitusPvm: currentDate(),
             havitetty: false,
         });
     } catch (error) {
@@ -126,18 +126,39 @@ export async function logout() {
     }
 }
 
-export const getDrawerByName = (drawerName) => {
-    return db.ref(LOCKERS_REF).on('value', querySnapShot => {
-        const data = querySnapShot.val() ? querySnapShot.val() : {};
-        const items = { ...data };
-        const keys = Object.keys(items);
-        const mappedItems = keys.map((key) => items[key]).filter((item) => {
-
-            if (item.tarjotinNimi === drawerName) {
-                return item.trayItems
-            }
+export const getTrayItems = async (trayName) => {
+    return await db.ref(LOCKERS_REF) // query all lockers -> find the correct tray
+        .once('value')
+        .then((querySnapShot) => {
+            const data = querySnapShot.val() ? querySnapShot.val() : {};
+            const items = { ...data };
+            const keys = Object.keys(items);
+            let trayData = keys.map((key) => {
+                return { ...items[key], ID: key };
+            });
+            const matchTray = trayData.filter((tray) => tray.tarjotinNimi === trayName);
+            return matchTray
+        })
+        .then((tray) => { // after tray is found -> find items matching the content of the tray
+            const [trayItems] = tray.map(tray => tray.trayItems);
+            const itemKeys = Object.keys(trayItems);
+            let test = itemKeys.map(async (key) => {
+                return await db.ref(ROOT_REF + trayItems[key])
+                    .get('value')
+                    .then((querySnapShot) => {
+                        const data = querySnapShot.val() ? querySnapShot.val() : {};
+                        const item = { ...data, ID: trayItems[key] };
+                        // console.log(item)
+                        return item
+                    })
+                // .then((res) => {
+                //     // console.log(res)
+                //     return res;
+                // })
+            })
+            return Promise.all(test);
+        }, (error) => {
+            console.log('The read failed: ' + error.name);
+            return []
         });
-        console.log(mappedItems)
-        // fn(mappedItems);
-    });
 }

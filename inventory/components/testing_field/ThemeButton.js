@@ -3,7 +3,7 @@ import { styles } from '../../styles/AppRootStyle'
 import React from 'react'
 
 const ThemeButton = React.forwardRef((props, ref) => {
-    const color = props.color;
+    const color = props?.color ? props.color : '#F4247C';
     const text = props.text;
     const width = props?.width === 'small' ? 230 : 275;
     const onPress = props.onPress;
@@ -16,7 +16,7 @@ const ThemeButton = React.forwardRef((props, ref) => {
     */
 
     return (
-        <TouchableOpacity ref={ref} {...props}
+        <TouchableOpacity ref={ref} onPress={onPress}
             style={[styles.button, styles.boxShadow, disabled ? styles.buttonDisabled : "", { backgroundColor: color, width: width }, props.style]}
             >
                 <Text style={[styles.upperCase, styles.h3]}>

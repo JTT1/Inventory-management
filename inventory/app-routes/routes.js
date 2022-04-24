@@ -8,6 +8,7 @@ import Component from '../components/componentScreen/Component';
 import LoadingScreen from '../components/login/Loading';
 import ScanQrCode from '../components/qrcodescanner/ScanQrCode';
 import ScanResults from '../components/qrcodescanner/ScanResults';
+import AddNewComponent from '../components/testing_field/AddNewComponent';
 
 
 // Routes and components to use in stack navigator
@@ -50,11 +51,17 @@ export const routesList = [
     {
         name: 'Skannaus',
         component: ScanQrCode,
-        // header: false,
+        header: false,
     },
     {
         name: 'Laatikko',
         component: ScanResults,
+        // header: false,
+    },
+
+    {
+        name: 'Lisää',
+        component: AddNewComponent,
         // header: false,
     },
 
