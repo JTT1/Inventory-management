@@ -84,6 +84,38 @@ export function addNewBrokenItem(data) {
     }
 }
 
+// on QR code scan
+export const getTrayItems = async (trayName) => {
+    return await db.ref(LOCKERS_REF) // query all lockers -> find the correct tray
+        .once('value')
+        .then((querySnapShot) => {
+            const data = querySnapShot.val() ? querySnapShot.val() : {};
+            const items = { ...data };
+            const keys = Object.keys(items);
+            let trayData = keys.map((key) => {
+                return { ...items[key], ID: key };
+            });
+            const matchTray = trayData.filter((tray) => tray.tarjotinNimi === trayName);
+            return matchTray
+        })
+        .then((tray) => { // after tray is found -> find items matching the content of the tray
+            const [trayItems] = tray.map(tray => tray.trayItems);
+            const itemKeys = Object.keys(trayItems);
+            let test = itemKeys.map(async (key) => {
+                return await db.ref(ROOT_REF + trayItems[key])
+                    .get('value')
+                    .then((querySnapShot) => {
+                        const data = querySnapShot.val() ? querySnapShot.val() : {};
+                        const item = { ...data, ID: trayItems[key] };
+                        return item
+                    })
+            })
+            return Promise.all(test);
+        }, (error) => {
+            console.log('The read failed: ' + error.name);
+            return []
+        });
+}
 
 
 export const storeUserData = async (value) => {
@@ -124,41 +156,4 @@ export async function logout() {
         console.log("Logout error. ", err.message);
         Alert.alert("Logout error. ", err.message);
     }
-}
-
-export const getTrayItems = async (trayName) => {
-    return await db.ref(LOCKERS_REF) // query all lockers -> find the correct tray
-        .once('value')
-        .then((querySnapShot) => {
-            const data = querySnapShot.val() ? querySnapShot.val() : {};
-            const items = { ...data };
-            const keys = Object.keys(items);
-            let trayData = keys.map((key) => {
-                return { ...items[key], ID: key };
-            });
-            const matchTray = trayData.filter((tray) => tray.tarjotinNimi === trayName);
-            return matchTray
-        })
-        .then((tray) => { // after tray is found -> find items matching the content of the tray
-            const [trayItems] = tray.map(tray => tray.trayItems);
-            const itemKeys = Object.keys(trayItems);
-            let test = itemKeys.map(async (key) => {
-                return await db.ref(ROOT_REF + trayItems[key])
-                    .get('value')
-                    .then((querySnapShot) => {
-                        const data = querySnapShot.val() ? querySnapShot.val() : {};
-                        const item = { ...data, ID: trayItems[key] };
-                        // console.log(item)
-                        return item
-                    })
-                // .then((res) => {
-                //     // console.log(res)
-                //     return res;
-                // })
-            })
-            return Promise.all(test);
-        }, (error) => {
-            console.log('The read failed: ' + error.name);
-            return []
-        });
 }
