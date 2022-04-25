@@ -20,7 +20,7 @@ export default function Login({ navigation }) {
       await firebase.auth().signInWithEmailAndPassword(email, password);
       console.log("kirjautuminen onnistui!");
       const currentUser = firebase.auth().currentUser;
-      storeUserData(currentUser.email);   
+        storeUserData(currentUser.email);
       routeToHome();
     } catch (err) {
         console.log('Kirjautuminen epäonnistui.', err);
@@ -57,7 +57,7 @@ export default function Login({ navigation }) {
   const routeToHome = () => {
     navigation.reset({
       index: 0,
-      routes: [{ name: 'Koti' }]
+      routes: [{ name: 'Loading' }]
     });
   }
 

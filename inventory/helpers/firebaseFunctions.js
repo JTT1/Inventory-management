@@ -1,5 +1,5 @@
 import { Alert } from 'react-native';
-import { db, ROOT_REF, LOANS_REF, BROKEN_REF, LOCKERS_REF, firebase } from '../firebase/Config';
+import { db, ROOT_REF, LOANS_REF, BROKEN_REF, LOCKERS_REF, USERS_REF, firebase } from '../firebase/Config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function fetchAllItems(setData) {
@@ -10,6 +10,20 @@ export function fetchAllItems(setData) {
         const mappedItems = keys.map((key) => items[key])
         setData(mappedItems);
     });
+}
+
+export async function fetchUser(email) {
+    return await db.ref(USERS_REF).once('value')
+        .then((querySnapShot) => {
+            const data = querySnapShot.val() ? querySnapShot.val() : {};
+            const items = { ...data };
+            const keys = Object.keys(items);
+            let users = keys.map((key) => {
+                return { ...items[key], ID: key };
+            })
+            const user = users.find((user) => (user.email === email));
+            return user;
+        })
 }
 
 export function getCurrentUserLoans(setData, setLoaded, userId) {
@@ -31,7 +45,6 @@ export function getCurrentUserLoans(setData, setLoaded, userId) {
 }
 
 function currentDate() {
-    // const serverTime = firebase.database.ServerValue.TIMESTAMP;
     const now = new Date();
     const month = Number(now.getMonth() + 1) < 10 ? '0' + Number(now.getMonth() + 1) : Number(now.getMonth() + 1);
     const day = now.getDate() < 10 ? '0' + now.getDate() : now.getDate();
@@ -129,6 +142,7 @@ export const storeUserData = async (value) => {
 export const removeUserData = async (target) => {
     try {
         await AsyncStorage.removeItem(target)
+        return true;
     } catch (e) {
         Alert.alert("virhe!", e.toString())
     }
@@ -149,7 +163,7 @@ export async function logout() {
     try {
         await firebase.auth().signOut();
         console.log("pihalla");
-        removeUserData('@userInfo');
+        await removeUserData('@userInfo');
         let testi = await AsyncStorage.getItem('@userInfo')
         console.log(testi + " tässä se viesti!");
     } catch (err) {

@@ -28,7 +28,6 @@ export default function Register({ navigation }) {
           email: currentUser.email,
           etunimi: etunimi,
           sukunimi: sukunimi,
-          password: password1,
           rooli: "user",
         })
         clear();
