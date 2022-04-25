@@ -4,6 +4,7 @@ import { loginStyles as styles } from './loginStyles';
 import { db, ROOT_REF, USERS_REF, firebase } from '../../firebase/Config';
 import { MaterialIcons } from '@expo/vector-icons';
 import ThemeButton from "../testing_field/ThemeButton";
+import { getAuth, sendEmailVerification } from "firebase/auth";
 
 
 export default function Register({ navigation }) {
@@ -20,15 +21,23 @@ export default function Register({ navigation }) {
       });
     }
 
+    
+
     const createAccount = async () => {
       try {
-        await firebase.auth().createUserWithEmailAndPassword(email, password1);
-        const currentUser = firebase.auth().currentUser;
-        firebase.database().ref(USERS_REF + currentUser.uid).set({
-          email: currentUser.email,
+        const newUserCredential = await firebase.auth().createUserWithEmailAndPassword(email, password1);
+        const thisUser = firebase.auth().currentUser;
+
+        await firebase.auth().currentUser.sendEmailVerification();
+        // const auth = getAuth();
+        // sendEmailVerification(auth.currentUser.email)
+        //   .then(() => {
+        //     console.log("email verification sent to " + auth.currentUser.email);
+        //   })
+        firebase.database().ref(USERS_REF + thisUser.uid).set({
+          email: thisUser.email,
           etunimi: etunimi,
           sukunimi: sukunimi,
-          password: password1,
           rooli: "user",
         })
         clear();

@@ -97,8 +97,10 @@ export async function logout() {
   try {
       await firebase.auth().signOut();
       console.log("pihalla");
-      removeUserData('@userInfo');
       let testi = await AsyncStorage.getItem('@userInfo')
+      console.log(testi + " tässä eka");
+      removeUserData('@userInfo');
+      testi = await AsyncStorage.getItem('@userInfo')
       console.log(testi + " tässä se viesti!");
   } catch (err) {
       console.log("Logout error. ", err.message);
