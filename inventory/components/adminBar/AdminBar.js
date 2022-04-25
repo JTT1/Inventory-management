@@ -4,7 +4,7 @@ import { AdminBarStyles as styles } from './AdminBarStyles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { UserContext } from "../context/userContext";
 
-export default function AdminBar () {
+export default function AdminBar ({ navigation }) {
     const { user } = useContext(UserContext);
 
 
@@ -19,7 +19,7 @@ export default function AdminBar () {
                     <MaterialCommunityIcons style={[styles.adminIcons, styles.boxShadow]} name="file-search-outline" size={30} color="#FFFFFF" />
                     </TouchableOpacity>
                     
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('Lisää')}>
                     <MaterialCommunityIcons style={[styles.adminIcons, styles.boxShadow]} name="plus" size={30} color="#FFFFFF" />
                     </TouchableOpacity>
     

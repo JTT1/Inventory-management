@@ -9,6 +9,7 @@ import LoadingScreen from '../components/login/Loading';
 import ScanQrCode from '../components/qrcodescanner/ScanQrCode';
 import ScanResults from '../components/qrcodescanner/ScanResults';
 import AddNewComponent from '../components/testing_field/AddNewComponent';
+import addComponents from '../components/adminTools/addComponents';
 
 
 // Routes and components to use in stack navigator
@@ -61,8 +62,8 @@ export const routesList = [
 
     {
         name: 'Lisää',
-        component: AddNewComponent,
-        // header: false,
+        component: addComponents,
+        header: false,
     },
 
 ]
