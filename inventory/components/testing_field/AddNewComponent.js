@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, ScrollView, View, Button, Alert, TextInput } from 'react-native';
-import { db, ROOT_REF } from '../firebase/Config';
+import { db, ROOT_REF } from '../../firebase/Config';
 import { Components } from './Items';
 
 export default function AddNewComponent() {

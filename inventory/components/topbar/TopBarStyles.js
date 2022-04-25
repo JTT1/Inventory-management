@@ -4,9 +4,8 @@ import { styles } from '../../styles/AppRootStyle';
 export const topBarStyles = StyleSheet.create({
     ...styles,
     topBarContainer: {
+        margin: 10,
         height: 75,
-        marginHorizontal: 10,
-        marginTop: 10,
         paddingHorizontal: 20,
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -41,7 +40,6 @@ export const topBarStyles = StyleSheet.create({
         width: 50,
         height: 50,
     },
-
     iconShadow: {
         textShadowOffset:
             { height: 4, width: 0 },

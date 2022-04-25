@@ -1,36 +1,33 @@
-import { ScrollView, View, Text, ActivityIndicator } from 'react-native';
+import { ScrollView, View, Text, ActivityIndicator, TouchableOpacity, Keyboard } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { searchStyles as styles } from './SearchStyles';
 import SearchListItem from './SearchListItem.js';
 import SearchFab from './SearchFab.js';
 import SearchField from './SearchField';
 import uuid from 'react-uuid';
-import { db, ROOT_REF } from '../../firebase/Config';
+import { fetchAllItems } from '../../helpers/firebaseFunctions';
+import Modal from 'react-native-modal';
+import { MaterialIcons } from '@expo/vector-icons';
 
-const SearchComponents = () => {
+
+const SearchComponents = (props) => {
     const [data, setData] = useState([]);
     const [searchFieldOpen, setSearchField] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredItems, setFilteredItems] = useState([]);
-    const [loaded, setLoaded] = useState(false);
+    const [isLoaded, setLoaded] = useState(false);
 
     // Firebase query
     useEffect(() => {
-        db.ref(ROOT_REF).on('value', querySnapShot => {
-            let data = querySnapShot.val() ? querySnapShot.val() : {};
-            let items = { ...data };
-            let keys = Object.keys(items);
-            const mappedItems = keys.map((key) => items[key])
-            setData(mappedItems);
-        });
+        fetchAllItems(setData);
     }, []);
 
-    // When search is submitted
+    // On search submit -> hide search field, filter the data array to show search results, and finish loading
     useEffect(() => {
-        setSearchField(false)
-        setFilteredItems(filterData(data, searchTerm))
-        setLoaded(true)
-    }, [searchTerm])
+        setSearchField(false);
+        setFilteredItems(filterData(data, searchTerm));
+        setLoaded(true);
+    }, [searchTerm]);
 
     // Toggle search field when FAB is pressed
     const toggleSearchField = () => {
@@ -42,39 +39,43 @@ const SearchComponents = () => {
         return string.split(' ').join('').toLowerCase().trim();
     }
 
-    // Search from category or name
+    // Search by category or name
     const filterData = (data, term) => {
         if (term.trim() === '') {
-            return []
+            return [];
         }
         const searchItemsArray = data.map((item) => item).filter((item) => {
             let search = formatString(term);
             let itemName = formatString(item.Nimike);
-            let itemCategory = formatString(item.Kategoria);
-            return itemName.includes(search) || itemCategory.includes(search)
+            let trayNumber = formatString(item.Tarjotin.toString());
+            return itemName.includes(search) || trayNumber.includes(search);
         });
-        return searchItemsArray
+        return searchItemsArray;
     }
 
     // Filtered list render
-    const listItems = filteredItems.length > 0 ? filteredItems.map((item) => <SearchListItem item={item} key={uuid()} />)
-        : <View>
-            <Text style={[styles.bodyTextWhite, styles.h5]}>Ei hakutuloksia</Text>
+    const listItems = filteredItems.length > 0
+        ? filteredItems.map((item) => <SearchListItem {...props} item={item} key={uuid()} />)
+        : <View style={{ textAlign: 'center', padding: 20 }}>
+            <Text style={[styles.bodyTextWhite, styles.h5]}>
+                {
+                    // On initial load, guide the user to press the search button
+                    searchTerm.length === 0
+                        ? 'Aloita painamalla alla olevaa hakupainiketta'
+                        : 'Ei hakutuloksia'
+                }
+            </Text>
         </View>
 
     return (
-        <View style={styles.flexBox}>
+        <View style={[styles.flexBox, { backgroundColor: '#2C2A4C' }]}>
             <View>
                 <Text style={[styles.bodyTextWhite, styles.h1]}>
                     Hae komponentteja
                 </Text>
             </View>
-            <Text style={[styles.bodyTextWhite, styles.h4]}>
-                Hakutulokset: {searchTerm}
-            </Text>
-            <View style={[styles.results, styles.boxShadow]}>
-
-                {!loaded
+            <View style={[styles.searchResults, styles.boxShadow]}>
+                {!isLoaded
                     ? <ActivityIndicator size="large" color="#1DFFBB" />
                     : <ScrollView style={[styles.stretch]}>
                         {listItems}
@@ -83,8 +84,20 @@ const SearchComponents = () => {
             </View>
 
             {/* Conditionally render either FAB or search field */}
-            {searchFieldOpen ? <SearchField setSearchTerm={setSearchTerm} setLoaded={setLoaded} />
-                : <SearchFab toggle={toggleSearchField} />}
+            <Modal style={[styles.searchModal]}
+                isVisible={searchFieldOpen} animationIn={'fadeIn'} animationOut={'fadeOut'}>
+                <View style={[styles.flexRow]}>
+                    <TouchableOpacity onPress={() => setSearchField(false)} style={[styles.cancelFAB]}>
+                        <MaterialIcons name="close" size={30} color="white" />
+                    </TouchableOpacity>
+                    <Text style={[styles.bodyTextWhite]}>
+                        Sulje
+                    </Text>
+                </View>
+                <SearchField data={data} setSearchTerm={setSearchTerm} setLoaded={setLoaded}
+                />
+            </Modal>
+            <SearchFab toggle={toggleSearchField} />
         </View >
     )
 }
