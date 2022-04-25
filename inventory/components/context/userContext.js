@@ -1,6 +1,6 @@
-import React, { createContext } from 'react';
+import { createContext } from 'react';
 
-const initialValue = {
+const user = {
     id: {
         email: "",
         etunimi: "",
@@ -8,4 +8,14 @@ const initialValue = {
         rooli: "",
     }
 }
-export const UserContext = createContext(initialValue);
+export const UserContext = createContext({
+    user: {
+        id: {
+            email: "",
+            etunimi: "",
+            sukunimi: "",
+            rooli: "",
+        }
+    },
+    setUser: (userInfo) => { }
+});

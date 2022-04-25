@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { styles } from './styles/AppRootStyle.js';
-import { View, } from 'react-native';
+import { View, Alert } from 'react-native';
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
@@ -12,16 +12,7 @@ import uuid from 'react-uuid';
 import { UserContext } from './components/context/userContext';
 
 const App = () => {
-
-  // When login works replace this with the user object (needed for UserContext)
-  const user = {
-    '1234': {
-      email: "essi@esimerkki.fi",
-      etunimi: "Essi",
-      sukunimi: "Esimerkki",
-      rooli: "user",
-    }
-  };
+  const [user, setUser] = useState([]);
 
   // Navigation stack
   const Stack = createNativeStackNavigator();
@@ -53,7 +44,7 @@ const App = () => {
     return <AppLoading />;
   } else {
     return (
-      <UserContext.Provider value={user}>
+      <UserContext.Provider value={{ user, setUser }}>
         <View style={styles.container}>
           <StatusBar style="light" />
           <NavigationContainer>
