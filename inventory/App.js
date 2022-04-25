@@ -9,9 +9,20 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TopBar from './components/topbar/TopBar';
 import { routesList } from './app-routes/routes.js';
 import uuid from 'react-uuid';
-import Login from './components/login/Login.js';
+import { UserContext } from './components/context/userContext';
 
 const App = () => {
+
+  // When login works replace this with the user object (needed for UserContext)
+  const user = {
+    '1234': {
+      email: "essi@esimerkki.fi",
+      etunimi: "Essi",
+      sukunimi: "Esimerkki",
+      rooli: "user",
+    }
+  };
+
   // Navigation stack
   const Stack = createNativeStackNavigator();
 
@@ -24,8 +35,8 @@ const App = () => {
       options={{
         headerShown: screen?.header,
         animationTypeForReplace: 'push',
-        animation: "slide_from_right",
-        presentation: 'modal',
+        animation: 'fade_from_bottom',
+        presentation: 'card',
       }}
     />
   });
@@ -42,27 +53,22 @@ const App = () => {
     return <AppLoading />;
   } else {
     return (
-      <View style={styles.container}>
-        <StatusBar style="light" />
-        <NavigationContainer>
-          <Stack.Navigator
-            initialRoute="Koti"
-            screenOptions={{
-              header: (props) => <TopBar {...props} />,
-              headerStyle: styles.header,
-            }}
-          >
-            {routes}
-            {/* 
-            <Stack.Screen
-              name={'Koti'}
-              component={Login}
-              options={{ headerShown: false }}
-            /> */}
-          </Stack.Navigator>
-        </NavigationContainer>
-      </View>
-      
+      <UserContext.Provider value={user}>
+        <View style={styles.container}>
+          <StatusBar style="light" />
+          <NavigationContainer>
+            <Stack.Navigator
+              initialRouteName="Loading"
+              screenOptions={{
+                header: (props) => <TopBar {...props} />,
+                headerStyle: styles.header,
+              }}
+            >
+              {routes}
+            </Stack.Navigator>
+          </NavigationContainer>
+        </View>
+      </UserContext.Provider>
     );
   }
 }

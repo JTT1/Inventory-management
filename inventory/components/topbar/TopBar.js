@@ -1,9 +1,15 @@
 import { View, Text, Image, BackHandler, TouchableOpacity } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { topBarStyles as styles } from './TopBarStyles.js'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { UserContext } from '../context/userContext';
+import { logout } from '../../helpers/firebaseFunctions';
 
 const TopBar = (props) => {
+    const user = useContext(UserContext);
+    const [key] = Object.keys(user);
+    const userDetails = user[key];
+    const currentScreen = props.route.name;
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', close);
@@ -14,31 +20,40 @@ const TopBar = (props) => {
 
 
     const close = () => {
-        console.log('press')
         props.navigation.goBack(null);
         return true;
     }
 
     const handleDrawerOpen = () => {
+        logout();
+        props.navigation.reset({
+            index: 0,
+            routes: [{name: 'Kirjautuminen'}]
+        });
         return
     }
+
 
     return (
         <View style={styles.topBarContainer}>
             {/* Tähän routing edelliseen komponenttiin */}
             <View style={[styles.flexRow, styles.centerVertical]}>
-                <TouchableOpacity onPress={close}>
+                {currentScreen == 'Koti'
+                    ? <MaterialCommunityIcons style={styles.iconShadow} name="home" size={45} color="#5E5A86" />
+                    : <TouchableOpacity onPress={close}>
                     <MaterialCommunityIcons style={styles.iconShadow} name="arrow-left" size={45} color="#5E5A86" />
                 </TouchableOpacity>
-                <Text style={[styles.h2, { marginLeft: 10, color: styles.bodyTextDark.color, }]}>
-                    {props.route.name}
+                }
+                <Text style={[styles.h2, { marginLeft: 10, color: styles.bodyTextDark.color }]}>
+                    {currentScreen}
                 </Text>
             </View>
             <View style={styles.avatar}>
-                {/* <Text style={styles.bodyTextDark}>User</Text> */}
 
+                {/* <Text style={styles.bodyTextDark}>{userDetails.etunimi} {userDetails.sukunimi}</Text> */}
                 {/* Tästä toggle drawer, josta näkee käyttäjäprofiilin */}
                 <TouchableOpacity onPress={handleDrawerOpen} style={styles.imgContainer}>
+
                     <Image source={{ uri: "https://picsum.photos/200" }} style={styles.userImg} />
                 </TouchableOpacity>
             </View>

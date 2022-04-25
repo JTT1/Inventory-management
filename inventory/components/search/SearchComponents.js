@@ -1,5 +1,5 @@
-import { ScrollView, View, Text, ActivityIndicator, TouchableOpacity, Keyboard } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import { ScrollView, View, Text, ActivityIndicator, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
 import { searchStyles as styles } from './SearchStyles';
 import SearchListItem from './SearchListItem.js';
 import SearchFab from './SearchFab.js';
@@ -15,7 +15,8 @@ const SearchComponents = (props) => {
     const [searchFieldOpen, setSearchField] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredItems, setFilteredItems] = useState([]);
-    const [isLoaded, setLoaded] = useState(false);
+    const [isLoaded, setLoaded] = useState(true);
+    const inputRef = useRef();
 
     // Firebase query
     useEffect(() => {
@@ -24,33 +25,41 @@ const SearchComponents = (props) => {
 
     // On search submit -> hide search field, filter the data array to show search results, and finish loading
     useEffect(() => {
-        setSearchField(false);
-        setFilteredItems(filterData(data, searchTerm));
-        setLoaded(true);
+        filterData(data, searchTerm)
+            .then((res) => {
+                setFilteredItems(res);
+                setLoaded(true);
+                setSearchField(false);
+            })
     }, [searchTerm]);
 
-    // Toggle search field when FAB is pressed
-    const toggleSearchField = () => {
-        setSearchField(!searchFieldOpen);
-    }
-
     // Wipes whitespace of given string and turns it into lowercase
-    const formatString = (string) => {
+    const formatString = async (string) => {
         return string.split(' ').join('').toLowerCase().trim();
     }
 
     // Search by category or name
-    const filterData = (data, term) => {
+    const filterData = async (data, term) => {
         if (term.trim() === '') {
             return [];
         }
-        const searchItemsArray = data.map((item) => item).filter((item) => {
-            let search = formatString(term);
-            let itemName = formatString(item.Nimike);
-            let trayNumber = formatString(item.Tarjotin.toString());
-            return itemName.includes(search) || trayNumber.includes(search);
-        });
-        return searchItemsArray;
+        let searchItemsArray = await data.map((item) => item)
+
+        // Async filter function to not freeze the application when executing the filtering
+        let asyncFilter = async function (array) {
+            let search = await formatString(term);
+
+            let temp = [];
+            for (let item = 0; item < array.length; item++) {
+                let itemName = await formatString(array[item].Nimike);
+                let trayNumber = await formatString(array[item].Tarjotin.toString());
+                if (itemName.includes(search) || trayNumber.includes(search)) {
+                    temp.push(array[item]);
+                };
+            }
+            return temp;
+        };
+        return await asyncFilter(searchItemsArray);
     }
 
     // Filtered list render
@@ -58,11 +67,11 @@ const SearchComponents = (props) => {
         ? filteredItems.map((item) => <SearchListItem {...props} item={item} key={uuid()} />)
         : <View style={{ textAlign: 'center', padding: 20 }}>
             <Text style={[styles.bodyTextWhite, styles.h5]}>
-                {
-                    // On initial load, guide the user to press the search button
+                { // On initial load, guide the user to press the search button
                     searchTerm.length === 0
-                        ? 'Aloita painamalla alla olevaa hakupainiketta'
-                        : 'Ei hakutuloksia'
+                        ? 'Aloita painamalla alla olevaa hakupainiketta.'
+                        : isLoaded &&
+                        'Ei hakutuloksia'
                 }
             </Text>
         </View>
@@ -75,30 +84,47 @@ const SearchComponents = (props) => {
                 </Text>
             </View>
             <View style={[styles.searchResults, styles.boxShadow]}>
-                {!isLoaded
-                    ? <ActivityIndicator size="large" color="#1DFFBB" />
-                    : <ScrollView style={[styles.stretch]}>
-                        {listItems}
-                    </ScrollView>
-                }
+                <ScrollView style={[styles.stretch]}>
+                    {listItems}
+                </ScrollView>
             </View>
 
-            {/* Conditionally render either FAB or search field */}
             <Modal style={[styles.searchModal]}
-                isVisible={searchFieldOpen} animationIn={'fadeIn'} animationOut={'fadeOut'}>
-                <View style={[styles.flexRow]}>
-                    <TouchableOpacity onPress={() => setSearchField(false)} style={[styles.cancelFAB]}>
-                        <MaterialIcons name="close" size={30} color="white" />
-                    </TouchableOpacity>
-                    <Text style={[styles.bodyTextWhite]}>
-                        Sulje
-                    </Text>
-                </View>
-                <SearchField data={data} setSearchTerm={setSearchTerm} setLoaded={setLoaded}
-                />
+                isVisible={searchFieldOpen}
+                onBackButtonPress={() => setSearchField(false)}
+                animationIn={'fadeIn'}
+                animationOut={'fadeOut'}
+                hideModalContentWhileAnimating={true}
+                useNativeDriver={true}
+                onModalShow={() => inputRef.current.focus()}
+            >
+                {!isLoaded ?
+                    <View style={[styles.flexBox, styles.stretch, styles.centerVertical]}>
+                        <ActivityIndicator size={100} color="#1DFFBB" />
+                    </View>
+                    :
+                    <React.Fragment>
+                        <View style={[styles.flexRow]}>
+                            <TouchableOpacity onPress={() => setSearchField(false)} style={[styles.cancelFAB]}>
+                                <MaterialIcons name="close" size={30} color="white" />
+                            </TouchableOpacity>
+                            <Text style={[styles.bodyTextWhite]}>
+                                Sulje
+                            </Text>
+                        </View>
+                        {searchFieldOpen &&
+                            <SearchField
+                                inputRef={inputRef}
+                                data={data}
+                                searchTerm={searchTerm}
+                                setSearchTerm={setSearchTerm}
+                                setLoaded={setLoaded} />
+                        }
+                    </React.Fragment>
+                }
             </Modal>
-            <SearchFab toggle={toggleSearchField} />
-        </View >
+            <SearchFab toggle={() => setSearchField(true)} />
+        </View>
     )
 }
 

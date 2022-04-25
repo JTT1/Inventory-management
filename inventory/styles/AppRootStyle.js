@@ -10,6 +10,9 @@ export const styles = StyleSheet.create({
     header: {
         backgroundColor: '#2C2A4C',
     },
+    themeRed: {
+        backgroundColor: '#F4247C',
+    },
     h1: {
         fontFamily: 'Quicksand700',
         fontSize: 30,
@@ -67,6 +70,8 @@ export const styles = StyleSheet.create({
     },
     backgroundImage: {
         position: 'absolute',
+        justifyContent: 'center',
+        alignItems: 'center',
         top: 0,
         left: 0,
         bottom: 0,
@@ -101,6 +106,9 @@ export const styles = StyleSheet.create({
     centerVertical: {
         justifyContent: 'center'
     },
+    selfCenterHorizontal: {
+        alignSelf: 'center'
+    },
 
     button: {
         marginTop: 25,
@@ -117,6 +125,9 @@ export const styles = StyleSheet.create({
     buttonSmaller: {
         width: 230,
     },
+    buttonDisabled: {
+        backgroundColor: 'black'
+    },
     TextInput: {
         display: "flex",
         flexDirection: "row",
@@ -130,7 +141,8 @@ export const styles = StyleSheet.create({
         backgroundColor: "rgba(143,138,191,0.5)",
         width: 270,
         height: 40,
-        color: 'white'
+        color: 'white',
+        marginTop: "2%"
     },
     inputWrapper: {
         flexDirection: 'row',
@@ -167,5 +179,17 @@ export const styles = StyleSheet.create({
         color: 'white',
         alignItems: "center",
     },
+    registerScroll: {
+        paddingTop: "15%",
+        paddingBottom: "15%",
+        alignItems: "center",
+    },
+    inputView: {
+        padding: 10,
+    },
+    registerBottom: {
+        paddingTop: "5%",
+        alignItems: "center"
+    }
 });
 
