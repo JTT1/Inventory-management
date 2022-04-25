@@ -4,6 +4,7 @@ import { homeStyles as styles } from './homeStyles';
 import { Text, View, Image, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { userStatus } from "../../helpers/firebaseFunctions";
+import AdminBar from "../adminBar/AdminBar";
 
 
 
@@ -74,6 +75,8 @@ export default function Home({ navigation }) {
         </TouchableOpacity>
 
       </View>
+
+     <AdminBar/>
 
     </View>
 
