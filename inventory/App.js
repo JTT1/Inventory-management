@@ -15,11 +15,11 @@ const App = () => {
 
   // When login works replace this with the user object (needed for UserContext)
   const user = {
-    '1224': {
-      email: "test@test.test",
+    '1234': {
+      email: "essi@esimerkki.fi",
       etunimi: "Essi",
       sukunimi: "Esimerkki",
-      rooli: "Opiskelija",
+      rooli: "user",
     }
   };
 
@@ -35,8 +35,8 @@ const App = () => {
       options={{
         headerShown: screen?.header,
         animationTypeForReplace: 'push',
-        animation: "slide_from_right",
-        presentation: 'modal',
+        animation: 'fade_from_bottom',
+        presentation: 'card',
       }}
     />
   });
@@ -58,7 +58,7 @@ const App = () => {
           <StatusBar style="light" />
           <NavigationContainer>
             <Stack.Navigator
-              initialRouteName="Loading"
+              initialRouteName="Koti"
               screenOptions={{
                 header: (props) => <TopBar {...props} />,
                 headerStyle: styles.header,

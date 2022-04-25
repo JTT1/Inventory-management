@@ -2,8 +2,8 @@ import { TouchableOpacity, Text } from 'react-native'
 import { styles } from '../../styles/AppRootStyle'
 import React from 'react'
 
-const ThemeButton = (props) => {
-    const color = props.color;
+const ThemeButton = React.forwardRef((props, ref) => {
+    const color = props?.color ? props.color : '#F4247C';
     const text = props.text;
     const width = props?.width === 'small' ? 230 : 275;
     const onPress = props.onPress;
@@ -16,7 +16,7 @@ const ThemeButton = (props) => {
     */
 
     return (
-        <TouchableOpacity disabled={disabled} onPress={onPress}
+        <TouchableOpacity ref={ref} onPress={onPress}
             style={[styles.button, styles.boxShadow, disabled ? styles.buttonDisabled : "", { backgroundColor: color, width: width }, props.style]}
             >
                 <Text style={[styles.upperCase, styles.h3]}>
@@ -24,6 +24,6 @@ const ThemeButton = (props) => {
                 </Text>
         </TouchableOpacity>
     )
-}
+});
 
-export default ThemeButton
+export default ThemeButton;

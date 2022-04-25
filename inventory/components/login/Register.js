@@ -21,6 +21,20 @@ export default function Register({ navigation }) {
       });
     }
 
+    const actionCodeSettings = {
+      url: 'https://www.example.com/finishSignUp?cartId=1234',
+      handleCodeInApp: true,
+      iOS: {
+        bundleId: 'com.example.ios'
+      },
+      android: {
+        packageName: 'com.example.android',
+        installApp: true,
+        minimumVersion: '12'
+      },
+      dynamicLinkDomain: 'example.page.link'
+    };
+
     
 
     const createAccount = async () => {

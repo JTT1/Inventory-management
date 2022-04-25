@@ -9,6 +9,7 @@ const TopBar = (props) => {
     const user = useContext(UserContext);
     const [key] = Object.keys(user);
     const userDetails = user[key];
+    const currentScreen = props.route.name;
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', close);
@@ -30,7 +31,6 @@ const TopBar = (props) => {
             routes: [{name: 'Kirjautuminen'}]
         });
         return
-
     }
 
 
@@ -38,11 +38,14 @@ const TopBar = (props) => {
         <View style={styles.topBarContainer}>
             {/* Tähän routing edelliseen komponenttiin */}
             <View style={[styles.flexRow, styles.centerVertical]}>
-                <TouchableOpacity onPress={close}>
+                {currentScreen == 'Koti'
+                    ? <MaterialCommunityIcons style={styles.iconShadow} name="home" size={45} color="#5E5A86" />
+                    : <TouchableOpacity onPress={close}>
                     <MaterialCommunityIcons style={styles.iconShadow} name="arrow-left" size={45} color="#5E5A86" />
                 </TouchableOpacity>
+                }
                 <Text style={[styles.h2, { marginLeft: 10, color: styles.bodyTextDark.color }]}>
-                    {props.route.name}
+                    {currentScreen}
                 </Text>
             </View>
             <View style={styles.avatar}>

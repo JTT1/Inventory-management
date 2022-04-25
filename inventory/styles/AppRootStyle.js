@@ -10,6 +10,9 @@ export const styles = StyleSheet.create({
     header: {
         backgroundColor: '#2C2A4C',
     },
+    themeRed: {
+        backgroundColor: '#F4247C',
+    },
     h1: {
         fontFamily: 'Quicksand700',
         fontSize: 30,
@@ -31,7 +34,6 @@ export const styles = StyleSheet.create({
         fontFamily: 'Quicksand700',
         fontSize: 18,
         color: 'white',
-        marginLeft: 5,
     },
     h5: {
         fontFamily: 'Quicksand700',
@@ -103,6 +105,9 @@ export const styles = StyleSheet.create({
     },
     centerVertical: {
         justifyContent: 'center'
+    },
+    selfCenterHorizontal: {
+        alignSelf: 'center'
     },
 
     button: {
@@ -186,6 +191,5 @@ export const styles = StyleSheet.create({
         paddingTop: "5%",
         alignItems: "center"
     }
-   
 });
 

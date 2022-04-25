@@ -1,11 +1,10 @@
 import React, { useContext } from "react";
-import { Text, View, TextInput, } from 'react-native';
+import { Text, View, TextInput, Alert } from 'react-native';
 import { useState } from 'react';
 import { componentStyles as styles } from './componentStyles';
 import ThemeButton from '../testing_field/ThemeButton';
 import { createNewLoan } from '../../helpers/firebaseFunctions';
 import { UserContext } from '../context/userContext.js';
-
 
 export default function Home({ navigation, route }) {
     const [text, setText] = useState(null);
@@ -13,17 +12,15 @@ export default function Home({ navigation, route }) {
     const user = useContext(UserContext);
     const [userId] = Object.keys(user)
 
-    console.log(userId)
-    // const item = route?.params.item;
-    const item = {
-        ID: 66,
-        Lisatietoa: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ornare eu leo sodales vulputate. Donec interdum semper ex, sit amet euismod arcu ultricies nec. Cras auctor, enim id volutpat mollis, nibh felis mollis felis, sit amet tincidunt purus enim at mauris.",
-        Maara: 25,
-        Nimike: "Virtausmittari",
-        Sijainti: "",
-        Tarjotin: "",
-    }
-
+    const item = route?.params.item;
+    // const item = {
+    //     ID: 66,
+    //     Lisatietoa: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ornare eu leo sodales vulputate. Donec interdum semper ex, sit amet euismod arcu ultricies nec. Cras auctor, enim id volutpat mollis, nibh felis mollis felis, sit amet tincidunt purus enim at mauris.",
+    //     Maara: 25,
+    //     Nimike: "Virtausmittari",
+    //     Sijainti: "",
+    //     Tarjotin: "",
+    // }
 
     const handleNewLoan = () => {
         const newLoanData = {
@@ -32,13 +29,18 @@ export default function Home({ navigation, route }) {
             projekti: text,
             userID: userId,
         }
-        createNewLoan(newLoanData);
-        setText('');
-        setAmount('');
-
-        navigation.navigate('Vahvistus', {
-            returnLoan: false
-        });
+        createNewLoan(newLoanData).then((res) => {
+            if (res.length > 0) {
+                return Alert.alert('Lainaus epäonnistui', res)
+            } else {
+                setText('');
+                setAmount('');
+                navigation.navigate('Vahvistus', {
+                    returnLoan: false
+                });
+            }
+        }
+        );
     };
 
     return (

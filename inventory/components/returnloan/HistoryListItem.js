@@ -5,8 +5,8 @@ import { returnLoanStyles as styles } from './ReturnLoanStyles';
 const HistoryListItem = ({ item }) => {
     return (
         <View style={[styles.historyListItem]}>
-            <View style={[styles.stretch, { padding: 10 }]}>
-                <Text style={[styles.bodyTextWhite, styles.h3]}>
+            <View style={[styles.stretch]}>
+                <Text style={[styles.bodyTextWhite, styles.h4]}>
                     {item.komponentti}
                 </Text>
                 <Text style={[styles.bodyTextWhite]}>
