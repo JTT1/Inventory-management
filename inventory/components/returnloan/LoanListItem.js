@@ -96,8 +96,9 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
         }
 
         const brokenItem = {
-            user: itemCopy.userID,
+            user: itemCopy.userEmail,
             itemID: itemCopy.ID,
+            komponentti: itemCopy.komponentti,
             description: brokenItemDetails,
         }
         brokenItemList.push(brokenItem)
