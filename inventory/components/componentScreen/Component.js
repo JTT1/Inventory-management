@@ -9,8 +9,9 @@ import { UserContext } from '../context/userContext.js';
 export default function Home({ navigation, route }) {
     const [text, setText] = useState(null);
     const [amount, setAmount] = useState(null);
-    const user = useContext(UserContext);
-    const [userId] = Object.keys(user)
+    const { user } = useContext(UserContext);
+    const userId = user.ID
+    const userEmail = user.email;
 
     const item = route?.params.item;
     // const item = {
@@ -28,6 +29,7 @@ export default function Home({ navigation, route }) {
             lainattuMaara: amount,
             projekti: text,
             userID: userId,
+            userEmail: userEmail
         }
         createNewLoan(newLoanData).then((res) => {
             if (res.length > 0) {

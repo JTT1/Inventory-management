@@ -16,6 +16,7 @@ export const routesList = [
     {
         name: 'Loading',
         component: LoadingScreen,
+        header: false,
     },
     {
         name: 'Rekisteröinti',

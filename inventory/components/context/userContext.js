@@ -10,12 +10,11 @@ const user = {
 }
 export const UserContext = createContext({
     user: {
-        id: {
             email: "",
             etunimi: "",
             sukunimi: "",
             rooli: "",
-        }
+        ID: ""
     },
     setUser: (userInfo) => { }
 });

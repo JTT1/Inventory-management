@@ -22,17 +22,18 @@ const TopBar = (props) => {
 
 
     const close = () => {
-        props.navigation.goBack(null);
+        props.route.name != 'Koti' && props.navigation.goBack(null);
         return true;
     }
 
-    const handleDrawerOpen = () => {
-        logout();
-        props.navigation.reset({
-            index: 0,
-            routes: [{name: 'Kirjautuminen'}]
-        });
-        return
+    const handleDrawerOpen = async () => {
+        return await logout()
+            .then(() => {
+                props.navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'Loading' }]
+                });
+            })
     }
 
 
