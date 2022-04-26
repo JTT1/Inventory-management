@@ -7,14 +7,12 @@ import { UserContext } from "../context/userContext";
 export default function AdminBar ({ navigation }) {
     const { user } = useContext(UserContext);
 
-
     if (user.rooli == "admin") {
         return (
             <View>
                 
                 <View style= {[styles.flexRow,styles.adminContainer, styles.centerVertical, styles.boxShadow]}>
                     <Text style={[styles.h4, styles.adminText]}>Admin</Text>
-                    
                     <TouchableOpacity>
                     <MaterialCommunityIcons style={[styles.adminIcons, styles.boxShadow]} name="file-search-outline" size={30} color="#FFFFFF" />
                     </TouchableOpacity>

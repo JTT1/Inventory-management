@@ -14,24 +14,16 @@ export default function Home({ navigation, route }) {
     const userEmail = user.email;
 
     const item = route?.params.item;
-    // const item = {
-    //     ID: 66,
-    //     Lisatietoa: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ornare eu leo sodales vulputate. Donec interdum semper ex, sit amet euismod arcu ultricies nec. Cras auctor, enim id volutpat mollis, nibh felis mollis felis, sit amet tincidunt purus enim at mauris.",
-    //     Maara: 25,
-    //     Nimike: "Virtausmittari",
-    //     Sijainti: "",
-    //     Tarjotin: "",
-    // }
 
-    const handleNewLoan = () => {
+    const handleNewLoan = async () => {
         const newLoanData = {
             komponentti: item.Nimike,
-            lainattuMaara: amount,
+            lainattuMaara: Number(amount),
             projekti: text,
             userID: userId,
             userEmail: userEmail
         }
-        createNewLoan(newLoanData).then((res) => {
+        await createNewLoan(newLoanData).then((res) => {
             if (res.length > 0) {
                 return Alert.alert('Lainaus epäonnistui', res)
             } else {
@@ -72,7 +64,7 @@ export default function Home({ navigation, route }) {
                         onChangeText={setAmount}
                         placeholderTextColor={"#B4B4B4"}
                         value={amount}
-                        placeholder="1"
+                        placeholder="0"
                         keyboardType="numeric"
                     />
                     <Text style={[styles.bodyTextWhite, styles.textFix]}>Lainattavissa {item.Maara} kpl</Text>

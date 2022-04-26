@@ -3,13 +3,11 @@ import React from "react";
 import { homeStyles as styles } from './homeStyles';
 import { Text, View, Image, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { userStatus } from "../../helpers/firebaseFunctions";
 import AdminBar from "../adminBar/AdminBar";
 
 
 
 export default function Home({ navigation }) {
-
 
   return (
     <View style={styles.backgroundColor}>
@@ -76,7 +74,7 @@ export default function Home({ navigation }) {
 
       </View>
 
-     <AdminBar/>
+      <AdminBar navigation={navigation} />
 
     </View>
 

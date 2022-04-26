@@ -1,4 +1,4 @@
-import { ScrollView, View, Text, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { ScrollView, View, Text, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
 import { searchStyles as styles } from './SearchStyles';
 import SearchListItem from './SearchListItem.js';
@@ -8,7 +8,6 @@ import uuid from 'react-uuid';
 import { fetchAllItems } from '../../helpers/firebaseFunctions';
 import Modal from 'react-native-modal';
 import { MaterialIcons } from '@expo/vector-icons';
-
 
 const SearchComponents = (props) => {
     const [data, setData] = useState([]);
@@ -20,7 +19,16 @@ const SearchComponents = (props) => {
 
     // Firebase query
     useEffect(() => {
-        fetchAllItems(setData);
+        (async () => {
+            fetchAllItems()
+                .then((res) => {
+                    if (res.length > 0) {
+                        setData(res);
+                    } else {
+                        Alert.alert('Virhe', 'Komponentteja ei pystytty hakemaan.');
+                    }
+                });
+        })();
     }, []);
 
     // On search submit -> hide search field, filter the data array to show search results, and finish loading

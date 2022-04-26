@@ -4,7 +4,7 @@ import { styles } from '../../styles/AppRootStyle';
 
 
 
-export default function AddNewComponent() {
+export default function AddNewComponent({ navigation }) {
 
     const [name, setName] = useState('');
     const [id, setId] = useState("");

@@ -9,13 +9,12 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
     const [checked, setChecked] = useState(false);
     const [validInput, setValidInput] = useState(true);
     const [modalOpen, toggleModal] = useState(false);
-    const [amount, setAmount] = useState('');
+    const currentlyLoanedAmount = item.lainattuMaara - item.palautukset;
     const [brokenItemDetails, setBrokenItemDetails] = useState('');
     const animation = useRef(new Animated.Value(60)).current;
     const shouldAnimate = useRef(false);
     const itemCopy = { ...item, validated: false };
     const inputRef = useRef();
-    const currentlyLoanedAmount = item.lainattuMaara - item.palautukset;
     const returnedBefore = item.palautukset;
 
     // Check box handler

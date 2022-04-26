@@ -38,7 +38,7 @@ input: {
     borderRadius: 12,
     backgroundColor: 'rgba(180, 180, 180, 0.1)',
     padding: 10,
-    color: 'white'
+    color: 'white',
 },
 
 input2: {
