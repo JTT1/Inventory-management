@@ -15,7 +15,7 @@ export async function fetchAllItems() {
 }
 
 export async function fetchProjects() {
-    return await db.ref(PROJECTS_REF)
+    return await db.ref(PROJECTS_REF + 'ryhmat/')
         .once('value')
         .then(querySnapShot => {
             const data = querySnapShot.val() ? querySnapShot.val() : {};
