@@ -63,4 +63,21 @@ buttonFix: {
 textFix: {
     maxWidth: "50%",
 },
+projectView: {
+    width: 280,
+    borderRadius: 12,
+    marginLeft: 20,
+    margin: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(180, 180, 180, 0.1)',
+    overflow: "hidden",
+
+},
+projectDropDown: {
+    width: 280,
+    height: 55,
+    borderRadius: 30,
+    backgroundColor: 'rgba(180, 180, 180, 0.1)',
+    padding: 10,
+},
 });

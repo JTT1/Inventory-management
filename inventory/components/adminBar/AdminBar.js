@@ -4,6 +4,9 @@ import { AdminBarStyles as styles } from './AdminBarStyles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { UserContext } from "../context/userContext";
 
+
+
+
 export default function AdminBar ({ navigation }) {
     const { user } = useContext(UserContext);
 

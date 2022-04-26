@@ -4,7 +4,7 @@ import { loginStyles as styles } from './loginStyles';
 import { db, ROOT_REF, USERS_REF, firebase } from '../../firebase/Config';
 import { MaterialIcons } from '@expo/vector-icons';
 import ThemeButton from "../testing_field/ThemeButton";
-import { getAuth, sendSignInLinkToEmail } from "firebase/auth";
+import { getAuth, sendEmailVerification } from "firebase/auth";
 
 
 export default function Register({ navigation }) {
@@ -20,7 +20,6 @@ export default function Register({ navigation }) {
         routes: [{name: 'Kirjautuminen'}]
       });
     }
-
 
     const actionCodeSettings = {
       url: 'https://www.example.com/finishSignUp?cartId=1234',

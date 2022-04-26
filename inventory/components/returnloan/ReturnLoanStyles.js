@@ -112,19 +112,31 @@ export const returnLoanStyles = StyleSheet.create({
         color: 'white'
     },
     saveButton: {
-        marginTop: 10,
-        marginLeft: 10,
+        marginTop: 20,
         backgroundColor: "#1DFFBB",
         padding: 10,
         borderRadius: 15,
         color: '#393663',
+        width: 100,
+        margin: 10
     },
     cancelButton: {
-        marginTop: 10,
-        marginLeft: 10,
+        marginTop: 20,
         backgroundColor: "#1DFFBB",
         padding: 10,
         borderRadius: 15,
-        backgroundColor: '#F4247C'
-    }
+        backgroundColor: '#F4247C',
+        width: 100,
+        margin: 10,
+        textAlign: "center"
+    },
+    textCenter: {
+        textAlign: "center"
+    },
+    modalBox: {
+        backgroundColor: "rgba(57, 54, 99, 0.95)",
+        width: "85%",
+        height: 340,
+        borderRadius: 15
+    },
 });
