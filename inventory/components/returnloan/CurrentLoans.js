@@ -13,9 +13,7 @@ import { UserContext } from '../context/userContext';
 const CurrentLoans = ({ navigation }) => {
     const [loaded, setIsLoaded] = useState(false);
     const [loanData, setLoanData] = useState([]);
-    const [returned, setReturned] = useState(false);
     const [modalVisible, toggleModal] = useState(false);
-    const [updateItemListTest, setUpdateItemListTest] = useState([]);
     let updateItemList = [];
     let brokenItemList = [];
 
@@ -28,7 +26,6 @@ const CurrentLoans = ({ navigation }) => {
         return () => {
             setLoanData([]);
             setIsLoaded(false);
-            setReturned(false);
         }
     }, [])
 
@@ -64,8 +61,6 @@ const CurrentLoans = ({ navigation }) => {
 
     // Handle loan return, and redirect to confirmation screen
     const handleReturnItems = () => {
-        console.log('updated items: ', updateItemList.length, 'broken items: ', brokenItemList.length)
-        setReturned(true);
 
         if (updateItemList.some((item) => item.validated === false)) {
             Alert.alert("Virhe", "Tarkista palautuksen tiedot.")
@@ -73,6 +68,7 @@ const CurrentLoans = ({ navigation }) => {
         }
 
         if (updateItemList.length === 0 && brokenItemList.length === 0) {
+            Alert.alert('', 'Valitse ainakin yksi komponentti palautettavaksi.')
             return
         } 
         else {
@@ -80,7 +76,7 @@ const CurrentLoans = ({ navigation }) => {
             updateItemList.forEach((item) => updateUserLoans(item));
             brokenItemList.forEach((item) => addNewBrokenItem(item));
         } catch (error) {
-            Alert.alert("Virhe tietokantayhteydessä.", "Tietoja ei pystytty päivittämään.")
+            Alert.alert("Virhe", "Tietoja ei pystytty päivittämään.")
             return
         }
         navigation.navigate('Vahvistus', {

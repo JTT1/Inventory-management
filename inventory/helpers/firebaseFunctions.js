@@ -2,18 +2,21 @@ import { Alert } from 'react-native';
 import { db, ROOT_REF, LOANS_REF, BROKEN_REF, LOCKERS_REF, USERS_REF, firebase } from '../firebase/Config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export function fetchAllItems(setData) {
-    return db.ref(ROOT_REF).on('value', querySnapShot => {
-        const data = querySnapShot.val() ? querySnapShot.val() : {};
-        const items = { ...data };
-        const keys = Object.keys(items);
-        const mappedItems = keys.map((key) => items[key])
-        setData(mappedItems);
+export async function fetchAllItems() {
+    return await db.ref(ROOT_REF)
+        .once('value')
+        .then(querySnapShot => {
+            const data = querySnapShot.val() ? querySnapShot.val() : {};
+            const items = { ...data };
+            const keys = Object.keys(items);
+            const mappedItems = keys.map((key) => items[key]);
+            return mappedItems;
     });
 }
 
 export async function fetchUser(email) {
-    return await db.ref(USERS_REF).once('value')
+    return await db.ref(USERS_REF)
+        .once('value')
         .then((querySnapShot) => {
             const data = querySnapShot.val() ? querySnapShot.val() : {};
             const items = { ...data };
@@ -31,7 +34,8 @@ export async function fetchUser(email) {
 
 export function getCurrentUserLoans(setData, setLoaded, userId) {
     try {
-        return db.ref(LOANS_REF).on('value', querySnapShot => {
+        return db.ref(LOANS_REF)
+            .on('value', querySnapShot => {
             const data = querySnapShot.val() ? querySnapShot.val() : {};
             const items = { ...data };
             const keys = Object.keys(items);
@@ -58,9 +62,9 @@ function currentDate() {
 
 export const createNewLoan = async (data) => {
     try {
-        return db.ref(LOANS_REF).push({
+        return await db.ref(LOANS_REF).push({
             komponentti: data.komponentti,
-            lainattuMaara: Number(data.lainattuMaara),
+            lainattuMaara: data.lainattuMaara,
             lainausPvm: currentDate(),
             palautettuKokonaan: false,
             palautukset: 0,
@@ -74,14 +78,13 @@ export const createNewLoan = async (data) => {
     }
 }
 
-
-export function updateUserLoans(data) {
-    return db.ref(LOANS_REF + data.ID).update({
+export async function updateUserLoans(data) {
+    return await db.ref(LOANS_REF + data.ID).update({
         lainattuMaara: data.lainattuMaara,
         palautettuKokonaan: data.palautettuKokonaan,
         palautukset: data.palautukset,
         palautusPvm: currentDate(),
-    }, (error) => console.log(error));
+    }, () => true);
 }
 
 export function addNewBrokenItem(data) {
@@ -117,7 +120,7 @@ export const getTrayItems = async (trayName) => {
                     .then((querySnapShot) => {
                         const data = querySnapShot.val() ? querySnapShot.val() : {};
                         const item = { ...data, ID: trayItems[key] };
-                        return item
+                        return item;
                     })
             })
             return Promise.all(test);
