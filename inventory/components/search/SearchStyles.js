@@ -39,8 +39,9 @@ export const searchStyles = StyleSheet.create({
         padding: 10,
     },
     searchFieldContainer: {
+        borderWidth: 2,
         marginTop: 40,
-        width: 310,
+        width: '100%',
         height: 56,
         backgroundColor: '#5E5A86',
         borderWidth: 2,
@@ -55,17 +56,21 @@ export const searchStyles = StyleSheet.create({
         paddingLeft: 10,
     },
     suggestionsList: {
-        elevation: 20,
-        maxHeight: 150,
-        paddingLeft: 25,
+        maxHeight: '75%',
+        width: '100%',
     },
     suggestionListItem: {
-        marginVertical: 3
+        marginVertical: 5
+
     },
     cancelFAB: {
-        borderRadius: 100,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 25,
         backgroundColor: '#5E5A86',
         padding: 5,
         marginRight: 5,
+        height: 50,
+        width: 50
     }
 });

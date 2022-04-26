@@ -6,9 +6,11 @@ import { UserContext } from '../context/userContext';
 import { logout } from '../../helpers/firebaseFunctions';
 
 const TopBar = (props) => {
-    const user = useContext(UserContext);
-    const [key] = Object.keys(user);
-    const userDetails = user[key];
+    const { user } = useContext(UserContext);
+
+    // const key = Object.keys(user);
+    // console.log('user key: ' + key)
+    // const userDetails = user[key];
     const currentScreen = props.route.name;
 
     useEffect(() => {
@@ -20,17 +22,18 @@ const TopBar = (props) => {
 
 
     const close = () => {
-        props.navigation.goBack(null);
+        props.route.name != 'Koti' && props.navigation.goBack(null);
         return true;
     }
 
-    const handleDrawerOpen = () => {
-        logout();
-        props.navigation.reset({
-            index: 0,
-            routes: [{name: 'Kirjautuminen'}]
-        });
-        return
+    const handleDrawerOpen = async () => {
+        return await logout()
+            .then(() => {
+                props.navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'Loading' }]
+                });
+            })
     }
 
 
@@ -50,7 +53,9 @@ const TopBar = (props) => {
             </View>
             <View style={styles.avatar}>
 
-                {/* <Text style={styles.bodyTextDark}>{userDetails.etunimi} {userDetails.sukunimi}</Text> */}
+                <Text style={styles.bodyTextDark}>
+                    {user.etunimi}
+                </Text>
                 {/* Tästä toggle drawer, josta näkee käyttäjäprofiilin */}
                 <TouchableOpacity onPress={handleDrawerOpen} style={styles.imgContainer}>
 

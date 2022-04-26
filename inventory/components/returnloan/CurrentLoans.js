@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { View, ScrollView, Text, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import LoanListItem from './LoanListItem';
 import ThemeButton from '../testing_field/ThemeButton';
@@ -10,28 +10,39 @@ import HistoryListItem from './HistoryListItem';
 import { MaterialIcons } from '@expo/vector-icons';
 import { UserContext } from '../context/userContext';
 
-// Note to self
-// hae firebasesta userin data tähän komponenttiin -> renderöityyn listaan pitäs saada lainan ID key mukaan
-
 const CurrentLoans = ({ navigation }) => {
     const [loaded, setIsLoaded] = useState(false);
     const [loanData, setLoanData] = useState([]);
+    const [returned, setReturned] = useState(false);
     const [modalVisible, toggleModal] = useState(false);
+    const [updateItemListTest, setUpdateItemListTest] = useState([]);
     let updateItemList = [];
     let brokenItemList = [];
 
     // Get the real user id from login information
-    const user = useContext(UserContext);
-    const [key] = Object.keys(user);
-    const userId = key;
+    const { user } = useContext(UserContext);
+    const userId = user.ID;
 
     useEffect(() => {
         getCurrentUserLoans(setLoanData, setIsLoaded, userId);
         return () => {
             setLoanData([]);
             setIsLoaded(false);
+            setReturned(false);
         }
     }, [])
+
+
+    const memoizedLoanList = useMemo(() => {
+        return loanData.every((item) => item.palautettuKokonaan === true) // If user's every loan is fully returned
+            ? <Text style={[styles.bodyTextWhite, { alignSelf: 'center' }]} >Ei aktiivisia lainoja.</Text>
+            : loanData.map((item) => { // Active loans
+                if (!item.palautettuKokonaan) {
+                    return <LoanListItem updateItemList={updateItemList} brokenItemList={brokenItemList} item={item} key={uuid()}
+                    />
+                }
+            });
+    }, [loanData]);
 
     // Render user loans
     const userLoans =
@@ -39,7 +50,8 @@ const CurrentLoans = ({ navigation }) => {
             ? <Text style={[styles.bodyTextWhite, { alignSelf: 'center' }]} >Ei aktiivisia lainoja.</Text>
             : loanData.map((item) => { // Active loans
                 if (!item.palautettuKokonaan) {
-                    return <LoanListItem updateItemList={updateItemList} brokenItemList={brokenItemList} item={item} key={uuid()} />
+                    return <LoanListItem updateItemList={updateItemList} brokenItemList={brokenItemList} item={item} key={uuid()}
+                    />
                 }
             });
 
@@ -52,21 +64,32 @@ const CurrentLoans = ({ navigation }) => {
 
     // Handle loan return, and redirect to confirmation screen
     const handleReturnItems = () => {
+        console.log('updated items: ', updateItemList.length, 'broken items: ', brokenItemList.length)
+        setReturned(true);
+
+        if (updateItemList.some((item) => item.validated === false)) {
+            Alert.alert("Virhe", "Tarkista palautuksen tiedot.")
+            return
+        }
+
         if (updateItemList.length === 0 && brokenItemList.length === 0) {
             return
-        };
-
+        } 
+        else {
         try {
-        updateItemList.forEach((item) => updateUserLoans(item));
+            updateItemList.forEach((item) => updateUserLoans(item));
             brokenItemList.forEach((item) => addNewBrokenItem(item));
         } catch (error) {
-            // console.log(error)
+            Alert.alert("Virhe tietokantayhteydessä.", "Tietoja ei pystytty päivittämään.")
             return
         }
         navigation.navigate('Vahvistus', {
             returnLoan: true
         });
+        }
     };
+
+
     return (
         <ScrollView contentContainerStyle={[styles.container]}>
             <Text style={[styles.h2, { textAlign: 'center', marginBottom: 20 }]}>
@@ -78,7 +101,7 @@ const CurrentLoans = ({ navigation }) => {
                     : userLoans}
             </ScrollView>
             <TouchableOpacity
-                style={[styles.flexRow, styles.centerVertical, { marginTop: 10 }]}
+                style={[styles.flexRow, styles.centerVertical, { marginTop: 10, marginBottom: 20 }]}
                 onPress={() => toggleModal(!modalVisible)}>
 
                 <MaterialIcons name="history" size={30} color="white" />
@@ -86,12 +109,14 @@ const CurrentLoans = ({ navigation }) => {
                     Palautetut lainat
                 </Text>
             </TouchableOpacity>
-            <ThemeButton style={{ marginBottom: 20, }} color="#F4247C" text="Palauta valitut" onPress={handleReturnItems} />
-
+            {userLoans.length > 0 &&
+                <ThemeButton style={{ marginBottom: 20, }} color="#F4247C" text="Palauta valitut" onPress={handleReturnItems} />
+            }
             {/* Loan history modal */}
             <Modal
                 style={[styles.centerHorizontal]}
                 isVisible={modalVisible}
+                onBackButtonPress={() => toggleModal(false)}
                 animationIn={'fadeIn'}
                 animationOut={'fadeOut'}
                 hideModalContentWhileAnimating={true}
