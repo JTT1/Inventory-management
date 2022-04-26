@@ -59,7 +59,9 @@ export default function AddNewComponent({ navigation }) {
     return (
     
       <SafeAreaView style={styles.addComponentBox}>
-        <KeyboardAwareScrollView contentContainerStyle={[styles.addComponentScroll, styles.centerHorizontal, styles.centerVertical]}>
+        {/* <KeyboardAwareScrollView enableOnAndroid contentContainerStyle={[styles.addComponentScroll, styles.centerHorizontal, styles.centerVertical]}> */}
+        <KeyboardAwareScrollView>
+          <View style={[styles.addComponentScroll, styles.centerHorizontal, styles.centerVertical]}>
           
 
 
@@ -131,11 +133,10 @@ export default function AddNewComponent({ navigation }) {
       
             <ThemeButton color="#F4247C" text="Lisää komponentti" onPress={add} />
       
-
-          </View>
+        </View>
 
           
-
+          </View>
           </KeyboardAwareScrollView>
           </SafeAreaView>
       
