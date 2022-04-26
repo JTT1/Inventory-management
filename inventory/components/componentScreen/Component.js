@@ -5,6 +5,7 @@ import { componentStyles as styles } from './componentStyles';
 import ThemeButton from '../testing_field/ThemeButton';
 import { createNewLoan } from '../../helpers/firebaseFunctions';
 import { UserContext } from '../context/userContext.js';
+import {Picker} from '@react-native-picker/picker';
 
 export default function Home({ navigation, route }) {
     const [text, setText] = useState(null);
@@ -12,6 +13,8 @@ export default function Home({ navigation, route }) {
     const { user } = useContext(UserContext);
     const userId = user.ID
     const userEmail = user.email;
+
+    const [selectedProject, setSelectedProject] = useState();
 
     const item = route?.params.item;
     // const item = {
@@ -45,6 +48,7 @@ export default function Home({ navigation, route }) {
         );
     };
 
+
     return (
         <View style={styles.center}>
             <View>
@@ -58,13 +62,40 @@ export default function Home({ navigation, route }) {
                     }
                 </View>
                 <Text style={[styles.h2, styles.marginFix]}>Projekti, jolle lainataan:</Text>
-                <TextInput
+                <View style={[styles.projectView]}>
+                <Picker
+                    style= {[styles.projectDropDown, styles.bodyTextWhite]}
+                    selectedValue={selectedProject}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setSelectedProject(itemValue)
+                    }>
+                    
+                    <Picker.Item label="TUKE 1" value="TUKE 1" />
+                    <Picker.Item label="TUKE 2" value="TUKE 2" />
+                    <Picker.Item label="TUKE 3" value="TUKE 3" />
+                    <Picker.Item label="TUKE 4" value="TUKE 4" />
+                    <Picker.Item label="TUKE 5" value="TUKE 5" />
+                    <Picker.Item label="TUKE 6" value="TUKE 6" />
+                    <Picker.Item label="TUKE 7" value="TUKE 7" />
+                    <Picker.Item label="TUKE 8" value="TUKE 8" />
+                    <Picker.Item label="TUKE 9" value="TUKE 9" />
+                    <Picker.Item label="TUKE 10" value="TUKE 10" />
+                    <Picker.Item label="PROHA 1" value="PROHA 1" />
+                    <Picker.Item label="PROHA 2" value="PROHA 2" />
+                    <Picker.Item label="PROHA 3" value="PROHA 3" />
+                    <Picker.Item label="PROHA 4" value="PROHA 4" />
+                    <Picker.Item label="PROHA 5" value="PROHA 5" />
+                    <Picker.Item label="MUU" value="MUU" />
+
+                </Picker>   
+                </View>
+                {/* <TextInput
                     style={styles.input}
                     onChangeText={setText}
                     placeholderTextColor={"#B4B4B4"}
                     value={text}
                     placeholder="Projektin nimi"
-                />
+                /> */}
                 <Text style={[styles.h2, styles.marginFix]}>Lainattava määrä:</Text>
                 <View style={[styles.flexRow, styles.centerHorizontal]}>
                     <TextInput

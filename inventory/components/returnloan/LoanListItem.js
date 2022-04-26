@@ -264,9 +264,11 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
                 hideModalContentWhileAnimating={true}
                 useNativeDriver={true}
             >
+                
+                <View style={[styles.modalBox, styles.centerHorizontal, styles.centerVertical]}>
                 <Text style={[styles.h2]}>Ilmoita rikkinäiseksi</Text>
                 <Pressable onPress={() => inputRef.current.focus()}
-                    style={[styles.boxShadow, styles.brokenItemInput]}
+                    style={[styles.brokenItemInput]}
                 >
                     <TextInput style={[styles.bodyTextWhite]}
                         ref={inputRef}
@@ -283,15 +285,16 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
                 <View style={styles.flexRow}>
                     <TouchableOpacity onPress={handleSave} style={[styles.flexRow]}>
                         <View style={[styles.saveButton]}>
-                            <Text style={[styles.h2, styles.bodyTextDark]}>Tallenna</Text>
+                            <Text style={[styles.bodyTextDark, styles.h4, styles.textCenter]}>Tallenna</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={handleCancel} style={[styles.flexRow]}>
                         {/* <MaterialIcons name="close" size={30} color="white" /> */}
                         <View style={[styles.cancelButton]}>
-                        <Text style={[styles.bodyTextWhite]}>Peruuta</Text>
+                        <Text style={[styles.bodyTextWhite, styles.h4, styles.textCenter]}>Peruuta</Text>
                         </View>
                     </TouchableOpacity>
+                </View>
                 </View>
             </Modal>
         </View>
