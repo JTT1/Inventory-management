@@ -93,7 +93,7 @@ export const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'flex-start',
         marginBottom: 1,
-    },
+    }, 
     flexBetween: {
         justifyContent: 'space-between',
     },
@@ -151,8 +151,7 @@ export const styles = StyleSheet.create({
     inputIcon: {
         elevation: 1,
         position: 'absolute',
-        paddingLeft: 10,
-        paddingTop: 5,
+        paddingLeft: 10
     },
     testi1: {
         display: "flex",
@@ -181,6 +180,17 @@ export const styles = StyleSheet.create({
         alignItems: "center",
     },
     registerScroll: {
+        paddingTop: "15%",
+        paddingBottom: "15%",
+        alignItems: "center",
+    },
+    inputView: {
+        padding: 10,
+    },
+    registerBottom: {
+        paddingTop: "5%",
+        alignItems: "center"
+    }, registerScroll: {
         paddingTop: "15%",
         paddingBottom: "15%",
         alignItems: "center",

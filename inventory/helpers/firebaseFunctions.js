@@ -1,9 +1,21 @@
 import { Alert } from 'react-native';
-import { db, ROOT_REF, LOANS_REF, BROKEN_REF, LOCKERS_REF, USERS_REF, firebase } from '../firebase/Config';
+import { db, ROOT_REF, LOANS_REF, BROKEN_REF, LOCKERS_REF, USERS_REF, PROJECTS_REF, firebase } from '../firebase/Config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export async function fetchAllItems() {
     return await db.ref(ROOT_REF)
+        .once('value')
+        .then(querySnapShot => {
+            const data = querySnapShot.val() ? querySnapShot.val() : {};
+            const items = { ...data };
+            const keys = Object.keys(items);
+            const mappedItems = keys.map((key) => items[key]);
+            return mappedItems;
+    });
+}
+
+export async function fetchProjects() {
+    return await db.ref(PROJECTS_REF)
         .once('value')
         .then(querySnapShot => {
             const data = querySnapShot.val() ? querySnapShot.val() : {};
