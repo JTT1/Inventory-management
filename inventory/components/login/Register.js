@@ -35,19 +35,15 @@ export default function Register({ navigation }) {
       dynamicLinkDomain: 'example.page.link'
     };
 
-    
+
 
     const createAccount = async () => {
       try {
-        const newUserCredential = await firebase.auth().createUserWithEmailAndPassword(email, password1);
+        const userCred = await firebase.auth().createUserWithEmailAndPassword(email, password1);
+        await userCred.user.sendEmailVerification();
         const thisUser = firebase.auth().currentUser;
 
-        await firebase.auth().currentUser.sendEmailVerification();
-        // const auth = getAuth();
-        // sendEmailVerification(auth.currentUser.email)
-        //   .then(() => {
-        //     console.log("email verification sent to " + auth.currentUser.email);
-        //   })
+
         firebase.database().ref(USERS_REF + thisUser.uid).set({
           email: thisUser.email,
           etunimi: etunimi,

@@ -190,6 +190,16 @@ export const styles = StyleSheet.create({
     registerBottom: {
         paddingTop: "5%",
         alignItems: "center"
+    },
+    largeTextInput: {
+        marginTop: 10,
+        paddingVertical: 15,
+        paddingHorizontal: 20,
+        borderRadius: 20,
+        backgroundColor: "rgba(143,138,191,0.5)",
+        width: 270,
+        height: 200,
+        color: 'white'
     }
 });
 

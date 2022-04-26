@@ -76,7 +76,7 @@ export default function Home({ navigation }) {
 
       </View>
 
-     <AdminBar/>
+     <AdminBar navigation={navigation}/>
 
     </View>
 

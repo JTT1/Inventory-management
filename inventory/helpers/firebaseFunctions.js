@@ -24,6 +24,9 @@ export async function fetchUser(email) {
             const user = users.find((user) => (user.email === email));
             return user;
         })
+        .catch((error) => {
+            return error;
+        })
 }
 
 export function getCurrentUserLoans(setData, setLoaded, userId) {
@@ -52,18 +55,6 @@ function currentDate() {
     return currentDate;
 }
 
-export function updateUserLoans(data) {
-    try {
-        return db.ref(LOANS_REF + data.ID).update({
-            lainattuMaara: data.lainattuMaara,
-            palautettuKokonaan: data.palautettuKokonaan,
-            palautukset: data.palautukset,
-            palautusPvm: currentDate(),
-        });
-    } catch (error) {
-        return error.message;
-    }
-}
 
 export const createNewLoan = async (data) => {
     try {
@@ -76,25 +67,31 @@ export const createNewLoan = async (data) => {
             palautusPvm: "",
             projekti: data.projekti,
             userID: data.userID,
+            userEmail: data.userEmail,
         });
     } catch (error) {
         return error.message;
     }
 }
 
+
+export function updateUserLoans(data) {
+    return db.ref(LOANS_REF + data.ID).update({
+        lainattuMaara: data.lainattuMaara,
+        palautettuKokonaan: data.palautettuKokonaan,
+        palautukset: data.palautukset,
+        palautusPvm: currentDate(),
+    }, (error) => console.log(error));
+}
+
 export function addNewBrokenItem(data) {
-    try {
-        return db.ref(BROKEN_REF).push({
+    return db.ref(BROKEN_REF).push({
             lainausID: data.itemID,
             kuvaus: data.description,
-            käyttäjä: data.user,
+        user: data.user,
             ilmoitusPvm: currentDate(),
             havitetty: false,
-        });
-    } catch (error) {
-        console.log(error);
-        return error.message;
-    }
+    }, (error) => console.log(error));
 }
 
 // on QR code scan
@@ -162,12 +159,9 @@ export const userStatus = async () => {
 export async function logout() {
     try {
         await firebase.auth().signOut();
-        console.log("pihalla");
         await removeUserData('@userInfo');
-        let testi = await AsyncStorage.getItem('@userInfo')
-        console.log(testi + " tässä se viesti!");
+        return await AsyncStorage.getItem('@userInfo');
     } catch (err) {
-        console.log("Logout error. ", err.message);
-        Alert.alert("Logout error. ", err.message);
+        return Alert.alert("Logout error. ", err.message);
     }
 }

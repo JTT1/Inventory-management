@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { styles } from './styles/AppRootStyle.js';
-import { View, Alert } from 'react-native';
+import { View, Alert, LogBox } from 'react-native';
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
@@ -13,6 +13,7 @@ import { UserContext } from './components/context/userContext';
 
 const App = () => {
   const [user, setUser] = useState([]);
+  LogBox.ignoreLogs(['Setting a timer']);
 
   // Navigation stack
   const Stack = createNativeStackNavigator();
