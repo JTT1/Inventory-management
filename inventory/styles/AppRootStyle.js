@@ -190,7 +190,8 @@ export const styles = StyleSheet.create({
     registerBottom: {
         paddingTop: "5%",
         alignItems: "center"
-    }, registerScroll: {
+    }, 
+    registerScroll: {
         paddingTop: "15%",
         paddingBottom: "15%",
         alignItems: "center",
