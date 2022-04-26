@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Text, View, TextInput, Alert } from 'react-native';
+import { Text, View, TextInput, Alert, Platform, KeyboardAvoidingView } from 'react-native';
 import { useState } from 'react';
 import { componentStyles as styles } from './componentStyles';
 import ThemeButton from '../testing_field/ThemeButton';
@@ -13,8 +13,16 @@ export default function Home({ navigation, route }) {
     const { user } = useContext(UserContext);
     const userId = user.ID
     const userEmail = user.email;
+    let device = "";
 
     const [selectedProject, setSelectedProject] = useState();
+
+    if (Platform.OS == 'android') {
+        device = "android"
+    } else {
+        device = "ios"
+    }
+
 
     const item = route?.params.item;
     // const item = {
@@ -50,7 +58,7 @@ export default function Home({ navigation, route }) {
 
 
     return (
-        <View style={styles.center}>
+        <KeyboardAvoidingView style={styles.center}>
             <View>
                 <View style={[styles.background, styles.itemInfo]}>
                     <Text style={[styles.h1, styles.marginFix]}>{item.Nimike}</Text>
@@ -63,7 +71,7 @@ export default function Home({ navigation, route }) {
                 </View>
                 <Text style={[styles.h2, styles.marginFix]}>Projekti, jolle lainataan:</Text>
                 <View style={[styles.projectView]}>
-                <Picker
+                {device == "android" ? <Picker
                     style= {[styles.projectDropDown, styles.bodyTextWhite]}
                     selectedValue={selectedProject}
                     onValueChange={(itemValue, itemIndex) =>
@@ -87,7 +95,8 @@ export default function Home({ navigation, route }) {
                     <Picker.Item label="PROHA 5" value="PROHA 5" />
                     <Picker.Item label="MUU" value="MUU" />
 
-                </Picker>   
+                </Picker> : <React.Fragment/>}
+                   
                 </View>
                 {/* <TextInput
                     style={styles.input}
@@ -112,6 +121,7 @@ export default function Home({ navigation, route }) {
                     <ThemeButton color="#F4247C" text="Lainaa" onPress={handleNewLoan} />
                 </View>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     );
+
 }

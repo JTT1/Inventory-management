@@ -1,7 +1,11 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, ScrollView, TextInput} from 'react-native';
+import { View, Text, ScrollView, TextInput, Alert, SafeAreaView, KeyboardAvoidingView} from 'react-native';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 import { styles } from '../../styles/AppRootStyle';
+import ThemeButton from '../testing_field/ThemeButton';
+import { db, ROOT_REF } from '../../firebase/Config';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
 
 
 
@@ -15,15 +19,26 @@ export default function AddNewComponent({ navigation }) {
     const [location, setLocation] = useState("");
     const detailsRef = useRef();
   
+
+    const checkInput = () => {
+      if (!name.trim()) {
+        Alert.alert("Syötä komponentin nimi!")
+        return false;
+      }
+
+      return true;
+    }
+
+
   
   
-    function addNewItem() {
-      if (newItem.trim() !== "") {
+    function add() {
+      if (checkInput() !== false) {
         db.ref(ROOT_REF).push({
           // ID: id,
           Tarjotin: tray,
-          Lisätieto: info,
-          Määrä: amount,
+          Lisatietoa: info,
+          Maara: amount,
           Nimike: name,
           Sijainti: location
         })
@@ -32,16 +47,23 @@ export default function AddNewComponent({ navigation }) {
         setInfo('');
         setAmount(1);
         setLocation('');
+        Alert.alert("Komponentin lisäys onnistui!")
       }
     }
+
+
+
   
   
   
     return (
-      <View style={[styles.container, styles.mainBox]}>
-        <Text style={styles.h1}>Lisää komponentteja</Text>
+    
+      <SafeAreaView style={styles.addComponentBox}>
+        <KeyboardAwareScrollView contentContainerStyle={[styles.addComponentScroll, styles.centerHorizontal, styles.centerVertical]}>
+          
 
-        <ScrollView contentContainerStyle={[styles.centerHorizontal, styles.centerVertical]}>
+
+        <Text style={styles.h1}>Lisää komponentteja</Text>
 
           <View>
             <Text style={styles.h3}>
@@ -105,10 +127,17 @@ export default function AddNewComponent({ navigation }) {
           </View>
 
 
+        <View style={styles.addComponentButton}>
+      
+            <ThemeButton color="#F4247C" text="Lisää komponentti" onPress={add} />
+      
 
+          </View>
 
-        </ScrollView>
+          
 
-      </View>
+          </KeyboardAwareScrollView>
+          </SafeAreaView>
+      
     );
   }

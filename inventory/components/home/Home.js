@@ -1,10 +1,11 @@
 import React from "react";
 
 import { homeStyles as styles } from './homeStyles';
-import { Text, View, Image, TouchableOpacity } from 'react-native';
+import { Text, View, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { userStatus } from "../../helpers/firebaseFunctions";
 import AdminBar from "../adminBar/AdminBar";
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 
 
@@ -12,7 +13,9 @@ export default function Home({ navigation }) {
 
 
   return (
-    <View style={styles.backgroundColor}>
+    // <View style={styles.backgroundColor}>
+      <SafeAreaView style={styles.backgroundColor}>
+        <KeyboardAwareScrollView>
 
       <Text style={styles.h1}>Mitä haluat tehdä?</Text>
 
@@ -78,7 +81,10 @@ export default function Home({ navigation }) {
 
      <AdminBar navigation={navigation}/>
 
-    </View>
+     </KeyboardAwareScrollView>
+
+     </SafeAreaView>
+
 
   )
 };

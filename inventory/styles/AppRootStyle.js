@@ -201,6 +201,28 @@ export const styles = StyleSheet.create({
         width: 270,
         height: 200,
         color: 'white'
+    },
+    addComponentButton: {
+        marginBottom: "10%"
+    },
+    addComponentBox: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        paddingBottom: "10%",
+        paddingTop: "10%",
+        backgroundColor: '#2C2A4C',
+        flex: 1,
+    },
+    addComponentScroll: {
+        flex: 1,
+        backgroundColor: '#2C2A4C',
+        paddingLeft: "14%",
+        paddingRight: "14%",
+    },
+    trayList: {
+        width: "80%",
+        alignItems: "center"
     }
 });
 
