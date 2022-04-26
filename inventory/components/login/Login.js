@@ -90,6 +90,10 @@ export default function Login({ navigation }) {
 
           <View style={styles.inputView}>
             <Text style={styles.h3}>Salasana</Text>
+            <View style={[styles.inputWrapper]}>
+            <MaterialIcons
+                style={styles.inputIcon}
+                name="lock-outline" size={24} color="#6EEEFF" />
             <TextInput
               style={styles.TextInput}
               placeholder="Salasana"
@@ -97,6 +101,7 @@ export default function Login({ navigation }) {
               secureTextEntry={true}
               onChangeText={(password) => setPassword(password)}
             />
+            </View>
           </View>
 
 
