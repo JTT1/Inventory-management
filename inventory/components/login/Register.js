@@ -4,6 +4,7 @@ import { loginStyles as styles } from './loginStyles';
 import { db, ROOT_REF, USERS_REF, firebase } from '../../firebase/Config';
 import { MaterialIcons } from '@expo/vector-icons';
 import ThemeButton from "../testing_field/ThemeButton";
+import { getAuth, sendSignInLinkToEmail } from "firebase/auth";
 
 
 export default function Register({ navigation }) {
@@ -20,12 +21,32 @@ export default function Register({ navigation }) {
       });
     }
 
+
+    const actionCodeSettings = {
+      url: 'https://www.example.com/finishSignUp?cartId=1234',
+      handleCodeInApp: true,
+      iOS: {
+        bundleId: 'com.example.ios'
+      },
+      android: {
+        packageName: 'com.example.android',
+        installApp: true,
+        minimumVersion: '12'
+      },
+      dynamicLinkDomain: 'example.page.link'
+    };
+
+
+
     const createAccount = async () => {
       try {
-        await firebase.auth().createUserWithEmailAndPassword(email, password1);
-        const currentUser = firebase.auth().currentUser;
-        firebase.database().ref(USERS_REF + currentUser.uid).set({
-          email: currentUser.email,
+        const userCred = await firebase.auth().createUserWithEmailAndPassword(email, password1);
+        await userCred.user.sendEmailVerification();
+        const thisUser = firebase.auth().currentUser;
+
+
+        firebase.database().ref(USERS_REF + thisUser.uid).set({
+          email: thisUser.email,
           etunimi: etunimi,
           sukunimi: sukunimi,
           rooli: "user",
