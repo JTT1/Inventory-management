@@ -234,6 +234,12 @@ export const styles = StyleSheet.create({
     trayList: {
         width: "80%",
         alignItems: "center"
+    },
+    screen: {
+        paddingTop: "40%",
+        flex: 1,
+        backgroundColor: '#2C2A4C',
+        alignContent: "center",
     }
 });
 

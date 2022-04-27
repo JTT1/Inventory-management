@@ -1,146 +1,110 @@
-import React, { useContext, useState, useEffect } from "react";
-import { Text, View, TextInput, Alert, Platform, SafeAreaView } from 'react-native';
-import { componentStyles as styles } from './componentStyles';
-import ThemeButton from '../testing_field/ThemeButton';
-import { createNewLoan, fetchProjects } from '../../helpers/firebaseFunctions';
-import { UserContext } from '../context/userContext.js';
-import {Picker} from '@react-native-picker/picker';
-import uuid from "react-uuid";
-import { PROJECTS_REF, db } from "../../firebase/Config";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import React, { useContext, useState, useEffect, useRef} from "react";
+import { Text, View, TextInput, Alert, Platform, SafeAreaView, Button, TouchableOpacity, Pressable } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { fetchAllItems } from "../../helpers/firebaseFunctions";
+import { returnLoanStyles as styles } from "../returnloan/ReturnLoanStyles";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import TrayList from "./trayList";
+
+
 
 export default function AddTrays({ navigation }) {
-    
-
-
-
-    const item = route?.params.item;
-
-    const handleNewLoan = async () => {
-        let projectName = selectedProject
-
-        if (visible) {
-            let tempProjects = [...projects]
-            tempProjects.push(other)
-            projectName = other
-            db.ref(PROJECTS_REF).update({
-                ryhmat: tempProjects
-              })
-        } 
-
-        const newLoanData = {
-            komponentti: item.Nimike,
-            lainattuMaara: Number(amount),
-            projekti: projectName,
-            userID: userId,
-            userEmail: userEmail
-        }
-        
-        await createNewLoan(newLoanData).then((res) => {
-            if (res.length > 0) {
-                return Alert.alert('Lainaus epäonnistui', res)
-            } else {
-                setText('');
-                setAmount('');
-                navigation.navigate('Vahvistus', {
-                    returnLoan: false
-                });
-            }
-        }
-        );
-    };
-
-    const pickerItems = projects.map((project) => {
-        return <Picker.Item key={uuid()} label={project} value={project} />
-    })
-
-    console.log(selectedProject + " valittu projekti");
+    const [name, setName] = useState('');
+    const [locker, setLocker] = useState('');
+    const [door, setDoor] = useState('');
+    const [item, setItem]= useState('');
+    const [term, setTerm] = useState('');
+    const [items, setItems] = useState([]);
+    const [searchResults, setSearchResults] = useState([]);
+    const [dbItems, setDbItems] = useState([]);
 
     useEffect(() => {
-        if (selectedProject == 'Muu') {
-            setVisible(true);
-        } else {
-            setVisible(false);
-        }
-    }, [selectedProject])
-    
+        (async () => {
+            fetchAllItems()
+                .then((res) => {
+                    if (res.length > 0) {
+                        setItems(res);
+                    } else {
+                        Alert.alert('Virhe', 'Komponentteja ei pystytty hakemaan.');
+                    }
+                });
+        })();
+    }, []);
+
+
+    const handleSearchSubmit = () => {
+        let itemsCopy = [...items]
+
+        let filteredItems = itemsCopy.filter((item) => (item.Nimike.includes(term)));
+
+        setSearchResults(filteredItems)
+    }
+
+    console.log(dbItems);
+
 
     return (
-        <SafeAreaView style={styles.center}>
-            <KeyboardAwareScrollView>
+        <SafeAreaView style={styles.addComponentBox}>
+        <KeyboardAwareScrollView>
+        <View style={[styles.addComponentScroll, styles.centerHorizontal, styles.centerVertical]}>
+            
             <View>
-                <View style={[styles.background, styles.itemInfo]}>
-                    <Text style={[styles.h1, styles.marginFix]}>{item.Nimike}</Text>
-                    {item.Lisatietoa.length > 0 &&
-                        <View>
-                            <Text style={[styles.h3, styles.marginFix]}>Lisätiedot</Text>
-                            <Text style={[styles.bodyTextWhite, styles.marginFix]}>{item.Lisatietoa}</Text>
-                    </View>
-                    }
-                </View>
-                <Text style={[styles.h2, styles.marginFix]}>Projekti, jolle lainataan:</Text>
-                <View style={[styles.projectView]}>
-                {device == "android" ? <Picker
-                    style= {[styles.projectDropDownAndroid, styles.bodyTextWhite]}
-                    selectedValue={selectedProject}
-                    onValueChange={(itemValue, itemIndex) => setSelectedProject(itemValue)}>
-                        {pickerItems}
-                        <Picker.Item label='Muu' value='Muu' />
-               </Picker> 
-
-                    
-
-               : <Picker
-               style= {[styles.projectDropDownIos, styles.bodyTextWhite]}
-               selectedValue={selectedProject}
-               onValueChange={(itemValue, itemIndex) => setSelectedProject(itemValue)}>
-                   {pickerItems}
-                   <Picker.Item label='Muu' value='Muu' />
-          </Picker> }
-                   
-                   {/* Komponentin toggle-toiminto */}
-
-                    <View style={styles.addComponent}>
-                        {/*Here we will return the view when state is true 
-                        and will return false if state is false*/}
-                        {visible ? (
-                        <TextInput
-                            style={styles.TextInput}
-                            placeholderTextColor="white"
-                            placeholder="Projektin nimi"
-                            onChangeText={setOther}
-                        />
-                        ) : <React.Fragment/>}
-                        
-                    </View>
-
-                    {/* Komponentin toggle-toiminto */}
-
-                </View>
-                {/* <TextInput
-                    style={styles.input}
-                    onChangeText={setText}
-                    placeholderTextColor={"#B4B4B4"}
-                    value={text}
-                    placeholder="Projektin nimi"
-                /> */}
-                <Text style={[styles.h2, styles.marginFix]}>Lainattava määrä:</Text>
-                <View style={[styles.flexRow, styles.centerHorizontal]}>
-                    <TextInput
-                        style={[styles.input2]}
-                        onChangeText={setAmount}
-                        placeholderTextColor={"#B4B4B4"}
-                        value={amount}
-                        placeholder="0"
-                        keyboardType="numeric"
-                    />
-                    <Text style={[styles.bodyTextWhite, styles.textFix]}>Lainattavissa {item.Maara} kpl</Text>
-                </View>
-                <View style={styles.center}>
-                    <ThemeButton color="#F4247C" text="Lainaa" onPress={handleNewLoan} />
-                </View>
+                <Text style={styles.h3}>
+                    Tarjottimen nimi
+                </Text>
+                <TextInput style={styles.TextInput}
+                    placeholder="Tarjottimen nimi sekä QR koodi"
+                    onChangeText={setName}
+                    placeholderTextColor={"gray"}
+                />
             </View>
-            </KeyboardAwareScrollView>
+
+            <View>
+                <Text style={styles.h3}>
+                    Tarjottimen sijainti - Kaappi
+                </Text>
+                <TextInput style={styles.TextInput}
+                    placeholder="Kaappi"
+                    onChangeText={setLocker}
+                    placeholderTextColor={"gray"}
+                />
+            </View>
+
+            <View>
+                <Text style={styles.h3}>
+                    Tarjottimen sijainti - Ovi
+                </Text>
+                <TextInput style={styles.TextInput}
+                    placeholder="Ovi"
+                    onChangeText={setDoor}
+                    placeholderTextColor={"gray"}
+                />
+            </View>
+
+            <View>
+                <Text style={styles.h3}>
+                    Lisää komponentteja tarjottimeen
+                </Text>
+                <TextInput style={styles.TextInput}
+                    placeholder="Kirjoita komponentin ID"
+                    onChangeText={setTerm}
+                    placeholderTextColor={"gray"}
+                    onSubmitEditing={handleSearchSubmit}
+                />
+
+
+            <View>
+                {searchResults.map((item) =>
+                    <TrayList key={item.ID} item={item} styles={styles} dbItems={dbItems} setDbItems={setDbItems}/>
+                )}
+            </View>
+            
+
+            </View>
+
+
+        </View>
+        </KeyboardAwareScrollView>
         </SafeAreaView>
     );
 

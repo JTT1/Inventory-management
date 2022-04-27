@@ -9,7 +9,9 @@ export async function fetchAllItems() {
             const data = querySnapShot.val() ? querySnapShot.val() : {};
             const items = { ...data };
             const keys = Object.keys(items);
-            const mappedItems = keys.map((key) => items[key]);
+            const mappedItems = keys.map((key) => {
+                return { ...items[key], ID: key }
+            });
             return mappedItems;
     });
 }
