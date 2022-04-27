@@ -24,7 +24,7 @@ export default function AdminBar ({ navigation }) {
                     <MaterialCommunityIcons style={[styles.adminIcons, styles.boxShadow]} name="plus" size={30} color="#FFFFFF" />
                     </TouchableOpacity>
     
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('Käyttäjät')}>
                     <MaterialCommunityIcons style={[styles.adminIcons, styles.boxShadow]} name="account-multiple" size={30} color="#FFFFFF" />
                     </TouchableOpacity>
     

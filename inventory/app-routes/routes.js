@@ -9,6 +9,7 @@ import LoadingScreen from '../components/login/Loading';
 import ScanQrCode from '../components/qrcodescanner/ScanQrCode';
 import ScanResults from '../components/qrcodescanner/ScanResults';
 import AddComponents from '../components/adminTools/addComponents';
+import UserManager from '../components/adminTools/UserManager';
 
 
 // Routes and components to use in stack navigator
@@ -34,7 +35,7 @@ export const routesList = [
     {
         name: 'Kirjautuminen',
         component: Login,
-        header: false, // this needs to be false for screens that dont render the header
+        header: false,
     },
     {
         name: 'Komponentti',
@@ -64,5 +65,8 @@ export const routesList = [
         component: AddComponents,
         header: true,
     },
-
+    {
+        name: 'Käyttäjät',
+        component: UserManager,
+    },
 ]
