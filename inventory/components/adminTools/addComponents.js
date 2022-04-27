@@ -81,6 +81,10 @@ export default function AddNewComponent({ navigation }) {
           }
           trayItemsCopy.push(lastPushId);
 
+
+          console.log('tray: ', selectedTray)
+          console.log('trayItemsCopy: ', trayItemsCopy)
+
           db.ref(LOCKERS_REF + matchingTray.ID).update({
             trayItems: trayItemsCopy
           })
