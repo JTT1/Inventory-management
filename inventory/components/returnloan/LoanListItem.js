@@ -160,6 +160,8 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
                 name="error-outline" size={40} color="#C4C4C4"
             />
 
+
+
     return (
         <View style={styles.loanListItem}>
             <View style={[styles.flexRow, styles.stretch]}>

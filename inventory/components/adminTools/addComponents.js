@@ -1,10 +1,13 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, ScrollView, TextInput, Alert, SafeAreaView, KeyboardAvoidingView } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, ScrollView, TextInput, Alert, Platform, SafeAreaView, KeyboardAvoidingView } from 'react-native';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
-import { styles } from '../../styles/AppRootStyle';
+import { componentStyles as styles } from '../componentScreen/componentStyles';
 import ThemeButton from '../testing_field/ThemeButton';
 import { db, ROOT_REF } from '../../firebase/Config';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {Picker} from '@react-native-picker/picker';
+import { fetchTrays } from '../../helpers/firebaseFunctions';
+import uuid from "react-uuid";
 
 
 
@@ -17,6 +20,30 @@ export default function AddNewComponent({ navigation }) {
   const [amount, setAmount] = useState(1);
   const [location, setLocation] = useState("");
   const detailsRef = useRef();
+  let device = "";
+  const [selectedTray, setSelectedTray] = useState();
+  const [trays, setTrays] = useState([])
+  const [visible, setVisible] = useState(false);
+
+  if (Platform.OS == "android") {
+    device = "android";
+  } else {
+    device = "ios";
+  }
+
+  useEffect(() => {
+    (async () => {
+        await fetchTrays()
+            .then((res) => {
+                if (res.length > 0) {
+                    setTrays(res);
+                    setSelectedTray(res[0]);
+                } else {
+                    Alert.alert('Virhe', 'Tarjottimia ei pystytty hakemaan!');
+                }
+            });
+    })();
+}, []);
 
 
   const checkInput = () => {
@@ -51,15 +78,17 @@ export default function AddNewComponent({ navigation }) {
   }
 
 
+  const pickerItems = trays.map((tray) => {
+    return <Picker.Item key={uuid()} label={tray} value={tray} />
+  })
 
-  
-  
+  console.log(pickerItems, " tässä pickeritemsit")
+
     return (
     
       <SafeAreaView style={styles.addComponentBox}>
-       <KeyboardAwareScrollView>
+        <KeyboardAwareScrollView>
           <View style={[styles.addComponentScroll, styles.centerHorizontal, styles.centerVertical]}>
-
 
         <Text style={styles.h1}>Lisää komponentteja</Text>
 
@@ -85,7 +114,53 @@ export default function AddNewComponent({ navigation }) {
           />
         </View>
 
-        <View>
+      {/* picker tulee tähän */}
+
+
+      <View style={[styles.projectView]}>
+                {device == "android" ? <Picker
+                    style= {[styles.projectDropDownAndroid, styles.bodyTextWhite]}
+                    selectedValue={selectedTray}
+                    onValueChange={(itemValue, itemIndex) => setSelectedTray(itemValue)}>
+                        {pickerItems}
+               </Picker> 
+
+               : <Picker
+               style= {[styles.projectDropDownIos, styles.bodyTextWhite]}
+               selectedValue={selectedTray}
+               onValueChange={(itemValue, itemIndex) => setSelectedTray(itemValue)}>
+                   {pickerItems}
+          </Picker> }
+                   
+                   {/* Komponentin toggle-toiminto */}
+
+                    <View style={styles.addComponent}>
+                        {/*Here we will return the view when state is true 
+                        and will return false if state is false*/}
+                        {visible ? (
+                        <TextInput
+                            style={styles.TextInput}
+                            placeholderTextColor="white"
+                            placeholder="Projektin nimi"
+                            onChangeText={setOther}
+                        />
+                        ) : <React.Fragment/>}
+                        
+                    </View>
+
+                    {/* Komponentin toggle-toiminto */}
+
+                </View>
+
+
+
+      {/* picker loppuu tähän  */}
+
+
+
+
+
+        {/* <View>
           <Text style={styles.h3}>
             Tarjotin
           </Text>
@@ -94,7 +169,7 @@ export default function AddNewComponent({ navigation }) {
             onChangeText={setTray}
             placeholderTextColor={"white"}
           />
-        </View>
+        </View> */}
 
         <View>
           <Text style={styles.h3}>

@@ -73,9 +73,16 @@ projectView: {
     overflow: "hidden",
 
 },
-projectDropDown: {
+projectDropDownAndroid: {
     width: 280,
     height: 55,
+    borderRadius: 30,
+    backgroundColor: 'rgba(180, 180, 180, 0.1)',
+    padding: 10,
+},
+projectDropDownIos: {
+    width: 280,
+    height: 200,
     borderRadius: 30,
     backgroundColor: 'rgba(180, 180, 180, 0.1)',
     padding: 10,

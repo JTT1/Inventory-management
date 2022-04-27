@@ -1,9 +1,23 @@
 import { Alert } from 'react-native';
-import { db, ROOT_REF, LOANS_REF, BROKEN_REF, LOCKERS_REF, USERS_REF, firebase } from '../firebase/Config';
+import { db, ROOT_REF, LOANS_REF, BROKEN_REF, LOCKERS_REF, USERS_REF, PROJECTS_REF, firebase } from '../firebase/Config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export async function fetchAllItems() {
-    return await db.ref(ROOT_REF)
+    return db.ref(ROOT_REF)
+        .once('value')
+        .then(querySnapShot => {
+            const data = querySnapShot.val() ? querySnapShot.val() : {};
+            const items = { ...data };
+            const keys = Object.keys(items);
+            const mappedItems = keys.map((key) => {
+                return { ...items[key], ID: key }
+            });
+            return mappedItems;
+    });
+}
+
+export async function fetchProjects() {
+    return db.ref(PROJECTS_REF + 'ryhmat/')
         .once('value')
         .then(querySnapShot => {
             const data = querySnapShot.val() ? querySnapShot.val() : {};
@@ -14,8 +28,21 @@ export async function fetchAllItems() {
     });
 }
 
+export async function fetchTrays() {
+    return db.ref(LOCKERS_REF)
+        .once('value')
+        .then(querySnapShot => {
+            const data = querySnapShot.val() ? querySnapShot.val() : {};
+            const items = { ...data };
+            const keys = Object.keys(items);
+            const mappedItems = keys.map((key) => items[key]);
+            const result = mappedItems.filter((item) => item.tarjotinNimi == tarjotinNimi);
+            return result;
+    });
+}
+
 export async function fetchUser(email) {
-    return await db.ref(USERS_REF)
+    return db.ref(USERS_REF)
         .once('value')
         .then((querySnapShot) => {
             const data = querySnapShot.val() ? querySnapShot.val() : {};
@@ -26,6 +53,23 @@ export async function fetchUser(email) {
             })
             const user = users.find((user) => (user.email === email));
             return user;
+        })
+        .catch((error) => {
+            return error;
+        })
+}
+
+export async function fetchAllUsers() {
+    return db.ref(USERS_REF)
+        .once('value')
+        .then((querySnapShot) => {
+            const data = querySnapShot.val() ? querySnapShot.val() : {};
+            const items = { ...data };
+            const keys = Object.keys(items);
+            let users = keys.map((key) => {
+                return { ...items[key], ID: key };
+            })
+            return users;
         })
         .catch((error) => {
             return error;
@@ -114,7 +158,7 @@ export const getTrayItems = async (trayName) => {
         .then((tray) => { // after tray is found -> find items matching the content of the tray
             const [trayItems] = tray.map(tray => tray.trayItems);
             const itemKeys = Object.keys(trayItems);
-            let test = itemKeys.map(async (key) => {
+            let items = itemKeys.map(async (key) => {
                 return await db.ref(ROOT_REF + trayItems[key])
                     .get('value')
                     .then((querySnapShot) => {
@@ -123,7 +167,7 @@ export const getTrayItems = async (trayName) => {
                         return item;
                     })
             })
-            return Promise.all(test);
+            return Promise.all(items);
         }, (error) => {
             console.log('The read failed: ' + error.name);
             return []

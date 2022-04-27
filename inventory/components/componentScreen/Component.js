@@ -1,11 +1,13 @@
-import React, { useContext } from "react";
-import { Text, View, TextInput, Alert, Platform, KeyboardAvoidingView } from 'react-native';
-import { useState } from 'react';
+import React, { useContext, useState, useEffect } from "react";
+import { Text, View, TextInput, Alert, Platform, SafeAreaView } from 'react-native';
 import { componentStyles as styles } from './componentStyles';
 import ThemeButton from '../testing_field/ThemeButton';
-import { createNewLoan } from '../../helpers/firebaseFunctions';
+import { createNewLoan, fetchProjects } from '../../helpers/firebaseFunctions';
 import { UserContext } from '../context/userContext.js';
 import {Picker} from '@react-native-picker/picker';
+import uuid from "react-uuid";
+import { PROJECTS_REF, db } from "../../firebase/Config";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function Home({ navigation, route }) {
     const [text, setText] = useState(null);
@@ -14,6 +16,9 @@ export default function Home({ navigation, route }) {
     const userId = user.ID
     const userEmail = user.email;
     let device = "";
+    const [projects, setProjects] = useState([])
+    const [visible, setVisible] = useState(false);
+    const [other, setOther] = useState('');
 
     const [selectedProject, setSelectedProject] = useState();
 
@@ -23,17 +28,44 @@ export default function Home({ navigation, route }) {
         device = "ios"
     }
 
+    useEffect(() => {
+        (async () => {
+            await fetchProjects()
+                .then((res) => {
+                    if (res.length > 0) {
+                        setProjects(res);
+                        setSelectedProject(res[0]);
+                    } else {
+                        Alert.alert('Virhe', 'Projekteja ei pystytty hakemaan!');
+                    }
+                });
+        })();
+    }, []);
+
+
 
     const item = route?.params.item;
 
     const handleNewLoan = async () => {
+        let projectName = selectedProject
+
+        if (visible) {
+            let tempProjects = [...projects]
+            tempProjects.push(other)
+            projectName = other
+            db.ref(PROJECTS_REF).update({
+                ryhmat: tempProjects
+              })
+        } 
+
         const newLoanData = {
             komponentti: item.Nimike,
             lainattuMaara: Number(amount),
-            projekti: text,
+            projekti: projectName,
             userID: userId,
             userEmail: userEmail
         }
+        
         await createNewLoan(newLoanData).then((res) => {
             if (res.length > 0) {
                 return Alert.alert('Lainaus epäonnistui', res)
@@ -48,9 +80,24 @@ export default function Home({ navigation, route }) {
         );
     };
 
+    const pickerItems = projects.map((project) => {
+        return <Picker.Item key={uuid()} label={project} value={project} />
+    })
+
+    console.log(selectedProject + " valittu projekti");
+
+    useEffect(() => {
+        if (selectedProject == 'Muu') {
+            setVisible(true);
+        } else {
+            setVisible(false);
+        }
+    }, [selectedProject])
+    
 
     return (
-        <KeyboardAvoidingView style={styles.center}>
+        <SafeAreaView style={styles.center}>
+            <KeyboardAwareScrollView>
             <View>
                 <View style={[styles.background, styles.itemInfo]}>
                     <Text style={[styles.h1, styles.marginFix]}>{item.Nimike}</Text>
@@ -64,31 +111,41 @@ export default function Home({ navigation, route }) {
                 <Text style={[styles.h2, styles.marginFix]}>Projekti, jolle lainataan:</Text>
                 <View style={[styles.projectView]}>
                 {device == "android" ? <Picker
-                    style= {[styles.projectDropDown, styles.bodyTextWhite]}
+                    style= {[styles.projectDropDownAndroid, styles.bodyTextWhite]}
                     selectedValue={selectedProject}
-                    onValueChange={(itemValue, itemIndex) =>
-                        setSelectedProject(itemValue)
-                    }>
-                    
-                    <Picker.Item label="TUKE 1" value="TUKE 1" />
-                    <Picker.Item label="TUKE 2" value="TUKE 2" />
-                    <Picker.Item label="TUKE 3" value="TUKE 3" />
-                    <Picker.Item label="TUKE 4" value="TUKE 4" />
-                    <Picker.Item label="TUKE 5" value="TUKE 5" />
-                    <Picker.Item label="TUKE 6" value="TUKE 6" />
-                    <Picker.Item label="TUKE 7" value="TUKE 7" />
-                    <Picker.Item label="TUKE 8" value="TUKE 8" />
-                    <Picker.Item label="TUKE 9" value="TUKE 9" />
-                    <Picker.Item label="TUKE 10" value="TUKE 10" />
-                    <Picker.Item label="PROHA 1" value="PROHA 1" />
-                    <Picker.Item label="PROHA 2" value="PROHA 2" />
-                    <Picker.Item label="PROHA 3" value="PROHA 3" />
-                    <Picker.Item label="PROHA 4" value="PROHA 4" />
-                    <Picker.Item label="PROHA 5" value="PROHA 5" />
-                    <Picker.Item label="MUU" value="MUU" />
+                    onValueChange={(itemValue, itemIndex) => setSelectedProject(itemValue)}>
+                        {pickerItems}
+                        <Picker.Item label='Muu' value='Muu' />
+               </Picker> 
 
-                </Picker> : <React.Fragment/>}
+                    
+
+               : <Picker
+               style= {[styles.projectDropDownIos, styles.bodyTextWhite]}
+               selectedValue={selectedProject}
+               onValueChange={(itemValue, itemIndex) => setSelectedProject(itemValue)}>
+                   {pickerItems}
+                   <Picker.Item label='Muu' value='Muu' />
+          </Picker> }
                    
+                   {/* Komponentin toggle-toiminto */}
+
+                    <View style={styles.addComponent}>
+                        {/*Here we will return the view when state is true 
+                        and will return false if state is false*/}
+                        {visible ? (
+                        <TextInput
+                            style={styles.TextInput}
+                            placeholderTextColor="white"
+                            placeholder="Projektin nimi"
+                            onChangeText={setOther}
+                        />
+                        ) : <React.Fragment/>}
+                        
+                    </View>
+
+                    {/* Komponentin toggle-toiminto */}
+
                 </View>
                 {/* <TextInput
                     style={styles.input}
@@ -113,7 +170,8 @@ export default function Home({ navigation, route }) {
                     <ThemeButton color="#F4247C" text="Lainaa" onPress={handleNewLoan} />
                 </View>
             </View>
-        </KeyboardAvoidingView>
+            </KeyboardAwareScrollView>
+        </SafeAreaView>
     );
 
 }
