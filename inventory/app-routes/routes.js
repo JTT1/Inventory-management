@@ -10,6 +10,8 @@ import ScanQrCode from '../components/qrcodescanner/ScanQrCode';
 import ScanResults from '../components/qrcodescanner/ScanResults';
 import AddComponents from '../components/adminTools/addComponents';
 import UserManager from '../components/adminTools/UserManager';
+import AddTrays from '../components/adminTools/AddTrays';
+import AddScreen from '../components/adminTools/addScreen';
 
 
 // Routes and components to use in stack navigator
@@ -61,6 +63,11 @@ export const routesList = [
         // header: false,
     },
     {
+        name: 'Valitse',
+        component: AddScreen,
+        header: true,
+    },
+    {
         name: 'Lisää',
         component: AddComponents,
         header: true,
@@ -69,4 +76,10 @@ export const routesList = [
         name: 'Käyttäjät',
         component: UserManager,
     },
+    {
+        name: 'Luo',
+        component: AddTrays,
+        header: true,
+    },
+
 ]

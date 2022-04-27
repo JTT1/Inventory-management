@@ -20,7 +20,7 @@ export default function AdminBar ({ navigation }) {
                     <MaterialCommunityIcons style={[styles.adminIcons, styles.boxShadow]} name="file-search-outline" size={30} color="#FFFFFF" />
                     </TouchableOpacity>
                     
-                    <TouchableOpacity onPress={() => navigation.navigate('Lisää')}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Valitse')}>
                     <MaterialCommunityIcons style={[styles.adminIcons, styles.boxShadow]} name="plus" size={30} color="#FFFFFF" />
                     </TouchableOpacity>
     
