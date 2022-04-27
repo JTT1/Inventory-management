@@ -57,8 +57,7 @@ export default function AddNewComponent({ navigation }) {
     return (
     
       <SafeAreaView style={styles.addComponentBox}>
-        {/* <KeyboardAwareScrollView enableOnAndroid contentContainerStyle={[styles.addComponentScroll, styles.centerHorizontal, styles.centerVertical]}> */}
-        <KeyboardAwareScrollView>
+       <KeyboardAwareScrollView>
           <View style={[styles.addComponentScroll, styles.centerHorizontal, styles.centerVertical]}>
 
 
