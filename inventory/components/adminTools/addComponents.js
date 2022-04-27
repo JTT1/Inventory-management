@@ -3,7 +3,7 @@ import { View, Text, ScrollView, TextInput, Alert, Platform, SafeAreaView, Keybo
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 import { componentStyles as styles } from '../componentScreen/componentStyles';
 import ThemeButton from '../testing_field/ThemeButton';
-import { db, ROOT_REF } from '../../firebase/Config';
+import { db, LOCKERS_REF, ROOT_REF } from '../../firebase/Config';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {Picker} from '@react-native-picker/picker';
 import { fetchTrays } from '../../helpers/firebaseFunctions';
@@ -17,13 +17,15 @@ export default function AddNewComponent({ navigation }) {
   const [id, setId] = useState("");
   const [tray, setTray] = useState("");
   const [info, setInfo] = useState("");
-  const [amount, setAmount] = useState(1);
+  const [amount, setAmount] = useState('');
   const [location, setLocation] = useState("");
-  const detailsRef = useRef();
-  let device = "";
   const [selectedTray, setSelectedTray] = useState();
+  const [selectedTrayId, setSelectedTrayId] = useState();
   const [trays, setTrays] = useState([])
   const [visible, setVisible] = useState(false);
+
+  const detailsRef = useRef();
+  let device = "";
 
   if (Platform.OS == "android") {
     device = "android";
@@ -37,13 +39,13 @@ export default function AddNewComponent({ navigation }) {
             .then((res) => {
                 if (res.length > 0) {
                     setTrays(res);
-                    setSelectedTray(res[0]);
+                  setSelectedTray(res[0].tarjotinNimi);
                 } else {
                     Alert.alert('Virhe', 'Tarjottimia ei pystytty hakemaan!');
                 }
             });
     })();
-}, []);
+  }, []);
 
 
   const checkInput = () => {
@@ -58,31 +60,54 @@ export default function AddNewComponent({ navigation }) {
 
 
 
-  function add() {
+  async function add() {
     if (checkInput() !== false) {
-      db.ref(ROOT_REF).push({
-        // ID: id,
-        Tarjotin: tray,
+
+      await db.ref(ROOT_REF).push({
+      // ID: id,
+        Tarjotin: selectedTray,
         Lisatietoa: info,
         Maara: amount,
         Nimike: name,
         Sijainti: location
       })
-      setName('');
-      setTray('');
-      setInfo('');
-      setAmount(1);
-      setLocation('');
-      Alert.alert("Komponentin lisäys onnistui!")
+        .then((querySnapShot) => {
+          const lastPushId = querySnapShot.getKey();
+
+          const [matchingTray] = trays.filter((tray) => (tray.tarjotinNimi === selectedTray))
+          let trayItemsCopy = [];
+          if ('trayItems' in matchingTray) {
+            trayItemsCopy = [...matchingTray.trayItems];
+          }
+          trayItemsCopy.push(lastPushId);
+
+          db.ref(LOCKERS_REF + matchingTray.ID).update({
+            trayItems: trayItemsCopy
+          })
+        })
+        .finally(() => {
+          setName('');
+          setTray('');
+          setInfo('');
+          setAmount('');
+          setLocation('');
+          return Alert.alert("Komponentin lisäys onnistui!")
+        })
     }
   }
 
 
-  const pickerItems = trays.map((tray) => {
-    return <Picker.Item key={uuid()} label={tray} value={tray} />
-  })
 
-  console.log(pickerItems, " tässä pickeritemsit")
+  const trayNames = trays.map((tray) => {
+    const returnObj = { name: tray.tarjotinNimi, ID: tray.ID }
+
+    return returnObj
+  }
+  )
+  const pickerItems = trayNames.map(({ name }) => {
+    return <Picker.Item key={uuid()} label={name} value={name} />
+
+  })
 
     return (
     
@@ -100,6 +125,7 @@ export default function AddNewComponent({ navigation }) {
             placeholder="Komponentin nimi"
             onChangeText={setName}
             placeholderTextColor={"white"}
+                value={name}
           />
         </View>
 
@@ -111,6 +137,7 @@ export default function AddNewComponent({ navigation }) {
             placeholder="Komponentin määrä"
             onChangeText={setAmount}
             placeholderTextColor={"white"}
+                value={amount}
           />
         </View>
 
@@ -121,7 +148,7 @@ export default function AddNewComponent({ navigation }) {
                 {device == "android" ? <Picker
                     style= {[styles.projectDropDownAndroid, styles.bodyTextWhite]}
                     selectedValue={selectedTray}
-                    onValueChange={(itemValue, itemIndex) => setSelectedTray(itemValue)}>
+                onValueChange={(itemValue, itemIndex) => setSelectedTray(itemValue)}>
                         {pickerItems}
                </Picker> 
 
@@ -143,6 +170,7 @@ export default function AddNewComponent({ navigation }) {
                             placeholderTextColor="white"
                             placeholder="Projektin nimi"
                             onChangeText={setOther}
+                    value={other}
                         />
                         ) : <React.Fragment/>}
                         
@@ -184,6 +212,7 @@ export default function AddNewComponent({ navigation }) {
               placeholder="Lisätietoa"
               onChangeText={setInfo}
               placeholderTextColor={"white"}
+                  value={info}
             />
           </Pressable>
         </View>
@@ -194,8 +223,9 @@ export default function AddNewComponent({ navigation }) {
           </Text>
           <TextInput style={styles.TextInput}
             placeholder="Jos muualla kuin varastossa"
-            onChangeText={setTray}
+                onChangeText={setLocation}
             placeholderTextColor={"white"}
+                value={location}
           />
         </View>
 

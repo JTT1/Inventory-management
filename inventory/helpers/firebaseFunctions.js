@@ -35,9 +35,10 @@ export async function fetchTrays() {
             const data = querySnapShot.val() ? querySnapShot.val() : {};
             const items = { ...data };
             const keys = Object.keys(items);
-            const mappedItems = keys.map((key) => items[key]);
-            const result = mappedItems.filter((item) => item.tarjotinNimi == tarjotinNimi);
-            return result;
+            const mappedItems = keys.map((key) => {
+                return { ...items[key], ID: key }
+            });
+            return mappedItems;
     });
 }
 
