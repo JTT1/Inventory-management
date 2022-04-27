@@ -4,8 +4,8 @@ import { loginStyles as styles } from './loginStyles';
 
 import { MaterialIcons } from '@expo/vector-icons';
 import ThemeButton from "../testing_field/ThemeButton";
-import { db, ROOT_REF, USERS_REF, firebase } from '../../firebase/Config';
-import { getUserData, storeUserData } from "../../helpers/firebaseFunctions";
+import { firebase } from '../../firebase/Config';
+import { storeUserData } from "../../helpers/firebaseFunctions";
 
 
 export default function Login({ navigation }) {
@@ -14,18 +14,22 @@ export default function Login({ navigation }) {
 
   const Login = async () => {
 
-
     if(handleLogin() == true) {
       try {
-      await firebase.auth().signInWithEmailAndPassword(email, password);
-      console.log("kirjautuminen onnistui!");
-      const currentUser = firebase.auth().currentUser;
-        storeUserData(currentUser.email);
-      routeToHome();
+        const userCred = await firebase.auth().signInWithEmailAndPassword(email, password);
+
+        if (!userCred.user.emailVerified) { // show alert message if user email is not verified
+          throw new Error('Varmenna sähköpostisi kirjautuaksesi sisään.');
+        }
+        else {
+          console.log("kirjautuminen onnistui!");
+          const currentUser = firebase.auth().currentUser;
+          storeUserData(currentUser.email);
+          routeToHome();
+        }
     } catch (err) {
         console.log('Kirjautuminen epäonnistui.', err);
         Alert.alert('Kirjautuminen epäonnistui. ', err.toString());
-
       }
     }
   }
@@ -73,7 +77,7 @@ export default function Login({ navigation }) {
         <View style={[styles.centerHorizontal, styles.loginBox, styles.centerVertical]}>
           <Text style={[styles.h2, styles.marginFix]}>Kirjautuminen vaaditaan</Text>
           <Text style={[styles.bodyTextWhite, styles.marginFix, styles.textFix]}>Ole hyvä ja kirjaudu sisään jatkaaksesi</Text>
-          <View style={styles.InputView}>
+          <View style={styles.inputView}>
             <Text style={styles.h3}>Sähköposti tai käyttäjänimi</Text>
             <View style={[styles.inputWrapper]}>
               <MaterialIcons
