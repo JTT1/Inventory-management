@@ -156,7 +156,8 @@ export const styles = StyleSheet.create({
     inputIcon: {
         elevation: 1,
         position: 'absolute',
-        paddingLeft: 10
+        paddingLeft: 10,
+        paddingTop: 4,
     },
     testi1: {
         display: "flex",

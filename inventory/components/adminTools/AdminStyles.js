@@ -15,6 +15,9 @@ export const AdminStyles = StyleSheet.create({
         maxHeight: "55%",
         color: 'white',
     },
+    userName: {
+        color: '#6EEEFF',
+    },
     trayItem: {
         padding: 15,
         alignSelf: 'stretch',
@@ -22,5 +25,11 @@ export const AdminStyles = StyleSheet.create({
         borderColor: '#605A91',
         borderTopWidth: 2,
     },
-
+    modalContentContainer: {
+        backgroundColor: "rgba(57, 54, 99, 0.95)",
+        width: "85%",
+        height: 340,
+        borderRadius: 15,
+        padding: 15,
+    },
 });

@@ -10,7 +10,7 @@ import { PROJECTS_REF, db } from "../../firebase/Config";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function Home({ navigation, route }) {
-    const [amount, setAmount] = useState(null);
+    const [amount, setAmount] = useState('');
     const [projects, setProjects] = useState([]);
     const [visible, setVisible] = useState(false);
     const [other, setOther] = useState('');
@@ -53,6 +53,9 @@ export default function Home({ navigation, route }) {
 
 
     const handleNewLoan = async () => {
+        if (Number(amount) < 1) {
+            return Alert.alert('', 'Valitse vähintään yksi kappale lainattavaksi.')
+        }
         let projectName = selectedProject;
 
         if (visible) {

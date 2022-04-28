@@ -15,14 +15,13 @@ const SearchListItem = ({ item, navigation }) => {
     }
 
     return (
-        <View style={[styles.searchListItem]}>
             <TouchableOpacity onPress={handleRouting}>
+            <View style={[styles.searchListItem]}>
             <View style={styles.flexRow}>
                 <Text style={[styles.bodyTextWhite, styles.upperCase, styles.h5, { color: '#6EEEFF' }]}>
                     {item.Nimike}
                 </Text>
-            </View>
-            </TouchableOpacity>
+                </View>
             <View style={styles.flexRow}>
                 <MaterialIcons
                     name="category"
@@ -68,7 +67,8 @@ const SearchListItem = ({ item, navigation }) => {
                         </TouchableOpacity>
                 }
             </View>
-        </View >
+            </View>
+        </TouchableOpacity>
     )
 }
 

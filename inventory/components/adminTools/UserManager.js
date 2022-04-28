@@ -10,11 +10,11 @@ const UserManager = () => {
 
     useEffect(() => {
         (async () => {
-            fetchAllUsers(true)
+            fetchAllUsers()
                 .then((res) => {
                     setUsers(res);
                     setLoaded(true);
-                });
+                })
         })();
     }, [])
 
@@ -27,12 +27,10 @@ const UserManager = () => {
             <Text style={[styles.h2, styles.selfCenterHorizontal]}>
                 Käyttäjähallinta
             </Text>
-            <View style={[styles.userListContainer, styles.stretch]}>
-
+            <View style={[styles.userListContainer, styles.stretch, styles.boxShadow]}>
                 <ScrollView>
                     {renderUserList}
                 </ScrollView>
-
             </View>
         </View>
     )

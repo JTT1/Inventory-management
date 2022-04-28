@@ -83,6 +83,15 @@ export async function fetchAllUsers() {
         })
 }
 
+export const updateUserInfo = async (data) => {
+    return await db.ref(USERS_REF + data.ID).update({
+        etunimi: data.etunimi,
+        sukunimi: data.sukunimi,
+        rooli: data.rooli,
+        email: data.email,
+    })
+}
+
 export function getCurrentUserLoans(setData, setLoaded, userId) {
     try {
         return db.ref(LOANS_REF)

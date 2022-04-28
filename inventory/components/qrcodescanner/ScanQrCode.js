@@ -45,4 +45,4 @@ const ScanQrCode = ({ navigation }) => {
     );
 }
 
-export default ScanQrCode
+export default ScanQrCode;
