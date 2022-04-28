@@ -28,6 +28,12 @@ export async function fetchProjects() {
     });
 }
 
+export async function updateProjects(data) {
+    return db.ref(PROJECTS_REF).update({
+        ryhmat: data
+    });
+}
+
 export async function fetchTrays() {
     return db.ref(LOCKERS_REF)
         .once('value')
@@ -144,6 +150,8 @@ export function addNewBrokenItem(data) {
 
 // on QR code scan
 export const getTrayItems = async (trayName) => {
+
+    try {
     return await db.ref(LOCKERS_REF) // query all lockers -> find the correct tray
         .once('value')
         .then((querySnapShot) => {
@@ -161,7 +169,7 @@ export const getTrayItems = async (trayName) => {
             const itemKeys = Object.keys(trayItems);
             let items = itemKeys.map(async (key) => {
                 return await db.ref(ROOT_REF + trayItems[key])
-                    .get('value')
+                    .once('value')
                     .then((querySnapShot) => {
                         const data = querySnapShot.val() ? querySnapShot.val() : {};
                         const item = { ...data, ID: trayItems[key] };
@@ -169,10 +177,10 @@ export const getTrayItems = async (trayName) => {
                     })
             })
             return Promise.all(items);
-        }, (error) => {
-            console.log('The read failed: ' + error.name);
-            return []
-        });
+        })
+    } catch (error) {
+        return [];
+    }
 }
 
 

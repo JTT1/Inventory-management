@@ -30,6 +30,7 @@ const CurrentLoans = ({ navigation }) => {
     }, [])
 
 
+    // TODO
     const memoizedLoanList = useMemo(() => {
         return loanData.every((item) => item.palautettuKokonaan === true) // If user's every loan is fully returned
             ? <Text style={[styles.bodyTextWhite, { alignSelf: 'center' }]} >Ei aktiivisia lainoja.</Text>
@@ -63,7 +64,7 @@ const CurrentLoans = ({ navigation }) => {
     const handleReturnItems = () => {
 
         if (updateItemList.some((item) => item.validated === false)) {
-            Alert.alert("Virhe", "Tarkista palautuksen tiedot.")
+            Alert.alert('', 'Tarkista palautuksen tiedot.')
             return
         }
 
@@ -84,7 +85,6 @@ const CurrentLoans = ({ navigation }) => {
         });
         }
     };
-
 
     return (
         <ScrollView contentContainerStyle={[styles.container]}>

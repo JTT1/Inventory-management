@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, ScrollView, TextInput, Alert, Platform, SafeAreaView, KeyboardAvoidingView } from 'react-native';
+import { View, Text, ScrollView, TextInput, Alert, Platform, SafeAreaView, KeyboardAvoidingView, ActivityIndicator } from 'react-native';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 import { componentStyles as styles } from '../componentScreen/componentStyles';
 import ThemeButton from '../testing_field/ThemeButton';
@@ -23,6 +23,7 @@ export default function AddNewComponent({ navigation }) {
   const [selectedTrayId, setSelectedTrayId] = useState();
   const [trays, setTrays] = useState([])
   const [visible, setVisible] = useState(false);
+  const [loaded, setLoaded] = useState(true);
 
   const detailsRef = useRef();
   let device = "";
@@ -45,7 +46,7 @@ export default function AddNewComponent({ navigation }) {
                 }
             });
     })();
-  }, []);
+  }, [loaded]);
 
 
   const checkInput = () => {
@@ -62,7 +63,7 @@ export default function AddNewComponent({ navigation }) {
 
   async function add() {
     if (checkInput() !== false) {
-
+      setLoaded(false);
       await db.ref(ROOT_REF).push({
       // ID: id,
         Tarjotin: selectedTray,
@@ -76,14 +77,10 @@ export default function AddNewComponent({ navigation }) {
 
           const [matchingTray] = trays.filter((tray) => (tray.tarjotinNimi === selectedTray))
           let trayItemsCopy = [];
-          if ('trayItems' in matchingTray) {
+          if (matchingTray && 'trayItems' in matchingTray) {
             trayItemsCopy = [...matchingTray.trayItems];
           }
           trayItemsCopy.push(lastPushId);
-
-
-          console.log('tray: ', selectedTray)
-          console.log('trayItemsCopy: ', trayItemsCopy)
 
           db.ref(LOCKERS_REF + matchingTray.ID).update({
             trayItems: trayItemsCopy
@@ -95,6 +92,7 @@ export default function AddNewComponent({ navigation }) {
           setInfo('');
           setAmount('');
           setLocation('');
+          setLoaded(true);
           return Alert.alert("Komponentin lisäys onnistui!")
         })
     }
@@ -112,6 +110,10 @@ export default function AddNewComponent({ navigation }) {
     return <Picker.Item key={uuid()} label={name} value={name} />
 
   })
+
+  if (!loaded) {
+    return <ActivityIndicator size={100} color="#1DFFBB" />
+  }
 
     return (
     

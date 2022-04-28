@@ -7,7 +7,6 @@ export const AdminStyles = StyleSheet.create({
     ...styles,
     userListContainer: {
         justifyContent: 'center',
-        alignItems: 'center',
         borderTopWidth: 2,
         borderBottomWidth: 2,
         borderColor: '#605A91',
@@ -17,7 +16,7 @@ export const AdminStyles = StyleSheet.create({
         color: 'white',
     },
     trayItem: {
-        padding: 10,
+        padding: 15,
         alignSelf: 'stretch',
         justifyContent: 'space-between',
         borderColor: '#605A91',

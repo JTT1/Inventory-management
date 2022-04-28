@@ -85,7 +85,6 @@ export const returnLoanStyles = StyleSheet.create({
         backgroundColor: "#302D53",
         borderWidth: 2,
         borderColor: '#605A91',
-        elevation: 10,
     },
     historyListItem: {
         borderBottomWidth: 2,

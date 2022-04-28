@@ -50,6 +50,11 @@ export const styles = StyleSheet.create({
         fontSize: 16,
         color: 'white',
     },
+    bodyTextCyan: {
+        fontFamily: 'Quicksand500',
+        fontSize: 16,
+        color: '#6EEEFF',
+    },
     bodyTextGreen: {
         fontFamily: 'Quicksand500',
         fontSize: 16,

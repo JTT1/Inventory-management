@@ -21,7 +21,7 @@ const ScanQrCode = ({ navigation }) => {
     const handleScannedCode = ({ type, data }) => {
         setScanned(true);
         navigation.pop();
-        navigation.navigate('Laatikko', { scanResult: data });
+        navigation.navigate('Tulos', { scanResult: data });
     };
     if (hasPermission === null) {
         return <Text>Requesting for camera permission</Text>;

@@ -58,7 +58,7 @@ export const routesList = [
         header: false,
     },
     {
-        name: 'Laatikko',
+        name: 'Tulos',
         component: ScanResults,
         // header: false,
     },

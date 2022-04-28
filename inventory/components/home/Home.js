@@ -13,7 +13,7 @@ export default function Home({ navigation }) {
   return (
     // <View style={styles.backgroundColor}>
     <SafeAreaView style={styles.backgroundColor}>
-      <KeyboardAwareScrollView>
+      {/* <KeyboardAwareScrollView> */}
 
         <Text style={styles.h1}>Mitä haluat tehdä?</Text>
 
@@ -79,7 +79,7 @@ export default function Home({ navigation }) {
 
         <AdminBar navigation={navigation} />
 
-      </KeyboardAwareScrollView>
+      {/* </KeyboardAwareScrollView> */}
 
     </SafeAreaView>
 

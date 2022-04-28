@@ -19,7 +19,7 @@ const UserManager = () => {
     }, [])
 
     const renderUserList = users.map((user) => {
-        return <UserListItem key={user.ID} user={user} styles={styles} />
+        return <UserListItem key={user.ID} user={user} />
     });
 
     return (
@@ -27,7 +27,7 @@ const UserManager = () => {
             <Text style={[styles.h2, styles.selfCenterHorizontal]}>
                 Käyttäjähallinta
             </Text>
-            <View style={[styles.userListContainer]}>
+            <View style={[styles.userListContainer, styles.stretch]}>
 
                 <ScrollView>
                     {renderUserList}
