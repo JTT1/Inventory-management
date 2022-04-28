@@ -97,7 +97,7 @@ export default function Home({ navigation, route }) {
         <SafeAreaView style={styles.center}>
             <KeyboardAwareScrollView>
             <View>
-                <View style={[styles.background, styles.itemInfo]}>
+                <View style={[styles.background, styles.itemInfo, styles.boxShadow]}>
                     <Text style={[styles.h1, styles.marginFix]}>{item.Nimike}</Text>
                     {item.Lisatietoa.length > 0 &&
                         <View>
