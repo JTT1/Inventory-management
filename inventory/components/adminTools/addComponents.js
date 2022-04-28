@@ -54,12 +54,8 @@ export default function AddNewComponent({ navigation }) {
       Alert.alert("Syötä komponentin nimi!")
       return false;
     }
-
     return true;
   }
-
-
-
 
   async function add() {
     if (checkInput() !== false) {
@@ -120,9 +116,7 @@ export default function AddNewComponent({ navigation }) {
       <SafeAreaView style={styles.addComponentBox}>
         <KeyboardAwareScrollView>
           <View style={[styles.addComponentScroll, styles.centerHorizontal, styles.centerVertical]}>
-
-        <Text style={styles.h1}>Lisää komponentteja</Text>
-
+            <Text style={styles.h1}>Lisää komponentteja</Text>
         <View>
           <Text style={styles.h3}>
             Nimi
@@ -133,8 +127,7 @@ export default function AddNewComponent({ navigation }) {
             placeholderTextColor={"white"}
                 value={name}
           />
-        </View>
-
+            </View>
         <View>
           <Text style={styles.h3}>
             Määrä

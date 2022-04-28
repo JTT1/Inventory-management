@@ -28,8 +28,32 @@ export const AdminStyles = StyleSheet.create({
     modalContentContainer: {
         backgroundColor: "rgba(57, 54, 99, 0.95)",
         width: "85%",
+        height: "50%",
         height: 340,
         borderRadius: 15,
         padding: 15,
+    },
+    projectView: {
+        width: "85%",
+        borderRadius: 12,
+        marginLeft: 20,
+        margin: 10,
+        borderWidth: 1,
+        borderColor: 'rgba(180, 180, 180, 0.1)',
+        overflow: "hidden",
+
+    },
+    projectDropDownAndroid: {
+        height: 55,
+        borderRadius: 30,
+        backgroundColor: 'rgba(180, 180, 180, 0.1)',
+        padding: 10,
+    },
+    projectDropDownIos: {
+        width: "85%",
+        height: 200,
+        borderRadius: 30,
+        backgroundColor: 'rgba(180, 180, 180, 0.1)',
+        padding: 10,
     },
 });
