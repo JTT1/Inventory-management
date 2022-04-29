@@ -106,10 +106,10 @@ export const styles = StyleSheet.create({
         alignSelf: 'stretch',
     },
     centerHorizontal: {
-        alignItems: 'center'
+        justifyContent: 'center'
     },
     centerVertical: {
-        justifyContent: 'center'
+        alignItems: 'center'
     },
     selfCenterHorizontal: {
         alignSelf: 'center'

@@ -224,7 +224,7 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
                         </Pressable>
                         {checked && 
                         <View style={[styles.innerContainer]}>
-                                <View style={[styles.detailsColumn, styles.centerVertical]}>
+                                <View style={[styles.detailsColumn, styles.centerHorizontal]}>
                                 <Text style={[styles.bodyTextWhite]}>
                                     Määrä
                                 </Text>
@@ -256,7 +256,7 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
                 </Animated.View>
             </View>
             <Modal
-                style={[styles.centerHorizontal]}
+                style={[styles.centerVertical]}
                 isVisible={modalOpen}
                 onBackButtonPress={handleCancel}
                 onModalShow={() => inputRef.current.focus()}
@@ -289,8 +289,7 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
                             <Text style={[styles.bodyTextDark, styles.h4, styles.textCenter]}>Tallenna</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={handleCancel} style={[styles.flexRow]}>
-                        {/* <MaterialIcons name="close" size={30} color="white" /> */}
+                        <TouchableOpacity onPress={handleCancel} style={[styles.flexRow]}>
                         <View style={[styles.cancelButton]}>
                         <Text style={[styles.bodyTextWhite, styles.h4, styles.textCenter]}>Peruuta</Text>
                         </View>

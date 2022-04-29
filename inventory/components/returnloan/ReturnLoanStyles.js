@@ -71,18 +71,18 @@ export const returnLoanStyles = StyleSheet.create({
         textAlign: 'right',
         paddingHorizontal: 10,
         borderRadius: 20,
-        backgroundColor: "rgba(143,138,191,0.5)",
+        backgroundColor: 'rgba(143,138,191,0.5)',
         height: 40,
         width: 70,
         color: 'white'
     },
     historyListContainer: {
         flex: 1,
-        alignSelf: 'center',
         padding: 10,
         marginTop: 10,
-        maxHeight: "65%",
-        backgroundColor: "#302D53",
+        maxHeight: '65%',
+        width: '85%',
+        backgroundColor: '#302D53',
         borderWidth: 2,
         borderColor: '#605A91',
     },
@@ -105,14 +105,14 @@ export const returnLoanStyles = StyleSheet.create({
         paddingVertical: 15,
         paddingHorizontal: 20,
         borderRadius: 20,
-        backgroundColor: "#302D53",
+        backgroundColor: '#302D53',
         width: 270,
         height: 200,
         color: 'white'
     },
     saveButton: {
         marginTop: 20,
-        backgroundColor: "#1DFFBB",
+        backgroundColor: '#1DFFBB',
         padding: 10,
         borderRadius: 15,
         color: '#393663',
@@ -121,20 +121,20 @@ export const returnLoanStyles = StyleSheet.create({
     },
     cancelButton: {
         marginTop: 20,
-        backgroundColor: "#1DFFBB",
+        backgroundColor: '#1DFFBB',
         padding: 10,
         borderRadius: 15,
         backgroundColor: '#F4247C',
         width: 100,
         margin: 10,
-        textAlign: "center"
+        textAlign: 'center'
     },
     textCenter: {
-        textAlign: "center"
+        textAlign: 'center'
     },
     modalBox: {
-        backgroundColor: "rgba(57, 54, 99, 0.95)",
-        width: "85%",
+        backgroundColor: 'rgba(57, 54, 99, 0.95)',
+        width: '85%',
         height: 340,
         borderRadius: 15
     },

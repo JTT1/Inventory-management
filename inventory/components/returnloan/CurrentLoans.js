@@ -60,19 +60,25 @@ const CurrentLoans = ({ navigation }) => {
             <HistoryListItem item={item} key={uuid()} />
         );
 
-    // Handle loan return, and redirect to confirmation screen
-    const handleReturnItems = () => {
 
+    const validateReturn = () => {
         if (updateItemList.some((item) => item.validated === false)) {
             Alert.alert('', 'Tarkista palautuksen tiedot.')
-            return
+            return false
         }
 
         if (updateItemList.length === 0 && brokenItemList.length === 0) {
             Alert.alert('', 'Valitse ainakin yksi komponentti palautettavaksi.')
-            return
-        } 
+            return false
+        }
         else {
+            return true
+        }
+    }
+
+    // Handle loan return, and redirect to confirmation screen
+    const handleReturnItems = () => {
+        if (validateReturn() == true) {
         try {
             updateItemList.forEach((item) => updateUserLoans(item));
             brokenItemList.forEach((item) => addNewBrokenItem(item));
@@ -97,7 +103,7 @@ const CurrentLoans = ({ navigation }) => {
                     : userLoans}
             </ScrollView>
             <TouchableOpacity
-                style={[styles.flexRow, styles.centerVertical, { marginTop: 10, marginBottom: 20 }]}
+                style={[styles.flexRow, styles.centerHorizontal, { marginTop: 10, marginBottom: 20 }]}
                 onPress={() => toggleModal(!modalVisible)}>
 
                 <MaterialIcons name="history" size={30} color="white" />
@@ -110,7 +116,7 @@ const CurrentLoans = ({ navigation }) => {
             }
             {/* Loan history modal */}
             <Modal
-                style={[styles.centerHorizontal]}
+                style={[styles.centerVertical, styles.centerHorizontal]}
                 isVisible={modalVisible}
                 onBackButtonPress={() => toggleModal(false)}
                 animationIn={'fadeIn'}
@@ -118,7 +124,7 @@ const CurrentLoans = ({ navigation }) => {
                 hideModalContentWhileAnimating={true}
                 useNativeDriver={true}
             >
-                <Text style={[styles.bodyTextWhite, styles.h3, { alignSelf: 'center' }]}>
+                <Text style={[styles.bodyTextWhite, styles.h3]}>
                     Lainaushistoria
                 </Text>
                 {loanHistory.length > 0
@@ -128,7 +134,7 @@ const CurrentLoans = ({ navigation }) => {
                     </ScrollView>
                     :
                     <View>
-                        <Text style={[styles.bodyTextWhite, styles.h4, { alignSelf: 'center', marginBottom: 20 }]}>Ei palautettuja lainoja.</Text>
+                        <Text style={[styles.bodyTextWhite, styles.h4, { marginBottom: 20 }]}>Ei palautettuja lainoja.</Text>
                     </View>
                 }
                 <TouchableOpacity style={[styles.flexRow, { marginTop: 10 }]} onPress={() => toggleModal(!modalVisible)}>

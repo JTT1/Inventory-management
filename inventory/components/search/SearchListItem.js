@@ -17,22 +17,13 @@ const SearchListItem = ({ item, navigation }) => {
     return (
             <TouchableOpacity onPress={handleRouting}>
             <View style={[styles.searchListItem]}>
-            <View style={styles.flexRow}>
-                <Text style={[styles.bodyTextWhite, styles.upperCase, styles.h5, { color: '#6EEEFF' }]}>
-                    {item.Nimike}
-                </Text>
+                <View style={styles.flexRow}>
+                    <Text style={[styles.bodyTextWhite, styles.upperCase, styles.h4, { color: '#6EEEFF' }]}>
+                        {item.Nimike}
+                    </Text>
                 </View>
-            <View style={styles.flexRow}>
-                <MaterialIcons
-                    name="category"
-                    size={30}
-                    color="white"
-                />
-                <Text style={styles.bodyTextWhite}>
-                    {item.Tarjotin}
-                </Text>
-            </View>
-            <View style={[styles.flexRow, styles.flexBetween]}>
+
+                <View style={[styles.flexRow, styles.flexBetween]}>
                 <View style={styles.flexRow}>
                     {
                         item.Maara !== ""
@@ -51,9 +42,11 @@ const SearchListItem = ({ item, navigation }) => {
                         {item.Maara} kpl
                     </Text>
                 </View>
+                    <TouchableOpacity onPress={handleMapOpen}>
                 {
+
                     item.Sijainti != ""
-                    && <TouchableOpacity onPress={handleMapOpen}>
+                            && 
                         <View style={[styles.flexRow]}>
                             <MaterialIcons
                                 name="map"
@@ -64,8 +57,8 @@ const SearchListItem = ({ item, navigation }) => {
                                 {item.Sijainti}
                             </Text>
                         </View>
-                        </TouchableOpacity>
-                }
+                        }
+                    </TouchableOpacity>
             </View>
             </View>
         </TouchableOpacity>

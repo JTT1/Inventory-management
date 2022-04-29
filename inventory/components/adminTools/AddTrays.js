@@ -42,9 +42,6 @@ export default function AddTrays({ navigation }) {
         setSearchResults(filteredItems)
     }
 
-    console.log(dbItems);
-
-
     const checkInput = () => {
 
         if (!name.trim()) {

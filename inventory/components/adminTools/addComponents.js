@@ -64,7 +64,7 @@ export default function AddNewComponent({ navigation }) {
       // ID: id,
         Tarjotin: selectedTray,
         Lisatietoa: info,
-        Maara: amount,
+        Maara: Number(amount),
         Nimike: name,
         Sijainti: location
       })

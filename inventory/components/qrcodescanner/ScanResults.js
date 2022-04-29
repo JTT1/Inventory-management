@@ -31,14 +31,12 @@ const ScanResults = ({ navigation, route }) => {
     const renderItemsList = data.map((item) => <TrayListItem item={item} navigation={navigation} key={uuid()} />)
 
     return (
-        <View style={[styles.container, styles.centerHorizontal]}>
+        <View style={[styles.container, styles.centerVertical]}>
             <Text style={[styles.h2, styles.selfCenterHorizontal]}>
                 {scanResult}
             </Text>
-
-
             <View style={[styles.scanResultsContainer, styles.stretch]}>
-                {status !== 'ok' ? <Text style={[styles.bodyTextWhite, styles.h5, { paddingVertical: 30 }]}>
+                {status !== 'ok' ? <Text style={[styles.bodyTextWhite, styles.h5, styles.notFound]}>
                     {status}
                 </Text>
                     : loaded ?

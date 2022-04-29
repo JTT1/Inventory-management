@@ -6,8 +6,10 @@ import { createNewLoan, fetchProjects, updateProjects } from '../../helpers/fire
 import { UserContext } from '../context/userContext.js';
 import {Picker} from '@react-native-picker/picker';
 import uuid from "react-uuid";
-import { PROJECTS_REF, db } from "../../firebase/Config";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { SimpleLineIcons } from '@expo/vector-icons';
+
+
 
 export default function Home({ navigation, route }) {
     const [amount, setAmount] = useState('');
@@ -21,12 +23,12 @@ export default function Home({ navigation, route }) {
     let device = "";
     const item = route?.params.item;
 
-
     if (Platform.OS == 'android') {
         device = "android"
     } else {
         device = "ios"
     }
+
 
     useEffect(() => {
         (async () => {
@@ -58,15 +60,16 @@ export default function Home({ navigation, route }) {
         }
         let projectName = selectedProject;
 
+
         if (visible) {
             let tempProjects = [...projects];
             tempProjects.push(other);
             projectName = other;
-
-            await updateProjects(tempProjects);
-            db.ref(PROJECTS_REF).update({
-                ryhmat: tempProjects
-            });
+            try {
+                await updateProjects(tempProjects);
+            } catch (error) {
+                return Alert.alert('Virhe', error.message);
+            }
         } 
 
         const newLoanData = {
@@ -77,7 +80,8 @@ export default function Home({ navigation, route }) {
             userEmail: userEmail
         };
         
-        await createNewLoan(newLoanData).then((res) => {
+        await createNewLoan(newLoanData)
+            .then((res) => {
             if (res.length > 0) {
                 return Alert.alert('Lainaus epäonnistui', res)
             } else {
@@ -94,17 +98,31 @@ export default function Home({ navigation, route }) {
     });
 
     return (
-        <SafeAreaView style={styles.center}>
+        <SafeAreaView style={[styles.center]}>
             <KeyboardAwareScrollView>
             <View>
                 <View style={[styles.background, styles.itemInfo, styles.boxShadow]}>
-                    <Text style={[styles.h1, styles.marginFix]}>{item.Nimike}</Text>
-                    {item.Lisatietoa.length > 0 &&
-                        <View>
-                            <Text style={[styles.h3, styles.marginFix]}>Lisätiedot</Text>
+                        <View style={[styles.flexRow, styles.flexBetween]}>
+                            <Text style={[styles.h1, styles.marginFix, { alignSelf: 'flex-start', marginBottom: 20, color: styles.bodyTextCyan.color }]}>
+                                {item.Nimike}
+                            </Text>
+                        </View>
+                        {
+                            item.Lisatietoa.length > 0 &&
+                            <View>
+                                <Text style={[styles.h3, styles.marginFix]}>Lisätiedot</Text>
                             <Text style={[styles.bodyTextWhite, styles.marginFix]}>{item.Lisatietoa}</Text>
-                    </View>
-                    }
+                            </View>
+                        }
+                        <View style={[styles.flexRow, styles.componentLocation, styles.flexBetween]}>
+                            <View style={[styles.flexRow]}>
+                                <SimpleLineIcons name="drawer" size={30} color="white" style={{ marginRight: 5 }} />
+                                <Text style={[styles.h4, { marginRight: 15 }]}>
+                                    {item.Tarjotin}
+                                </Text>
+                            </View>
+                            <Text style={[styles.h4]}>{item.Sijainti}</Text>
+                        </View>
                 </View>
                 <Text style={[styles.h2, styles.marginFix]}>Projekti, jolle lainataan:</Text>
                 <View style={[styles.projectView]}>
@@ -139,7 +157,7 @@ export default function Home({ navigation, route }) {
                         </View>
                     </View>
                 <Text style={[styles.h2, styles.marginFix]}>Lainattava määrä:</Text>
-                <View style={[styles.flexRow, styles.centerHorizontal]}>
+                    <View style={[styles.flexRow, styles.centerVertical]}>
                     <TextInput
                         style={[styles.input2]}
                         onChangeText={setAmount}
@@ -150,9 +168,7 @@ export default function Home({ navigation, route }) {
                     />
                     <Text style={[styles.bodyTextWhite, styles.textFix]}>Lainattavissa {item.Maara} kpl</Text>
                 </View>
-                <View style={styles.center}>
-                    <ThemeButton color="#F4247C" text="Lainaa" onPress={handleNewLoan} />
-                </View>
+                    <ThemeButton color="#F4247C" text="Lainaa" onPress={handleNewLoan} style={{ marginBottom: 20 }} />
             </View>
             </KeyboardAwareScrollView>
         </SafeAreaView>

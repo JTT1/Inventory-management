@@ -12,7 +12,7 @@ export const AdminStyles = StyleSheet.create({
         borderColor: '#605A91',
         backgroundColor: '#393663',
         marginVertical: 5,
-        maxHeight: "55%",
+        maxHeight: '55%',
         color: 'white',
     },
     userName: {
@@ -26,34 +26,42 @@ export const AdminStyles = StyleSheet.create({
         borderTopWidth: 2,
     },
     modalContentContainer: {
-        backgroundColor: "rgba(57, 54, 99, 0.95)",
-        width: "85%",
-        height: "50%",
-        height: 340,
+        backgroundColor: 'rgba(57, 54, 99, 0.85)',
+        width: '95%',
         borderRadius: 15,
         padding: 15,
+        borderColor: '#8F8ABF',
+        borderWidth: 2
+    },
+    headingMargin: {
+        marginBottom: 10,
+    },
+    adminTextInput: {
+        maxHeight: 40,
+        paddingLeft: 15,
+        width: '100%',
     },
     projectView: {
-        width: "85%",
+        width: '85%',
         borderRadius: 12,
-        marginLeft: 20,
-        margin: 10,
-        borderWidth: 1,
-        borderColor: 'rgba(180, 180, 180, 0.1)',
-        overflow: "hidden",
-
+        marginVertical: 10,
+        borderWidth: 2,
+        borderColor: 'rgba(180, 180, 180, 0.2)',
+        overflow: 'hidden',
     },
     projectDropDownAndroid: {
-        height: 55,
         borderRadius: 30,
         backgroundColor: 'rgba(180, 180, 180, 0.1)',
         padding: 10,
     },
     projectDropDownIos: {
-        width: "85%",
+        width: '85%',
         height: 200,
         borderRadius: 30,
         backgroundColor: 'rgba(180, 180, 180, 0.1)',
         padding: 10,
+    },
+    userIcon: {
+        marginRight: 5,
     },
 });

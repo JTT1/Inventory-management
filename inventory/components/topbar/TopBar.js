@@ -45,7 +45,6 @@ const TopBar = (props) => {
                 </Text>
             </View>
             <View style={styles.avatar}>
-                <Text style={styles.bodyTextDark}>{user.etunimi}</Text>
                 {/* Tästä toggle drawer, josta näkee käyttäjäprofiilin */}
                 <TouchableOpacity onPress={handleDrawerOpen} style={styles.imgContainer}>
 

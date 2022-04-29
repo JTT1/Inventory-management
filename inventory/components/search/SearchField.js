@@ -54,7 +54,7 @@ const SearchField = ({ data, setSearchTerm, setLoaded, searchTerm, inputRef }) =
     }
 
     return (
-        <View style={[styles.stretch, styles.centerHorizontal]}>
+        <View style={[styles.stretch]}>
             <View style={[styles.searchFieldContainer, styles.boxShadow]}>
                 <TextInput style={[styles.bodyTextWhite, styles.searchInput]}
                     ref={inputRef}

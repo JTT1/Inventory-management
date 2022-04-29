@@ -29,7 +29,7 @@ export async function fetchProjects() {
 }
 
 export async function updateProjects(data) {
-    return db.ref(PROJECTS_REF).update({
+    return await db.ref(PROJECTS_REF).update({
         ryhmat: data
     });
 }
@@ -154,7 +154,7 @@ export function addNewBrokenItem(data) {
         user: data.user,
             ilmoitusPvm: currentDate(),
             havitetty: false,
-    }, (error) => console.log(error));
+    });
 }
 
 // on QR code scan

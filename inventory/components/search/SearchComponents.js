@@ -107,7 +107,7 @@ const SearchComponents = (props) => {
                 onModalShow={() => inputRef.current.focus()}
             >
                 {!isLoaded ?
-                    <View style={[styles.flexBox, styles.stretch, styles.centerVertical]}>
+                    <View style={[styles.flexBox, styles.stretch, styles.centerHorizontal]}>
                         <ActivityIndicator size={100} color="#1DFFBB" />
                     </View>
                     :

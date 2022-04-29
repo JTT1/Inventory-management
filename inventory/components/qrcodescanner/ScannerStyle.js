@@ -11,6 +11,10 @@ export const scannerStyles = StyleSheet.create({
     camera: {
         flex: 1,
     },
+    scanAgain: {
+        position: 'absolute',
+        bottom: 20,
+    },
 
     scanResultsContainer: {
         justifyContent: 'center',
@@ -20,7 +24,7 @@ export const scannerStyles = StyleSheet.create({
         borderColor: '#605A91',
         backgroundColor: '#393663',
         marginVertical: 5,
-        maxHeight: "55%",
+        maxHeight: '55%',
         color: 'white',
     },
     trayItem: {
@@ -29,5 +33,8 @@ export const scannerStyles = StyleSheet.create({
         justifyContent: 'space-between',
         borderColor: '#605A91',
         borderTopWidth: 2,
+    },
+    notFound: {
+        paddingVertical: 30,
     },
 });

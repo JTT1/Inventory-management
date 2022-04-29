@@ -42,7 +42,7 @@ export default function Home({ navigation }) {
               <View style={styles.secondaryBox}>
                 <View style={styles.flexRow}>
                   <MaterialCommunityIcons style={styles.homeIcon} name="keyboard-return" size={30} color="#FFFFFF" />
-                  <Text style={styles.h2}>PALAUTA</Text>
+                <Text style={styles.h2}>OMAT LAINAT</Text>
                 </View>
                 <Text style={styles.bodyTextWhite}>Palauta lainaamiasi komponentteja.</Text>
 
