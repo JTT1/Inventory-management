@@ -27,7 +27,7 @@ const SearchComponents = (props) => {
                     } else {
                         Alert.alert('Virhe', 'Komponentteja ei pystytty hakemaan.');
                     }
-                });
+                })
         })();
     }, []);
 

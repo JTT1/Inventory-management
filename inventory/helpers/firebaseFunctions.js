@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export async function fetchAllItems() {
     return db.ref(ROOT_REF)
-        .once('value')
+        .get('value')
         .then(querySnapShot => {
             const data = querySnapShot.val() ? querySnapShot.val() : {};
             const items = { ...data };
@@ -13,7 +13,24 @@ export async function fetchAllItems() {
                 return { ...items[key], ID: key }
             });
             return mappedItems;
-    });
+        })
+}
+
+export const updateItemAmount = async (item, { add }) => {
+    await db.ref(ROOT_REF + item.ID)
+        .get()
+        .then((querySnapShot) => querySnapShot.val().Maara)
+        .then((amount) => {
+            if (add) {
+                db.ref(ROOT_REF + item.ID).update({
+                    Maara: amount + item.maara
+                })
+            } else {
+                db.ref(ROOT_REF + item.ID).update({
+                    Maara: amount - item.maara
+                })
+            }
+        })
 }
 
 export async function fetchProjects() {
@@ -28,9 +45,9 @@ export async function fetchProjects() {
     });
 }
 
-export async function updateProjects(data) {
+export async function updateProjects(projectsArray) {
     return await db.ref(PROJECTS_REF).update({
-        ryhmat: data
+        ryhmat: projectsArray
     });
 }
 
@@ -92,8 +109,12 @@ export const updateUserInfo = async (data) => {
     })
 }
 
+export const deleteUser = async (uid) => {
+    // let auth = firebase.auth();
+    // console.log(auth)
+}
+
 export function getCurrentUserLoans(setData, setLoaded, userId) {
-    try {
         return db.ref(LOANS_REF)
             .on('value', querySnapShot => {
             const data = querySnapShot.val() ? querySnapShot.val() : {};
@@ -105,10 +126,7 @@ export function getCurrentUserLoans(setData, setLoaded, userId) {
             const userLoans = loanData.filter((item) => (item.userID === userId));
             setData(userLoans);
             setLoaded(true);
-        });
-    } catch (error) {
-        return error.message;
-    }
+            });
 }
 
 function currentDate() {
@@ -123,6 +141,7 @@ function currentDate() {
 export const createNewLoan = async (data) => {
     try {
         return await db.ref(LOANS_REF).push({
+            komponenttiID: data.komponenttiID,
             komponentti: data.komponentti,
             lainattuMaara: data.lainattuMaara,
             lainausPvm: currentDate(),

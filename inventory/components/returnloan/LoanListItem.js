@@ -13,7 +13,7 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
     const [brokenItemDetails, setBrokenItemDetails] = useState('');
     const animation = useRef(new Animated.Value(60)).current;
     const shouldAnimate = useRef(false);
-    const itemCopy = { ...item, validated: false };
+    const itemCopy = { ...item, validated: false, thisReturnAmount: 0 };
     const inputRef = useRef();
     const returnedBefore = item.palautukset;
 
@@ -34,6 +34,8 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
                 updateItemList[index].palautukset = updateItemList[index].lainattuMaara;
                 updateItemList[index].palautettuKokonaan = true;
                 updateItemList[index].validated = true;
+                updateItemList[index].thisReturnAmount = 1;
+
             }
         } else {
             setValidInput(true);
@@ -59,9 +61,7 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
         setValidInput(true);
 
         // Get the correct object from the updateItemList[index]
-        const index = updateItemList.findIndex(itemCopy => {
-            return itemCopy.ID === item.ID;
-        });
+        const index = updateItemList.findIndex(itemCopy => itemCopy.ID === item.ID);
 
         // If higher amount than currently loaned
         if (Number(text) > currentlyLoanedAmount) {
@@ -72,6 +72,7 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
         } else {
             updateItemList[index].palautukset = returnedBefore + Number(text);
             updateItemList[index].validated = true;
+            updateItemList[index].thisReturnAmount = Number(text);
             if (updateItemList[index].palautukset === updateItemList[index].lainattuMaara) {
                 updateItemList[index].palautettuKokonaan = true;
             }

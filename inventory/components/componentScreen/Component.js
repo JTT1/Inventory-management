@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { Text, View, TextInput, Alert, Platform, SafeAreaView } from 'react-native';
 import { componentStyles as styles } from './componentStyles';
 import ThemeButton from '../testing_field/ThemeButton';
-import { createNewLoan, fetchProjects, updateProjects } from '../../helpers/firebaseFunctions';
+import { createNewLoan, fetchProjects, updateItemAmount, updateProjects } from '../../helpers/firebaseFunctions';
 import { UserContext } from '../context/userContext.js';
 import {Picker} from '@react-native-picker/picker';
 import uuid from "react-uuid";
@@ -22,6 +22,8 @@ export default function Home({ navigation, route }) {
     const userEmail = user.email;
     let device = "";
     const item = route?.params.item;
+    let inputDisabledState = item.Maara == 0 ? true : false;
+
 
     if (Platform.OS == 'android') {
         device = "android"
@@ -55,11 +57,22 @@ export default function Home({ navigation, route }) {
 
 
     const handleNewLoan = async () => {
+        if (item.Maara == 0) {
+            return Alert.alert('', 'Ei lainattavissa.')
+        }
         if (Number(amount) < 1) {
             return Alert.alert('', 'Valitse vähintään yksi kappale lainattavaksi.')
+        } else if (Number(amount) > item.Maara) {
+            return Alert.alert('', 'Tarkista lainattava määrä.')
         }
+
         let projectName = selectedProject;
 
+        let removeFromInventory = {
+            ID: item.ID,
+            maara: Number(amount)
+        }
+        await updateItemAmount(removeFromInventory, { add: false });
 
         if (visible) {
             let tempProjects = [...projects];
@@ -73,6 +86,7 @@ export default function Home({ navigation, route }) {
         } 
 
         const newLoanData = {
+            komponenttiID: item.ID,
             komponentti: item.Nimike,
             lainattuMaara: Number(amount),
             projekti: projectName,
@@ -129,9 +143,16 @@ export default function Home({ navigation, route }) {
                 {device == "android" ? <Picker
                     style= {[styles.projectDropDownAndroid, styles.bodyTextWhite]}
                     selectedValue={selectedProject}
+                            enabled={!inputDisabledState}
                             onValueChange={(itemValue) => setSelectedProject(itemValue)}>
-                        {pickerItems}
-                        <Picker.Item label='Muu' value='Muu' />
+                            {
+                                item.Maara == 0
+                                    ? <Picker.Item label="" value={null} />
+
+                                    :
+                                    pickerItems
+                            }
+                            <Picker.Item label='Muu' value='Muu' />
                         </Picker> 
 
                             // iOS picker
@@ -163,6 +184,7 @@ export default function Home({ navigation, route }) {
                         onChangeText={setAmount}
                         placeholderTextColor={"#B4B4B4"}
                         value={amount}
+                            editable={!inputDisabledState}
                         placeholder="0"
                         keyboardType="numeric"
                     />

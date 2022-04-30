@@ -4,7 +4,7 @@ import LoanListItem from './LoanListItem';
 import ThemeButton from '../testing_field/ThemeButton';
 import { returnLoanStyles as styles } from './ReturnLoanStyles';
 import uuid from 'react-uuid';
-import { getCurrentUserLoans, updateUserLoans, addNewBrokenItem } from '../../helpers/firebaseFunctions';
+import { getCurrentUserLoans, updateUserLoans, addNewBrokenItem, updateItemAmount } from '../../helpers/firebaseFunctions';
 import Modal from 'react-native-modal';
 import HistoryListItem from './HistoryListItem';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -23,6 +23,7 @@ const CurrentLoans = ({ navigation }) => {
 
     useEffect(() => {
         getCurrentUserLoans(setLoanData, setIsLoaded, userId);
+
         return () => {
             setLoanData([]);
             setIsLoaded(false);
@@ -80,6 +81,14 @@ const CurrentLoans = ({ navigation }) => {
     const handleReturnItems = () => {
         if (validateReturn() == true) {
         try {
+            updateItemList.forEach((item) => {
+
+                let backToInventory = {
+                    'ID': item.komponenttiID,
+                    'maara': item.thisReturnAmount
+                }
+                updateItemAmount(backToInventory, { add: true })
+            })
             updateItemList.forEach((item) => updateUserLoans(item));
             brokenItemList.forEach((item) => addNewBrokenItem(item));
         } catch (error) {

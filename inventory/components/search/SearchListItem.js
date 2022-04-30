@@ -26,7 +26,7 @@ const SearchListItem = ({ item, navigation }) => {
                 <View style={[styles.flexRow, styles.flexBetween]}>
                 <View style={styles.flexRow}>
                     {
-                        item.Maara !== ""
+                            item.Maara !== 0
                             ? <MaterialIcons
                                 name="check"
                                 size={30}

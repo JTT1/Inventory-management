@@ -4,7 +4,7 @@ import Modal from 'react-native-modal';
 import { AdminStyles as styles } from './AdminStyles';
 import { Feather } from '@expo/vector-icons';
 import ThemeButton from '../testing_field/ThemeButton';
-import { updateUserInfo } from '../../helpers/firebaseFunctions';
+import { updateUserInfo, deleteUser } from '../../helpers/firebaseFunctions';
 import { Picker } from '@react-native-picker/picker';
 import { FontAwesome5 } from '@expo/vector-icons';
 
@@ -43,9 +43,15 @@ const UserListItem = ({ user, navigation }) => {
         return;
     }
 
-    const deleteUser = (uid) => {
-        // delete user from the database
-        return navigation.navigate('Käyttäjät')
+    const userDelete = async (uid) => {
+        // delete user from the database and firebase auth
+
+        try {
+            await deleteUser(user.ID)
+        } catch (error) {
+            return Alert.alert('Virhe', 'Käyttäjää ei voitu poistaa.')
+        }
+        // return navigation.navigate('Käyttäjät')
     }
 
     const handleUserDelete = () => {
@@ -58,7 +64,7 @@ const UserListItem = ({ user, navigation }) => {
                     onPress: () => null,
                     style: "cancel"
                 },
-                { text: "OK", onPress: () => deleteUser(user.ID) }
+                { text: "OK", onPress: () => userDelete(user.ID) }
             ]);
     }
 
