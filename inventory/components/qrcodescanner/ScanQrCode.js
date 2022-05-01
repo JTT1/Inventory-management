@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, } from 'react-native';
+import { Text, View, BackHandler } from 'react-native';
 import { scannerStyles as styles } from './ScannerStyle';
 import { Camera } from 'expo-camera';
-import ThemeButton from '../testing_field/ThemeButton';
 
 const ScanQrCode = ({ navigation }) => {
     const [hasPermission, setHasPermission] = useState(null);
@@ -17,11 +16,22 @@ const ScanQrCode = ({ navigation }) => {
         })();
     }, []);
 
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', close);
+        return () => {
+            BackHandler.removeEventListener('hardwareBackPress', close);
+        }
+    }, []);
+
+    const close = () => {
+        navigation.goBack();
+        return true
+    }
 
     const handleScannedCode = ({ type, data }) => {
         setScanned(true);
         navigation.pop();
-        navigation.navigate('Laatikko', { scanResult: data });
+        navigation.navigate('Tulos', { scanResult: data });
     };
     if (hasPermission === null) {
         return <Text>Requesting for camera permission</Text>;
@@ -38,11 +48,8 @@ const ScanQrCode = ({ navigation }) => {
                 barCodeScannerSettings={{ barCodeTypes: 'qr' }}
                 style={[styles.camera]}
             />}
-            {scanned && <ThemeButton text={'Skannaa uudestaan'}
-                style={[styles.bodyTextDark]}
-                onPress={() => setScanned(false)} />}
         </View>
     );
 }
 
-export default ScanQrCode
+export default ScanQrCode;

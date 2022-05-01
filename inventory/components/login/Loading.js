@@ -41,7 +41,7 @@ export default function LoadingScreen({ navigation }) {
   }, [])
 
     return (
-      <View style={[styles.container, styles.centerVertical]}>
+      <View style={[styles.container, styles.centerHorizontal]}>
         <ActivityIndicator size={100} color="#1DFFBB" />
         <Text style={[styles.bodyTextWhite, styles.selfCenterHorizontal]}>Kirjaudutaan {status}</Text>
         </View>

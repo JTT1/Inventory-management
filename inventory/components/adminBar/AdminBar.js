@@ -4,26 +4,27 @@ import { AdminBarStyles as styles } from './AdminBarStyles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { UserContext } from "../context/userContext";
 
+
+
+
 export default function AdminBar ({ navigation }) {
     const { user } = useContext(UserContext);
-
 
     if (user.rooli == "admin") {
         return (
             <View>
                 
-                <View style= {[styles.flexRow,styles.adminContainer, styles.centerVertical, styles.boxShadow]}>
+                <View style={[styles.flexRow, styles.adminContainer, styles.centerHorizontal, styles.boxShadow]}>
                     <Text style={[styles.h4, styles.adminText]}>Admin</Text>
-                    
                     <TouchableOpacity>
                     <MaterialCommunityIcons style={[styles.adminIcons, styles.boxShadow]} name="file-search-outline" size={30} color="#FFFFFF" />
                     </TouchableOpacity>
                     
-                    <TouchableOpacity onPress={() => navigation.navigate('Lisää')}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Valitse')}>
                     <MaterialCommunityIcons style={[styles.adminIcons, styles.boxShadow]} name="plus" size={30} color="#FFFFFF" />
                     </TouchableOpacity>
     
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('Käyttäjät')}>
                     <MaterialCommunityIcons style={[styles.adminIcons, styles.boxShadow]} name="account-multiple" size={30} color="#FFFFFF" />
                     </TouchableOpacity>
     

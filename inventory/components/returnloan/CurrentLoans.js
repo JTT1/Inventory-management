@@ -4,7 +4,7 @@ import LoanListItem from './LoanListItem';
 import ThemeButton from '../testing_field/ThemeButton';
 import { returnLoanStyles as styles } from './ReturnLoanStyles';
 import uuid from 'react-uuid';
-import { getCurrentUserLoans, updateUserLoans, addNewBrokenItem } from '../../helpers/firebaseFunctions';
+import { getCurrentUserLoans, updateUserLoans, addNewBrokenItem, updateItemAmount } from '../../helpers/firebaseFunctions';
 import Modal from 'react-native-modal';
 import HistoryListItem from './HistoryListItem';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -13,9 +13,7 @@ import { UserContext } from '../context/userContext';
 const CurrentLoans = ({ navigation }) => {
     const [loaded, setIsLoaded] = useState(false);
     const [loanData, setLoanData] = useState([]);
-    const [returned, setReturned] = useState(false);
     const [modalVisible, toggleModal] = useState(false);
-    const [updateItemListTest, setUpdateItemListTest] = useState([]);
     let updateItemList = [];
     let brokenItemList = [];
 
@@ -25,14 +23,15 @@ const CurrentLoans = ({ navigation }) => {
 
     useEffect(() => {
         getCurrentUserLoans(setLoanData, setIsLoaded, userId);
+
         return () => {
             setLoanData([]);
             setIsLoaded(false);
-            setReturned(false);
         }
     }, [])
 
 
+    // TODO
     const memoizedLoanList = useMemo(() => {
         return loanData.every((item) => item.palautettuKokonaan === true) // If user's every loan is fully returned
             ? <Text style={[styles.bodyTextWhite, { alignSelf: 'center' }]} >Ei aktiivisia lainoja.</Text>
@@ -62,25 +61,38 @@ const CurrentLoans = ({ navigation }) => {
             <HistoryListItem item={item} key={uuid()} />
         );
 
-    // Handle loan return, and redirect to confirmation screen
-    const handleReturnItems = () => {
-        console.log('updated items: ', updateItemList.length, 'broken items: ', brokenItemList.length)
-        setReturned(true);
 
+    const validateReturn = () => {
         if (updateItemList.some((item) => item.validated === false)) {
-            Alert.alert("Virhe", "Tarkista palautuksen tiedot.")
-            return
+            Alert.alert('', 'Tarkista palautuksen tiedot.')
+            return false
         }
 
         if (updateItemList.length === 0 && brokenItemList.length === 0) {
-            return
-        } 
+            Alert.alert('', 'Valitse ainakin yksi komponentti palautettavaksi.')
+            return false
+        }
         else {
+            return true
+        }
+    }
+
+    // Handle loan return, and redirect to confirmation screen
+    const handleReturnItems = () => {
+        if (validateReturn() == true) {
         try {
+            updateItemList.forEach((item) => {
+
+                let backToInventory = {
+                    'ID': item.komponenttiID,
+                    'maara': item.thisReturnAmount
+                }
+                updateItemAmount(backToInventory, { add: true })
+            })
             updateItemList.forEach((item) => updateUserLoans(item));
             brokenItemList.forEach((item) => addNewBrokenItem(item));
         } catch (error) {
-            Alert.alert("Virhe tietokantayhteydessä.", "Tietoja ei pystytty päivittämään.")
+            Alert.alert("Virhe", "Tietoja ei pystytty päivittämään.")
             return
         }
         navigation.navigate('Vahvistus', {
@@ -88,7 +100,6 @@ const CurrentLoans = ({ navigation }) => {
         });
         }
     };
-
 
     return (
         <ScrollView contentContainerStyle={[styles.container]}>
@@ -101,7 +112,7 @@ const CurrentLoans = ({ navigation }) => {
                     : userLoans}
             </ScrollView>
             <TouchableOpacity
-                style={[styles.flexRow, styles.centerVertical, { marginTop: 10, marginBottom: 20 }]}
+                style={[styles.flexRow, styles.centerHorizontal, { marginTop: 10, marginBottom: 20 }]}
                 onPress={() => toggleModal(!modalVisible)}>
 
                 <MaterialIcons name="history" size={30} color="white" />
@@ -114,7 +125,7 @@ const CurrentLoans = ({ navigation }) => {
             }
             {/* Loan history modal */}
             <Modal
-                style={[styles.centerHorizontal]}
+                style={[styles.centerVertical, styles.centerHorizontal]}
                 isVisible={modalVisible}
                 onBackButtonPress={() => toggleModal(false)}
                 animationIn={'fadeIn'}
@@ -122,7 +133,7 @@ const CurrentLoans = ({ navigation }) => {
                 hideModalContentWhileAnimating={true}
                 useNativeDriver={true}
             >
-                <Text style={[styles.bodyTextWhite, styles.h3, { alignSelf: 'center' }]}>
+                <Text style={[styles.bodyTextWhite, styles.h3]}>
                     Lainaushistoria
                 </Text>
                 {loanHistory.length > 0
@@ -132,7 +143,7 @@ const CurrentLoans = ({ navigation }) => {
                     </ScrollView>
                     :
                     <View>
-                        <Text style={[styles.bodyTextWhite, styles.h4, { alignSelf: 'center', marginBottom: 20 }]}>Ei palautettuja lainoja.</Text>
+                        <Text style={[styles.bodyTextWhite, styles.h4, { marginBottom: 20 }]}>Ei palautettuja lainoja.</Text>
                     </View>
                 }
                 <TouchableOpacity style={[styles.flexRow, { marginTop: 10 }]} onPress={() => toggleModal(!modalVisible)}>

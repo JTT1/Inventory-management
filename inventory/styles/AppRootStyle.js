@@ -50,6 +50,11 @@ export const styles = StyleSheet.create({
         fontSize: 16,
         color: 'white',
     },
+    bodyTextCyan: {
+        fontFamily: 'Quicksand500',
+        fontSize: 16,
+        color: '#6EEEFF',
+    },
     bodyTextGreen: {
         fontFamily: 'Quicksand500',
         fontSize: 16,
@@ -93,7 +98,7 @@ export const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'flex-start',
         marginBottom: 1,
-    },
+    }, 
     flexBetween: {
         justifyContent: 'space-between',
     },
@@ -101,10 +106,10 @@ export const styles = StyleSheet.create({
         alignSelf: 'stretch',
     },
     centerHorizontal: {
-        alignItems: 'center'
+        justifyContent: 'center'
     },
     centerVertical: {
-        justifyContent: 'center'
+        alignItems: 'center'
     },
     selfCenterHorizontal: {
         alignSelf: 'center'
@@ -152,7 +157,7 @@ export const styles = StyleSheet.create({
         elevation: 1,
         position: 'absolute',
         paddingLeft: 10,
-        paddingTop: 5,
+        paddingTop: 4,
     },
     testi1: {
         display: "flex",
@@ -191,6 +196,56 @@ export const styles = StyleSheet.create({
     registerBottom: {
         paddingTop: "5%",
         alignItems: "center"
+    }, 
+    registerScroll: {
+        paddingTop: "15%",
+        paddingBottom: "15%",
+        alignItems: "center",
+    },
+    inputView: {
+        padding: 10,
+    },
+    registerBottom: {
+        paddingTop: "5%",
+        alignItems: "center"
+    },
+    largeTextInput: {
+        marginTop: 10,
+        paddingVertical: 15,
+        paddingHorizontal: 20,
+        borderRadius: 20,
+        backgroundColor: "rgba(143,138,191,0.5)",
+        width: 270,
+        height: 200,
+        color: 'white'
+    },
+    addComponentButton: {
+        marginBottom: "10%"
+    },
+    addComponentBox: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        paddingBottom: "10%",
+        paddingTop: "10%",
+        backgroundColor: '#2C2A4C',
+        flex: 1,
+    },
+    addComponentScroll: {
+        flex: 1,
+        backgroundColor: '#2C2A4C',
+        paddingLeft: "14%",
+        paddingRight: "14%",
+    },
+    trayList: {
+        width: "80%",
+        alignItems: "center"
+    },
+    screen: {
+        paddingTop: "40%",
+        flex: 1,
+        backgroundColor: '#2C2A4C',
+        alignContent: "center",
     }
 });
 

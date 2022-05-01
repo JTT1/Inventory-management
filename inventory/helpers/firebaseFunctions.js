@@ -1,19 +1,73 @@
 import { Alert } from 'react-native';
-import { db, ROOT_REF, LOANS_REF, BROKEN_REF, LOCKERS_REF, USERS_REF, firebase } from '../firebase/Config';
+import { db, ROOT_REF, LOANS_REF, BROKEN_REF, LOCKERS_REF, USERS_REF, PROJECTS_REF, firebase } from '../firebase/Config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export function fetchAllItems(setData) {
-    return db.ref(ROOT_REF).on('value', querySnapShot => {
-        const data = querySnapShot.val() ? querySnapShot.val() : {};
-        const items = { ...data };
-        const keys = Object.keys(items);
-        const mappedItems = keys.map((key) => items[key])
-        setData(mappedItems);
+export async function fetchAllItems() {
+    return db.ref(ROOT_REF)
+        .get('value')
+        .then(querySnapShot => {
+            const data = querySnapShot.val() ? querySnapShot.val() : {};
+            const items = { ...data };
+            const keys = Object.keys(items);
+            const mappedItems = keys.map((key) => {
+                return { ...items[key], ID: key }
+            });
+            return mappedItems;
+        })
+}
+
+export const updateItemAmount = async (item, { add }) => {
+    await db.ref(ROOT_REF + item.ID)
+        .get()
+        .then((querySnapShot) => querySnapShot.val().Maara)
+        .then((amount) => {
+            if (add) {
+                db.ref(ROOT_REF + item.ID).update({
+                    Maara: amount + item.maara
+                })
+            } else {
+                db.ref(ROOT_REF + item.ID).update({
+                    Maara: amount - item.maara
+                })
+            }
+        })
+}
+
+export async function fetchProjects() {
+    return db.ref(PROJECTS_REF + 'ryhmat/')
+        .once('value')
+        .then(querySnapShot => {
+            const data = querySnapShot.val() ? querySnapShot.val() : {};
+            const items = { ...data };
+            const keys = Object.keys(items);
+            const mappedItems = keys.map((key) => items[key]);
+            return mappedItems;
+    });
+}
+
+export async function updateProjects(projectsArray) {
+    return await db.ref(PROJECTS_REF).update({
+        ryhmat: projectsArray
+    });
+}
+
+export async function fetchTrays() {
+    return db.ref(LOCKERS_REF)
+        .once('value')
+        .then(querySnapShot => {
+            const data = querySnapShot.val() ? querySnapShot.val() : {};
+            const items = { ...data };
+            const keys = Object.keys(items);
+            const mappedItems = keys.map((key) => {
+                return { ...items[key], ID: key }
+            });
+            return mappedItems;
     });
 }
 
 export async function fetchUser(email) {
-    return await db.ref(USERS_REF).once('value')
+    return db.ref(USERS_REF)
+        .once('value')
         .then((querySnapShot) => {
             const data = querySnapShot.val() ? querySnapShot.val() : {};
             const items = { ...data };
@@ -29,9 +83,40 @@ export async function fetchUser(email) {
         })
 }
 
+export async function fetchAllUsers() {
+    return db.ref(USERS_REF)
+        .once('value')
+        .then((querySnapShot) => {
+            const data = querySnapShot.val() ? querySnapShot.val() : {};
+            const items = { ...data };
+            const keys = Object.keys(items);
+            let users = keys.map((key) => {
+                return { ...items[key], ID: key };
+            })
+            return users;
+        })
+        .catch((error) => {
+            return error;
+        })
+}
+
+export const updateUserInfo = async (data) => {
+    return await db.ref(USERS_REF + data.ID).update({
+        etunimi: data.etunimi,
+        sukunimi: data.sukunimi,
+        rooli: data.rooli,
+        email: data.email,
+    })
+}
+
+export const deleteUser = async (uid) => {
+    // let auth = firebase.auth();
+    // console.log(auth)
+}
+
 export function getCurrentUserLoans(setData, setLoaded, userId) {
-    try {
-        return db.ref(LOANS_REF).on('value', querySnapShot => {
+        return db.ref(LOANS_REF)
+            .on('value', querySnapShot => {
             const data = querySnapShot.val() ? querySnapShot.val() : {};
             const items = { ...data };
             const keys = Object.keys(items);
@@ -41,10 +126,7 @@ export function getCurrentUserLoans(setData, setLoaded, userId) {
             const userLoans = loanData.filter((item) => (item.userID === userId));
             setData(userLoans);
             setLoaded(true);
-        });
-    } catch (error) {
-        return error.message;
-    }
+            });
 }
 
 function currentDate() {
@@ -58,9 +140,10 @@ function currentDate() {
 
 export const createNewLoan = async (data) => {
     try {
-        return db.ref(LOANS_REF).push({
+        return await db.ref(LOANS_REF).push({
+            komponenttiID: data.komponenttiID,
             komponentti: data.komponentti,
-            lainattuMaara: Number(data.lainattuMaara),
+            lainattuMaara: data.lainattuMaara,
             lainausPvm: currentDate(),
             palautettuKokonaan: false,
             palautukset: 0,
@@ -74,14 +157,13 @@ export const createNewLoan = async (data) => {
     }
 }
 
-
-export function updateUserLoans(data) {
-    return db.ref(LOANS_REF + data.ID).update({
+export async function updateUserLoans(data) {
+    return await db.ref(LOANS_REF + data.ID).update({
         lainattuMaara: data.lainattuMaara,
         palautettuKokonaan: data.palautettuKokonaan,
         palautukset: data.palautukset,
         palautusPvm: currentDate(),
-    }, (error) => console.log(error));
+    }, () => true);
 }
 
 export function addNewBrokenItem(data) {
@@ -91,11 +173,13 @@ export function addNewBrokenItem(data) {
         user: data.user,
             ilmoitusPvm: currentDate(),
             havitetty: false,
-    }, (error) => console.log(error));
+    });
 }
 
 // on QR code scan
 export const getTrayItems = async (trayName) => {
+
+    try {
     return await db.ref(LOCKERS_REF) // query all lockers -> find the correct tray
         .once('value')
         .then((querySnapShot) => {
@@ -111,20 +195,20 @@ export const getTrayItems = async (trayName) => {
         .then((tray) => { // after tray is found -> find items matching the content of the tray
             const [trayItems] = tray.map(tray => tray.trayItems);
             const itemKeys = Object.keys(trayItems);
-            let test = itemKeys.map(async (key) => {
+            let items = itemKeys.map(async (key) => {
                 return await db.ref(ROOT_REF + trayItems[key])
-                    .get('value')
+                    .once('value')
                     .then((querySnapShot) => {
                         const data = querySnapShot.val() ? querySnapShot.val() : {};
                         const item = { ...data, ID: trayItems[key] };
-                        return item
+                        return item;
                     })
             })
-            return Promise.all(test);
-        }, (error) => {
-            console.log('The read failed: ' + error.name);
-            return []
-        });
+            return Promise.all(items);
+        })
+    } catch (error) {
+        return [];
+    }
 }
 
 

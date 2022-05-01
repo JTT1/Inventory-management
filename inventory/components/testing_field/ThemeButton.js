@@ -17,7 +17,7 @@ const ThemeButton = React.forwardRef((props, ref) => {
 
     return (
         <TouchableOpacity ref={ref} onPress={onPress}
-            style={[styles.button, styles.boxShadow, disabled ? styles.buttonDisabled : "", { backgroundColor: color, width: width }, props.style]}
+            style={[styles.button, styles.boxShadow, { backgroundColor: color, width: width }, props.style]}
             >
                 <Text style={[styles.upperCase, styles.h3]}>
                     {text}

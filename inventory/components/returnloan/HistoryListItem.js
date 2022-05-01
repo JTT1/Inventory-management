@@ -6,9 +6,12 @@ const HistoryListItem = ({ item }) => {
     return (
         <View style={[styles.historyListItem]}>
             <View style={[styles.stretch]}>
+                <View style={[styles.flexRow, styles.flexBetween]}>
                 <Text style={[styles.bodyTextWhite, styles.h4]}>
                     {item.komponentti}
                 </Text>
+                    <Text style={[styles.bodyTextWhite]}>{item.lainattuMaara} kpl</Text>
+                </View>
                 <Text style={[styles.bodyTextWhite]}>
                     Projekti: {item.projekti}
                 </Text>

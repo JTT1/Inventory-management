@@ -1,117 +1,198 @@
-import React, { useContext } from "react";
-import { Text, View, TextInput, Alert } from 'react-native';
-import { useState } from 'react';
+import React, { useContext, useState, useEffect } from "react";
+import { Text, View, TextInput, Alert, Platform, SafeAreaView } from 'react-native';
 import { componentStyles as styles } from './componentStyles';
 import ThemeButton from '../testing_field/ThemeButton';
-import { createNewLoan } from '../../helpers/firebaseFunctions';
+import { createNewLoan, fetchProjects, updateItemAmount, updateProjects } from '../../helpers/firebaseFunctions';
 import { UserContext } from '../context/userContext.js';
 import {Picker} from '@react-native-picker/picker';
+import uuid from "react-uuid";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { SimpleLineIcons } from '@expo/vector-icons';
+
+
 
 export default function Home({ navigation, route }) {
-    const [text, setText] = useState(null);
-    const [amount, setAmount] = useState(null);
-    const { user } = useContext(UserContext);
-    const userId = user.ID
-    const userEmail = user.email;
-
+    const [amount, setAmount] = useState('');
+    const [projects, setProjects] = useState([]);
+    const [visible, setVisible] = useState(false);
+    const [other, setOther] = useState('');
     const [selectedProject, setSelectedProject] = useState();
-
+    const { user } = useContext(UserContext);
+    const userId = user.ID;
+    const userEmail = user.email;
+    let device = "";
     const item = route?.params.item;
-    // const item = {
-    //     ID: 66,
-    //     Lisatietoa: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ornare eu leo sodales vulputate. Donec interdum semper ex, sit amet euismod arcu ultricies nec. Cras auctor, enim id volutpat mollis, nibh felis mollis felis, sit amet tincidunt purus enim at mauris.",
-    //     Maara: 25,
-    //     Nimike: "Virtausmittari",
-    //     Sijainti: "",
-    //     Tarjotin: "",
-    // }
+    let inputDisabledState = item.Maara == 0 ? true : false;
 
-    const handleNewLoan = () => {
+
+    if (Platform.OS == 'android') {
+        device = "android"
+    } else {
+        device = "ios"
+    }
+
+
+    useEffect(() => {
+        (async () => {
+            await fetchProjects()
+                .then((res) => {
+                    if (res.length > 0) {
+                        setProjects(res);
+                        setSelectedProject(res[0]);
+                    } else {
+                        Alert.alert('Virhe', 'Projekteja ei pystytty hakemaan!');
+                    }
+                });
+        })();
+    }, []);
+
+
+    useEffect(() => {
+        if (selectedProject == 'Muu') {
+            setVisible(true);
+        } else {
+            setVisible(false);
+        }
+    }, [selectedProject])
+
+
+    const handleNewLoan = async () => {
+        if (item.Maara == 0) {
+            return Alert.alert('', 'Ei lainattavissa.')
+        }
+        if (Number(amount) < 1) {
+            return Alert.alert('', 'Valitse vähintään yksi kappale lainattavaksi.')
+        } else if (Number(amount) > item.Maara) {
+            return Alert.alert('', 'Tarkista lainattava määrä.')
+        }
+
+        let projectName = selectedProject;
+
+        let removeFromInventory = {
+            ID: item.ID,
+            maara: Number(amount)
+        }
+        await updateItemAmount(removeFromInventory, { add: false });
+
+        if (visible) {
+            let tempProjects = [...projects];
+            tempProjects.push(other);
+            projectName = other;
+            try {
+                await updateProjects(tempProjects);
+            } catch (error) {
+                return Alert.alert('Virhe', error.message);
+            }
+        } 
+
         const newLoanData = {
+            komponenttiID: item.ID,
             komponentti: item.Nimike,
-            lainattuMaara: amount,
-            projekti: text,
+            lainattuMaara: Number(amount),
+            projekti: projectName,
             userID: userId,
             userEmail: userEmail
-        }
-        createNewLoan(newLoanData).then((res) => {
+        };
+        
+        await createNewLoan(newLoanData)
+            .then((res) => {
             if (res.length > 0) {
                 return Alert.alert('Lainaus epäonnistui', res)
             } else {
-                setText('');
                 setAmount('');
                 navigation.navigate('Vahvistus', {
                     returnLoan: false
                 });
             }
-        }
-        );
+        });
     };
 
+    const pickerItems = projects.map((project) => {
+        return <Picker.Item key={uuid()} label={project} value={project} />
+    });
 
     return (
-        <View style={styles.center}>
+        <SafeAreaView style={[styles.center]}>
+            <KeyboardAwareScrollView>
             <View>
-                <View style={[styles.background, styles.itemInfo]}>
-                    <Text style={[styles.h1, styles.marginFix]}>{item.Nimike}</Text>
-                    {item.Lisatietoa.length > 0 &&
-                        <View>
-                            <Text style={[styles.h3, styles.marginFix]}>Lisätiedot</Text>
+                <View style={[styles.background, styles.itemInfo, styles.boxShadow]}>
+                        <View style={[styles.flexRow, styles.flexBetween]}>
+                            <Text style={[styles.h1, styles.marginFix, { alignSelf: 'flex-start', marginBottom: 20, color: styles.bodyTextCyan.color }]}>
+                                {item.Nimike}
+                            </Text>
+                        </View>
+                        {
+                            item.Lisatietoa.length > 0 &&
+                            <View>
+                                <Text style={[styles.h3, styles.marginFix]}>Lisätiedot</Text>
                             <Text style={[styles.bodyTextWhite, styles.marginFix]}>{item.Lisatietoa}</Text>
-                    </View>
-                    }
+                            </View>
+                        }
+                        <View style={[styles.flexRow, styles.componentLocation, styles.flexBetween]}>
+                            <View style={[styles.flexRow]}>
+                                <SimpleLineIcons name="drawer" size={30} color="white" style={{ marginRight: 5 }} />
+                                <Text style={[styles.h4, { marginRight: 15 }]}>
+                                    {item.Tarjotin}
+                                </Text>
+                            </View>
+                            <Text style={[styles.h4]}>{item.Sijainti}</Text>
+                        </View>
                 </View>
                 <Text style={[styles.h2, styles.marginFix]}>Projekti, jolle lainataan:</Text>
                 <View style={[styles.projectView]}>
-                <Picker
-                    style= {[styles.projectDropDown, styles.bodyTextWhite]}
+                {device == "android" ? <Picker
+                    style= {[styles.projectDropDownAndroid, styles.bodyTextWhite]}
                     selectedValue={selectedProject}
-                    onValueChange={(itemValue, itemIndex) =>
-                        setSelectedProject(itemValue)
-                    }>
-                    
-                    <Picker.Item label="TUKE 1" value="TUKE 1" />
-                    <Picker.Item label="TUKE 2" value="TUKE 2" />
-                    <Picker.Item label="TUKE 3" value="TUKE 3" />
-                    <Picker.Item label="TUKE 4" value="TUKE 4" />
-                    <Picker.Item label="TUKE 5" value="TUKE 5" />
-                    <Picker.Item label="TUKE 6" value="TUKE 6" />
-                    <Picker.Item label="TUKE 7" value="TUKE 7" />
-                    <Picker.Item label="TUKE 8" value="TUKE 8" />
-                    <Picker.Item label="TUKE 9" value="TUKE 9" />
-                    <Picker.Item label="TUKE 10" value="TUKE 10" />
-                    <Picker.Item label="PROHA 1" value="PROHA 1" />
-                    <Picker.Item label="PROHA 2" value="PROHA 2" />
-                    <Picker.Item label="PROHA 3" value="PROHA 3" />
-                    <Picker.Item label="PROHA 4" value="PROHA 4" />
-                    <Picker.Item label="PROHA 5" value="PROHA 5" />
-                    <Picker.Item label="MUU" value="MUU" />
+                            enabled={!inputDisabledState}
+                            onValueChange={(itemValue) => setSelectedProject(itemValue)}>
+                            {
+                                item.Maara == 0
+                                    ? <Picker.Item label="" value={null} />
 
-                </Picker>   
-                </View>
-                {/* <TextInput
-                    style={styles.input}
-                    onChangeText={setText}
-                    placeholderTextColor={"#B4B4B4"}
-                    value={text}
-                    placeholder="Projektin nimi"
-                /> */}
+                                    :
+                                    pickerItems
+                            }
+                            <Picker.Item label='Muu' value='Muu' />
+                        </Picker> 
+
+                            // iOS picker
+                            : <Picker
+                                style={[styles.projectDropDownIos, styles.bodyTextWhite]}
+                                selectedValue={selectedProject}
+                                onValueChange={(itemValue) => setSelectedProject(itemValue)}>
+                                {pickerItems}
+                                <Picker.Item label='Muu' value='Muu' />
+                            </Picker>}
+
+                    <View style={styles.addComponent}>
+                        {/*Here we will return the view when state is true 
+                        and will return false if state is false*/}
+                            {visible &&
+                        <TextInput
+                            style={styles.TextInput}
+                            placeholderTextColor="white"
+                            placeholder="Projektin nimi"
+                            onChangeText={setOther}
+                        />
+                            }
+                        </View>
+                    </View>
                 <Text style={[styles.h2, styles.marginFix]}>Lainattava määrä:</Text>
-                <View style={[styles.flexRow, styles.centerHorizontal]}>
+                    <View style={[styles.flexRow, styles.centerVertical]}>
                     <TextInput
                         style={[styles.input2]}
                         onChangeText={setAmount}
                         placeholderTextColor={"#B4B4B4"}
                         value={amount}
-                        placeholder="1"
+                            editable={!inputDisabledState}
+                        placeholder="0"
                         keyboardType="numeric"
                     />
                     <Text style={[styles.bodyTextWhite, styles.textFix]}>Lainattavissa {item.Maara} kpl</Text>
                 </View>
-                <View style={styles.center}>
-                    <ThemeButton color="#F4247C" text="Lainaa" onPress={handleNewLoan} />
-                </View>
+                    <ThemeButton color="#F4247C" text="Lainaa" onPress={handleNewLoan} style={{ marginBottom: 20 }} />
             </View>
-        </View>
+            </KeyboardAwareScrollView>
+        </SafeAreaView>
     );
 }

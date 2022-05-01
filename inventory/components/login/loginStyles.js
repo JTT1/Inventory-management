@@ -10,7 +10,7 @@ export const loginStyles = StyleSheet.create({
         borderColor: "#8F8ABF",
         borderRadius: 20,
         height: "80%",
-        width: "90%"
+        width: "90%",
     },
     marginFix: {
         marginBottom: 20

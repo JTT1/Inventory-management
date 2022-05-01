@@ -11,14 +11,13 @@ backgroundColor: {
   mainBox: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 30,
-    marginLeft: 35,
+    marginLeft: "10%",
     flexDirection: "column",
   },
 
   flexRow: {
     flexDirection:"row",
-    marginTop: 20,
+    marginTop: "5%",
   },
 
   secondaryBox: {

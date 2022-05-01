@@ -9,13 +9,12 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
     const [checked, setChecked] = useState(false);
     const [validInput, setValidInput] = useState(true);
     const [modalOpen, toggleModal] = useState(false);
-    const [amount, setAmount] = useState('');
+    const currentlyLoanedAmount = item.lainattuMaara - item.palautukset;
     const [brokenItemDetails, setBrokenItemDetails] = useState('');
     const animation = useRef(new Animated.Value(60)).current;
     const shouldAnimate = useRef(false);
-    const itemCopy = { ...item, validated: false };
+    const itemCopy = { ...item, validated: false, thisReturnAmount: 0 };
     const inputRef = useRef();
-    const currentlyLoanedAmount = item.lainattuMaara - item.palautukset;
     const returnedBefore = item.palautukset;
 
     // Check box handler
@@ -35,6 +34,8 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
                 updateItemList[index].palautukset = updateItemList[index].lainattuMaara;
                 updateItemList[index].palautettuKokonaan = true;
                 updateItemList[index].validated = true;
+                updateItemList[index].thisReturnAmount = 1;
+
             }
         } else {
             setValidInput(true);
@@ -60,9 +61,7 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
         setValidInput(true);
 
         // Get the correct object from the updateItemList[index]
-        const index = updateItemList.findIndex(itemCopy => {
-            return itemCopy.ID === item.ID;
-        });
+        const index = updateItemList.findIndex(itemCopy => itemCopy.ID === item.ID);
 
         // If higher amount than currently loaned
         if (Number(text) > currentlyLoanedAmount) {
@@ -73,6 +72,7 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
         } else {
             updateItemList[index].palautukset = returnedBefore + Number(text);
             updateItemList[index].validated = true;
+            updateItemList[index].thisReturnAmount = Number(text);
             if (updateItemList[index].palautukset === updateItemList[index].lainattuMaara) {
                 updateItemList[index].palautettuKokonaan = true;
             }
@@ -161,6 +161,8 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
                 name="error-outline" size={40} color="#C4C4C4"
             />
 
+
+
     return (
         <View style={styles.loanListItem}>
             <View style={[styles.flexRow, styles.stretch]}>
@@ -223,7 +225,7 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
                         </Pressable>
                         {checked && 
                         <View style={[styles.innerContainer]}>
-                                <View style={[styles.detailsColumn, styles.centerVertical]}>
+                                <View style={[styles.detailsColumn, styles.centerHorizontal]}>
                                 <Text style={[styles.bodyTextWhite]}>
                                     Määrä
                                 </Text>
@@ -255,7 +257,7 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
                 </Animated.View>
             </View>
             <Modal
-                style={[styles.centerHorizontal]}
+                style={[styles.centerVertical]}
                 isVisible={modalOpen}
                 onBackButtonPress={handleCancel}
                 onModalShow={() => inputRef.current.focus()}
@@ -288,8 +290,7 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
                             <Text style={[styles.bodyTextDark, styles.h4, styles.textCenter]}>Tallenna</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={handleCancel} style={[styles.flexRow]}>
-                        {/* <MaterialIcons name="close" size={30} color="white" /> */}
+                        <TouchableOpacity onPress={handleCancel} style={[styles.flexRow]}>
                         <View style={[styles.cancelButton]}>
                         <Text style={[styles.bodyTextWhite, styles.h4, styles.textCenter]}>Peruuta</Text>
                         </View>

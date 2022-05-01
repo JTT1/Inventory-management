@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, Touchable, Alert, ScrollView, ImageBackground } from "react-native";
+import { Text, View, TextInput, TouchableOpacity, Alert, ScrollView, ImageBackground } from "react-native";
 import { loginStyles as styles } from './loginStyles';
-import { db, ROOT_REF, USERS_REF, firebase } from '../../firebase/Config';
-import { MaterialIcons } from '@expo/vector-icons';
+import { USERS_REF, firebase } from '../../firebase/Config';
 import ThemeButton from "../testing_field/ThemeButton";
-import { getAuth, sendSignInLinkToEmail } from "firebase/auth";
 
 
 export default function Register({ navigation }) {
-    const [etunimi, setEtunimi] = useState("");
-    const [sukunimi, setSukunimi] = useState("");
-    const [email, setEmail] = useState("");
-    const [password1, setPassword1] = useState("");
-    const [password2, setPassword2] = useState("");
+
+  const [etunimi, setEtunimi] = useState('');
+  const [sukunimi, setSukunimi] = useState('');
+  const [email, setEmail] = useState('');
+  const [password1, setPassword1] = useState('');
+  const [password2, setPassword2] = useState('');
+
 
     const routeToLogin = () => {
       navigation.reset({
@@ -21,29 +21,11 @@ export default function Register({ navigation }) {
       });
     }
 
-
-    const actionCodeSettings = {
-      url: 'https://www.example.com/finishSignUp?cartId=1234',
-      handleCodeInApp: true,
-      iOS: {
-        bundleId: 'com.example.ios'
-      },
-      android: {
-        packageName: 'com.example.android',
-        installApp: true,
-        minimumVersion: '12'
-      },
-      dynamicLinkDomain: 'example.page.link'
-    };
-
-
-
     const createAccount = async () => {
       try {
         const userCred = await firebase.auth().createUserWithEmailAndPassword(email, password1);
         await userCred.user.sendEmailVerification();
         const thisUser = firebase.auth().currentUser;
-
 
         firebase.database().ref(USERS_REF + thisUser.uid).set({
           email: thisUser.email,
@@ -59,10 +41,8 @@ export default function Register({ navigation }) {
         }
       
     }
-    
 
-    const checkInput = () => {
-
+  const checkInput = () => {
       let passwordLength = password1.length;
 
       if (!etunimi.trim()) {
@@ -122,7 +102,6 @@ export default function Register({ navigation }) {
       setPassword2("");
     }
 
-
     function addUser() {
       if (password1 !== password2) {
         Alert.alert("Salasanasi ei täsmää!")
@@ -132,10 +111,6 @@ export default function Register({ navigation }) {
           } 
         }
       }
-
-
-
-
 
     return (
       <View style={styles.registerCenter}>
@@ -152,6 +127,7 @@ export default function Register({ navigation }) {
           placeholder="Etunimi"
           placeholderTextColor="#B4B4B4"
           onChangeText={setEtunimi}
+                  value={etunimi}
         />
       </View>
  
@@ -162,6 +138,7 @@ export default function Register({ navigation }) {
           placeholder="Sukunimi"
           placeholderTextColor="#B4B4B4"
           onChangeText={setSukunimi}
+                  value={sukunimi}
         />
       </View>
 
@@ -184,6 +161,7 @@ export default function Register({ navigation }) {
           placeholder="Sähköposti"
           placeholderTextColor="#B4B4B4"
           onChangeText={setEmail}
+                  value={email}
         />
       </View>
 
@@ -195,6 +173,7 @@ export default function Register({ navigation }) {
           placeholderTextColor="#B4B4B4"
           secureTextEntry={true}
           onChangeText={setPassword1}
+                  value={password1}
         />
       </View>
 
@@ -206,6 +185,7 @@ export default function Register({ navigation }) {
           placeholderTextColor="#B4B4B4"
           secureTextEntry={true}
           onChangeText={setPassword2}
+                  value={password2}
         />
       </View>
 

@@ -5,12 +5,12 @@ export const componentStyles = StyleSheet.create({
     ...styles,
 
 center: {
-    backgroundColor: '#2C2A4C',
-    height: "100%"
-  },
-  background: {
-      backgroundColor: 'rgba(57, 54, 99, 1)',
-    marginTop: 45,
+        backgroundColor: '#2C2A4C',
+        height: "100%"
+    },
+    background: {
+        backgroundColor: 'rgba(57, 54, 99, 1)',
+        marginTop: 20,
     marginBottom: 30,
     borderTopWidth: 2,
     borderBottomWidth: 2,
@@ -19,10 +19,17 @@ center: {
     borderRightColor: "#5E5A86",
     borderBottomColor: "#5E5A86",
     borderTopColor: "#5E5A86",
-},
-
+    },
 flexRow: {
     flexDirection: "row",
+    },
+
+    componentLocation: {
+        borderTopWidth: 2,
+        borderTopColor: "#5E5A86",
+        paddingVertical: 10,
+        marginHorizontal: 20,
+        marginTop: 20,
 },
 
     itemInfo: {
@@ -38,7 +45,7 @@ input: {
     borderRadius: 12,
     backgroundColor: 'rgba(180, 180, 180, 0.1)',
     padding: 10,
-    color: 'white'
+    color: 'white',
 },
 
 input2: {
@@ -73,9 +80,16 @@ projectView: {
     overflow: "hidden",
 
 },
-projectDropDown: {
+projectDropDownAndroid: {
     width: 280,
     height: 55,
+    borderRadius: 30,
+    backgroundColor: 'rgba(180, 180, 180, 0.1)',
+    padding: 10,
+},
+projectDropDownIos: {
+    width: 280,
+    height: 200,
     borderRadius: 30,
     backgroundColor: 'rgba(180, 180, 180, 0.1)',
     padding: 10,

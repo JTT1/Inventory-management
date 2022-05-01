@@ -7,10 +7,6 @@ import { logout } from '../../helpers/firebaseFunctions';
 
 const TopBar = (props) => {
     const { user } = useContext(UserContext);
-
-    // const key = Object.keys(user);
-    // console.log('user key: ' + key)
-    // const userDetails = user[key];
     const currentScreen = props.route.name;
 
     useEffect(() => {
@@ -19,7 +15,6 @@ const TopBar = (props) => {
             BackHandler.removeEventListener('hardwareBackPress', close);
         }
     }, []);
-
 
     const close = () => {
         props.route.name != 'Koti' && props.navigation.goBack(null);
@@ -36,10 +31,8 @@ const TopBar = (props) => {
             })
     }
 
-
     return (
         <View style={styles.topBarContainer}>
-            {/* Tähän routing edelliseen komponenttiin */}
             <View style={[styles.flexRow, styles.centerVertical]}>
                 {currentScreen == 'Koti'
                     ? <MaterialCommunityIcons style={styles.iconShadow} name="home" size={45} color="#5E5A86" />
@@ -52,10 +45,6 @@ const TopBar = (props) => {
                 </Text>
             </View>
             <View style={styles.avatar}>
-
-                <Text style={styles.bodyTextDark}>
-                    {user.etunimi}
-                </Text>
                 {/* Tästä toggle drawer, josta näkee käyttäjäprofiilin */}
                 <TouchableOpacity onPress={handleDrawerOpen} style={styles.imgContainer}>
 
