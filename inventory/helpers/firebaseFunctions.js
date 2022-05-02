@@ -100,6 +100,23 @@ export async function fetchAllUsers() {
         })
 }
 
+export async function fetchAllLoans() {
+    return db.ref(LOANS_REF)
+        .once('value')
+        .then((querySnapShot) => {
+            const data = querySnapShot.val() ? querySnapShot.val() : {};
+            const items = { ...data };
+            const keys = Object.keys(items);
+            let loans = keys.map((key) => {
+                return { ...items[key], ID: key };
+            })
+            return loans;
+        })
+        .catch((error) => {
+            return error;
+        })
+}
+
 export const updateUserInfo = async (data) => {
     return await db.ref(USERS_REF + data.ID).update({
         etunimi: data.etunimi,
