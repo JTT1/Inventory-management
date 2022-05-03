@@ -13,6 +13,7 @@ import UserManager from '../components/adminTools/UserManager';
 import AddTrays from '../components/adminTools/AddTrays';
 import AddScreen from '../components/adminTools/addScreen';
 import Profile from '../components/profile/Profile';
+import LoanHistory from '../components/adminTools/LoanHistory';
 
 
 // Routes and components to use in stack navigator
@@ -88,4 +89,8 @@ export const routesList = [
         component: Profile,
         header: false,
     },
+    {
+        name: 'Lainaushistoria',
+        component: LoanHistory,
+    }
 ]
