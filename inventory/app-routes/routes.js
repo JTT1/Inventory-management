@@ -12,10 +12,12 @@ import AddComponents from '../components/adminTools/addComponents';
 import UserManager from '../components/adminTools/UserManager';
 import AddTrays from '../components/adminTools/AddTrays';
 import AddScreen from '../components/adminTools/addScreen';
+import Profile from '../components/profile/Profile';
 
 
 // Routes and components to use in stack navigator
 export const routesList = [
+    
     {
         name: 'Loading',
         component: LoadingScreen,
@@ -81,5 +83,9 @@ export const routesList = [
         component: AddTrays,
         header: true,
     },
-
+    {
+        name: 'Profiili',
+        component: Profile,
+        header: false,
+    },
 ]

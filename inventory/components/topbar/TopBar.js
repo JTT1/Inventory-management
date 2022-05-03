@@ -22,13 +22,13 @@ const TopBar = (props) => {
     }
 
     const handleDrawerOpen = async () => {
-        return await logout()
-            .then(() => {
+        //return await logout()
+          //  .then(() => {
                 props.navigation.reset({
                     index: 0,
-                    routes: [{ name: 'Loading' }]
+                    routes: [{ name: 'Profiili' }]
                 });
-            })
+           // })
     }
 
     return (
@@ -45,6 +45,7 @@ const TopBar = (props) => {
                 </Text>
             </View>
             <View style={styles.avatar}>
+                
                 {/* Tästä toggle drawer, josta näkee käyttäjäprofiilin */}
                 <TouchableOpacity onPress={handleDrawerOpen} style={styles.imgContainer}>
 

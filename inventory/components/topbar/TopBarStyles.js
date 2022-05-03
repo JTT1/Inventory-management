@@ -45,5 +45,6 @@ export const topBarStyles = StyleSheet.create({
             { height: 4, width: 0 },
         textShadowColor: '#5E5A86',
         textShadowRadius: 15,
-    }
+    },
+    
 });
