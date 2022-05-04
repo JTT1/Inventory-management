@@ -21,7 +21,7 @@ const TopBar = (props) => {
         return true;
     }
 
-    const handleDrawerOpen = async () => {
+    const handleProfile = async () => {
         //return await logout()
           //  .then(() => {
                 props.navigation.reset({
@@ -47,7 +47,7 @@ const TopBar = (props) => {
             <View style={styles.avatar}>
                 
                 {/* Tästä toggle drawer, josta näkee käyttäjäprofiilin */}
-                <TouchableOpacity onPress={handleDrawerOpen} style={styles.imgContainer}>
+                <TouchableOpacity onPress={handleProfile} style={styles.imgContainer}>
 
                     <Image source={{ uri: "https://picsum.photos/200" }} style={styles.userImg} />
                 </TouchableOpacity>

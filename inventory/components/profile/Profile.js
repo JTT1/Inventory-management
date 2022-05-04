@@ -2,10 +2,11 @@ import { View, Text, ScrollView, Image, ImageBackground, TouchableOpacity, BackH
 import React, { useEffect, useContext, useState } from 'react'
 import { profileStyles as styles } from './profileStyles'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import ThemeButton from '../testing_field/ThemeButton';
 import { UserContext } from '../context/userContext';
+import { logout } from '../../helpers/firebaseFunctions';
 import MyInfo from './MyInfo';
 import MyLoans from './MyLoans';
+
 
 
 
@@ -24,6 +25,16 @@ const { user } = useContext(UserContext);
     const close = () => {
         props.navigation.navigate("Koti");
         return true;
+    }
+
+    const handleLogOut = async () => {
+        return await logout()
+            .then(() => {
+                props.navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'Loading' }]
+                });
+            })
     }
 
 
@@ -48,21 +59,19 @@ const { user } = useContext(UserContext);
                     <Image source={{ uri: "https://picsum.photos/200" }} style={[styles.userImg, styles.imgContainer]} />
                     <Text style={[styles.h4, styles.marginFix]}>{user.etunimi} {user.sukunimi}</Text>
                     
+                    <TouchableOpacity onPress={handleLogOut}>
+                        <Text style={[styles.bodyTextYellow, {marginBottom: 15}]}>Kirjaudu Ulos</Text>
+                    </TouchableOpacity>
                     
-                    <View style={[styles.flexRow, styles.profileButtons]}>
-                        <TouchableOpacity style={[styles.myInfo]}>
-                        <Text style={[styles.h3, styles.profileButtons]}>Omat tiedot</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[styles.myLoans]}>
-                        <Text style={[styles.h3, styles.profileButtons]}>Omat Lainat</Text>
-                        </TouchableOpacity>
-                    </View> 
+                    
 
                 </View>
                 </ImageBackground>
-                 <MyInfo/> 
-                {/* <MyLoans/> */}
-                
+                <ScrollView style={{width:"100%"}}>
+                    <Text style={[styles.h2, {alignSelf:"center", marginTop: 10}]}>Omat tiedot</Text>
+                 <MyInfo/>
+                 <MyLoans/>
+                </ScrollView>
             </View>
         </View>
     )

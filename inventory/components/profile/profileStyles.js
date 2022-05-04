@@ -16,6 +16,10 @@ export const profileStyles = StyleSheet.create({
         height: 150,
         marginBottom: 15,
     },
+    profileBox: {
+        borderBottomWidth: 1,
+        borderColor: '#1DFFBB'
+    },
     marginFix: {
         marginBottom: 15
     },
@@ -70,7 +74,7 @@ export const profileStyles = StyleSheet.create({
     },
     mainInfoBox: {
         width: "100%",
-        marginTop: "15%"
+        marginTop: "5%"
     },
         loanListItem: {
         justifyContent: 'center',
