@@ -51,6 +51,18 @@ export async function updateProjects(projectsArray) {
     });
 }
 
+export function fetchTrays2(setTrays) {
+    return db.ref(LOCKERS_REF)
+        .on('value', querySnapShot => {
+            const data = querySnapShot.val() ? querySnapShot.val() : {};
+            const items = { ...data };
+            const keys = Object.keys(items);
+            const mappedItems = keys.map((key) => {
+                return { ...items[key], ID: key }
+            })
+            setTrays(mappedItems)
+        });
+}
 export async function fetchTrays() {
     return db.ref(LOCKERS_REF)
         .once('value')
@@ -62,7 +74,7 @@ export async function fetchTrays() {
                 return { ...items[key], ID: key }
             });
             return mappedItems;
-    });
+        });
 }
 
 export async function fetchUser(email) {

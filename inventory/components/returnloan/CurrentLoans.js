@@ -1,29 +1,24 @@
-import React, { useState, useEffect, useContext, useMemo } from 'react';
-import { View, ScrollView, Text, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { ScrollView, Text, ActivityIndicator, Alert } from 'react-native';
 import LoanListItem from './LoanListItem';
 import ThemeButton from '../testing_field/ThemeButton';
 import { returnLoanStyles as styles } from './ReturnLoanStyles';
 import uuid from 'react-uuid';
-import { getCurrentUserLoans, updateUserLoans, addNewBrokenItem, updateItemAmount } from '../../helpers/firebaseFunctions';
-import Modal from 'react-native-modal';
-import HistoryListItem from './HistoryListItem';
-import { MaterialIcons } from '@expo/vector-icons';
+import { getCurrentUserLoans, updateUserLoans, addNewBrokenItem, updateItemAmount, fetchTrays2 } from '../../helpers/firebaseFunctions';
 import { UserContext } from '../context/userContext';
 
 const CurrentLoans = ({ navigation }) => {
     const [loaded, setIsLoaded] = useState(false);
     const [loanData, setLoanData] = useState([]);
-    const [modalVisible, toggleModal] = useState(false);
+    const [trays, setTrays] = useState([]);
     let updateItemList = [];
     let brokenItemList = [];
-
-    // Get the real user id from login information
     const { user } = useContext(UserContext);
     const userId = user.ID;
 
     useEffect(() => {
         getCurrentUserLoans(setLoanData, setIsLoaded, userId);
-
+        fetchTrays2(setTrays)
         return () => {
             setLoanData([]);
             setIsLoaded(false);
@@ -31,36 +26,15 @@ const CurrentLoans = ({ navigation }) => {
     }, [])
 
 
-    // TODO
-    const memoizedLoanList = useMemo(() => {
-        return loanData.every((item) => item.palautettuKokonaan === true) // If user's every loan is fully returned
-            ? <Text style={[styles.bodyTextWhite, { alignSelf: 'center' }]} >Ei aktiivisia lainoja.</Text>
-            : loanData.map((item) => { // Active loans
-                if (!item.palautettuKokonaan) {
-                    return <LoanListItem updateItemList={updateItemList} brokenItemList={brokenItemList} item={item} key={uuid()}
-                    />
-                }
-            });
-    }, [loanData]);
-
     // Render user loans
     const userLoans =
         loanData.every((item) => item.palautettuKokonaan === true) // If user's every loan is fully returned
-            ? <Text style={[styles.bodyTextWhite, { alignSelf: 'center' }]} >Ei aktiivisia lainoja.</Text>
+            ? <Text style={[styles.bodyTextWhite, styles.selfCenterHorizontal]} >Ei aktiivisia lainoja.</Text>
             : loanData.map((item) => { // Active loans
                 if (!item.palautettuKokonaan) {
-                    return <LoanListItem updateItemList={updateItemList} brokenItemList={brokenItemList} item={item} key={uuid()}
-                    />
+                    return <LoanListItem updateItemList={updateItemList} brokenItemList={brokenItemList} item={item} key={uuid()} trays={trays} />
                 }
             });
-
-    // User's loan history
-    const loanHistory = loanData
-        .filter(loan => loan.palautettuKokonaan)
-        .map((item) =>
-            <HistoryListItem item={item} key={uuid()} />
-        );
-
 
     const validateReturn = () => {
         if (updateItemList.some((item) => item.validated === false)) {
@@ -82,7 +56,6 @@ const CurrentLoans = ({ navigation }) => {
         if (validateReturn() == true) {
         try {
             updateItemList.forEach((item) => {
-
                 let backToInventory = {
                     'ID': item.komponenttiID,
                     'maara': item.thisReturnAmount
@@ -111,50 +84,7 @@ const CurrentLoans = ({ navigation }) => {
                     <ActivityIndicator size="large" color="#1DFFBB" />
                     : userLoans}
             </ScrollView>
-            <TouchableOpacity
-                style={[styles.flexRow, styles.centerHorizontal, { marginTop: 10, marginBottom: 20 }]}
-                onPress={() => toggleModal(!modalVisible)}>
-
-                <MaterialIcons name="history" size={30} color="white" />
-                <Text style={[styles.bodyTextWhite, { marginLeft: 5 }]}>
-                    Palautetut lainat
-                </Text>
-            </TouchableOpacity>
-            {userLoans.length > 0 &&
-                <ThemeButton style={{ marginBottom: 20, }} color="#F4247C" text="Palauta valitut" onPress={handleReturnItems} />
-            }
-            {/* Loan history modal */}
-            <Modal
-                style={[styles.centerVertical, styles.centerHorizontal]}
-                isVisible={modalVisible}
-                onBackButtonPress={() => toggleModal(false)}
-                animationIn={'fadeIn'}
-                animationOut={'fadeOut'}
-                hideModalContentWhileAnimating={true}
-                useNativeDriver={true}
-            >
-                <Text style={[styles.bodyTextWhite, styles.h3]}>
-                    Lainaushistoria
-                </Text>
-                {loanHistory.length > 0
-                    ?
-                    <ScrollView style={[styles.historyListContainer]}>
-                        {loanHistory}
-                    </ScrollView>
-                    :
-                    <View>
-                        <Text style={[styles.bodyTextWhite, styles.h4, { marginBottom: 20 }]}>Ei palautettuja lainoja.</Text>
-                    </View>
-                }
-                <TouchableOpacity style={[styles.flexRow, { marginTop: 10 }]} onPress={() => toggleModal(!modalVisible)}>
-                    <View style={styles.closeButton}>
-                    <MaterialIcons name="close" size={30} color="white" />
-                    </View>
-                    <Text style={[styles.bodyTextWhite]}>
-                        Sulje
-                    </Text>
-                </TouchableOpacity>
-            </Modal>
+            {userLoans.length > 0 && <ThemeButton style={{ marginBottom: 20, }} color="#F4247C" text="Palauta valitut" onPress={handleReturnItems} />}
         </ScrollView >
     )
 };

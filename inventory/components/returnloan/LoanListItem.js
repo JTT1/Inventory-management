@@ -1,28 +1,39 @@
 import { View, Text, Pressable, Animated, Dimensions, TextInput, TouchableOpacity } from 'react-native';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { returnLoanStyles as styles } from './ReturnLoanStyles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import Modal from 'react-native-modal';
 
-const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
+const LoanListItem = ({ item, updateItemList, brokenItemList, trays }) => {
     const [checked, setChecked] = useState(false);
     const [validInput, setValidInput] = useState(true);
     const [modalOpen, toggleModal] = useState(false);
-    const currentlyLoanedAmount = item.lainattuMaara - item.palautukset;
     const [brokenItemDetails, setBrokenItemDetails] = useState('');
+    const [itemTray, setItemTray] = useState({});
+    const [loaded, setLoaded] = useState(false);
+    const currentlyLoanedAmount = item.lainattuMaara - item.palautukset;
     const animation = useRef(new Animated.Value(60)).current;
     const shouldAnimate = useRef(false);
     const itemCopy = { ...item, validated: false, thisReturnAmount: 0 };
     const inputRef = useRef();
     const returnedBefore = item.palautukset;
 
+    useEffect(() => {
+        const correctTrayArr = trays.map((tray) => tray).filter(tray => {
+            return tray.trayItems.includes(item.komponenttiID)
+        });
+        const tray = correctTrayArr[0];
+        setItemTray(tray)
+        setLoaded(true)
+    }, [])
+
     // Check box handler
     const handleSelection = () => {
         // toggle state
         setChecked(!checked);
 
-        // Add item to the updateItemList[index] of items to be returned
+        // Add item to the list of items to be returned
         if (!checked) {
             updateItemList.push(itemCopy);
 
@@ -167,7 +178,7 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
         <View style={styles.loanListItem}>
             <View style={[styles.flexRow, styles.stretch]}>
                 <View style={styles.loanedItemName}>
-                    <Text style={[styles.bodyTextWhite, styles.h4,]}>
+                    <Text style={[styles.bodyTextWhite, styles.h4]}>
                         {item.komponentti}
                     </Text>
 
@@ -175,6 +186,11 @@ const LoanListItem = ({ item, updateItemList, brokenItemList }) => {
                     <Text style={[styles.bodyTextWhite]}>
                         Lainassa: {currentlyLoanedAmount} kpl
                     </Text>
+
+                    {itemTray == undefined ? <Text style={[styles.bodyTextWhite]}>Ei sijaintia</Text>
+                        :
+                        <Text style={[styles.bodyTextWhite]}> Sijainti: kaappi {itemTray.kaappi} ovi {itemTray.ovi}</Text>
+                    }
                 </View>
                 <Pressable onPress={handleSelection}>
                     {!checked
