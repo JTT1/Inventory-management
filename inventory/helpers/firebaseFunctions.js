@@ -138,11 +138,6 @@ export const updateUserInfo = async (data) => {
     })
 }
 
-export const deleteUser = async (uid) => {
-    // let auth = firebase.auth();
-    // console.log(auth)
-}
-
 export function getCurrentUserLoans(setData, setLoaded, userId) {
         return db.ref(LOANS_REF)
             .on('value', querySnapShot => {

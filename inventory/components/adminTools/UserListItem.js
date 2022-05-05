@@ -4,9 +4,8 @@ import Modal from 'react-native-modal';
 import { AdminStyles as styles } from './AdminStyles';
 import { Feather } from '@expo/vector-icons';
 import ThemeButton from '../testing_field/ThemeButton';
-import { updateUserInfo, deleteUser } from '../../helpers/firebaseFunctions';
+import { updateUserInfo } from '../../helpers/firebaseFunctions';
 import { Picker } from '@react-native-picker/picker';
-import { FontAwesome5 } from '@expo/vector-icons';
 
 const UserListItem = ({ user, navigation }) => {
     const [firstName, setFirstName] = useState(user.etunimi);
@@ -43,31 +42,6 @@ const UserListItem = ({ user, navigation }) => {
         return;
     }
 
-    const userDelete = async (uid) => {
-        // delete user from the database and firebase auth
-
-        try {
-            await deleteUser(user.ID)
-        } catch (error) {
-            return Alert.alert('Virhe', 'Käyttäjää ei voitu poistaa.')
-        }
-        // return navigation.navigate('Käyttäjät')
-    }
-
-    const handleUserDelete = () => {
-        Alert.alert(
-            "Huom",
-            `Haluatko varmasti poistaa käyttäjän ${user.etunimi} ${user.sukunimi}?`,
-            [
-                {
-                    text: "Peruuta",
-                    onPress: () => null,
-                    style: "cancel"
-                },
-                { text: "OK", onPress: () => userDelete(user.ID) }
-            ]);
-    }
-
     return (
             <TouchableOpacity onPress={handleUserSelect}>
             <View style={[styles.flexRow, styles.stretch, styles.trayItem, styles.flexBetween]}>
@@ -89,12 +63,6 @@ const UserListItem = ({ user, navigation }) => {
                 hideModalContentWhileAnimating={true}
                 useNativeDriver={true}
                 >
-                    <TouchableOpacity onPress={handleUserDelete} style={[styles.centerVertical, styles.flexRow, styles.headingMargin]}>
-                        <Text style={[styles.bodyTextWhite]}>
-                            Poista käyttäjä
-                        </Text>
-                        <FontAwesome5 name="trash" size={24} color="#F4247C" style={{ marginLeft: 5 }} />
-                    </TouchableOpacity>
                     <View style={[styles.modalContentContainer, styles.centerHorizontal]}>
                         <View style={[styles.flexRow]}>
                             <Text style={[styles.h4, styles.headingMargin]}>

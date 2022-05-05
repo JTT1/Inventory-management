@@ -189,7 +189,7 @@ const LoanListItem = ({ item, updateItemList, brokenItemList, trays }) => {
 
                     {itemTray == undefined ? <Text style={[styles.bodyTextWhite]}>Ei sijaintia</Text>
                         :
-                        <Text style={[styles.bodyTextWhite]}> Sijainti: kaappi {itemTray.kaappi} ovi {itemTray.ovi}</Text>
+                        <Text style={[styles.bodyTextWhite]}>Sijainti: kaappi {itemTray.kaappi} ovi {itemTray.ovi}</Text>
                     }
                 </View>
                 <Pressable onPress={handleSelection}>

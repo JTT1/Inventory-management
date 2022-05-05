@@ -12,7 +12,8 @@ export const AdminStyles = StyleSheet.create({
         borderColor: '#605A91',
         backgroundColor: '#393663',
         marginVertical: 5,
-        maxHeight: '55%',
+        maxHeight: '75%',
+        marginTop: 10,
         color: 'white',
     },
     userName: {
