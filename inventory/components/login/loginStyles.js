@@ -5,7 +5,7 @@ export const loginStyles = StyleSheet.create({
     ...styles,
 
     loginBox: {
-        backgroundColor: "rgba(94, 90, 134, 0.9)",
+        backgroundColor: "rgba(94, 90, 134, 1)",
         borderWidth: 1,
         borderColor: "#8F8ABF",
         borderRadius: 20,
